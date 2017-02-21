@@ -1,0 +1,27 @@
+apply plugin: 'groovy'
+apply plugin: 'maven-publish'
+apply plugin: 'maven'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+
+    compile 'org.apache.maven:maven-ant-tasks:2.1.3'
+    compile 'org.osgi:org.eclipse.osgi:3.10.100.v20150529-1857'
+}
+
+group = "de.monkeyworks.buildmonkey"
+version = '0.1'
+
+
+publishing {
+    publications {
+        mavenGroovy(MavenPublication) {
+            from components.java
+        }
+    }
+}
