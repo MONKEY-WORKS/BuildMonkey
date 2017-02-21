@@ -1,0 +1,10 @@
+rootProject.name = "gradle-build"
+
+def projects = [
+    'gradle.dependency'
+]
+
+for(p in projects) {
+    include ':' + p
+}
+
