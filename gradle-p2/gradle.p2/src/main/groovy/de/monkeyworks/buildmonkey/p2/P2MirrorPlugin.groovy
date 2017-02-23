@@ -95,16 +95,15 @@ class P2MirrorPlugin implements Plugin<Project> {
             }
 
             def os = org.gradle.internal.os.OperatingSystem.current()
-		    def arch = System.getProperty("os.arch").contains("64") ? "64" : "32"
+		    def arch = System.getProperty("os.arch").contains("64") ? "-x86_64" : ""
             def eclipseUrl = mirror.eclipseSdkURL
             def eclipseVersion = mirror.eclipseVersion
 		    if (os.windows) {
-		        downloadUrl = "${eclipseUrl}/eclipse-SDK-${eclipseVersion}-windows-${arch}.zip"
+		        downloadUrl = "${eclipseUrl}/eclipse-SDK-${eclipseVersion}-win32${arch}.zip"
 		    } else if (os.macOsX) {
-		        downloadUrl = "${eclipseUrl}/eclipse-SDK-${eclipseVersion}-macosx-${arch}.tar.gz"
+		        downloadUrl = "${eclipseUrl}/eclipse-SDK-${eclipseVersion}-macosx-cocoa${arch}.tar.gz"
 		    } else if (os.linux) {
-		        downloadUrl = "${eclipseUrl}/eclipse-SDK-${eclipseVersion}-linux-${arch}.tar.gz"
-                
+		        downloadUrl = "${eclipseUrl}/eclipse-SDK-${eclipseVersion}-linux-gtk${arch}.tar.gz"
 		    }
 
             targetDir = project.buildDir.toPath().resolve("eclipse").toFile()
