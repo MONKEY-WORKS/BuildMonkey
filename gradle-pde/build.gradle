@@ -1,0 +1,48 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
+
+    dependencies {
+        classpath "de.monkeyworks.buildmonkey.p2:gradle.p2:+"
+    }
+
+}
+
+subprojects {
+
+    apply plugin: 'groovy'
+    apply plugin: 'maven-publish'
+    apply plugin: 'maven'
+    apply plugin: 'eclipse'
+
+    repositories {
+        mavenCentral()
+        jcentral()
+    }
+
+
+    dependencies {
+        compile gradleApi()
+        compile localGroovy()
+        compile 'de.monkeyworks.buildmonkey.p2-master:gradle.p2:+'
+        compile 'de.monkeyworks.buildmonkey.p2-master:gradle.mavenize:+'
+    }
+
+
+    group = "de.monkeyworks.buildmonkey.pde-" + rootProject.ext.branch
+    version = rootProject.version
+
+    publishing {
+        publications {
+            mavenGroovy(MavenPublication) {
+                groupId 'de.monkeyworks.buildmonkey.pde-' + rootProject.ext.branch
+                version rootProject.version
+
+                from components.java
+            }
+        }
+    }
+}

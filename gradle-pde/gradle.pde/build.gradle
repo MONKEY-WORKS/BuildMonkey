@@ -1,0 +1,13 @@
+
+
+dependencies {
+    compile 'eclipse:org.eclipse.core.runtime:+'
+    compile 'eclipse:org.eclipse.equinox.common:+'
+    compile('eclipse:org.eclipse.jdt.junit.core:+'){
+        exclude group: 'eclipse', module: 'org.eclipse.jdt.debug'
+        exclude group: 'eclipse', module: 'org.eclipse.jdt.core'
+    }
+    compile 'eclipse:org.eclipse.osgi:+'
+    compile 'eclipse:org.eclipse.osgi.compatibility.state:+'
+    compile 'bcel:bcel:+'
+}

@@ -1,0 +1,10 @@
+rootProject.name = "gradle-pde"
+
+def projects = [
+	'gradle.pde'
+]
+
+for(p in projects) {
+    include ':' + p
+}
+
