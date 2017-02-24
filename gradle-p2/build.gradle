@@ -1,3 +1,15 @@
+buildscript {
+    repositories {
+        maven {url "https://plugins.gradle.org/m2/"}
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencies {
+        classpath "com.gradle.publish:plugin-publish-plugin:0.9.7"
+    }
+}
+
 subprojects {
 
     apply plugin: 'groovy'
@@ -14,19 +26,5 @@ subprojects {
         compile gradleApi()
         compile localGroovy()
     }
-
-
-    group = "de.monkeyworks.buildmonkey.p2"
-    version = '0.1'
-
-    publishing {
-        publications {
-            mavenGroovy(MavenPublication) {
-                groupId 'de.monkeyworks.buildmonkey.p2'
-                version '0.1'
-
-                from components.java
-            }
-        }
-    }
 }
+

@@ -8,7 +8,7 @@ import de.monkeyworks.buildmonkey.p2.tools.DownloadEclipseSdkTask
 import groovy.xml.MarkupBuilder
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
-
+//DUPLICATED, must be part of a common bundle
 class P2MirrorPlugin implements Plugin<Project> {
 
 	static final String DSL_EXTENSION_NAME = "eclipseMirror"

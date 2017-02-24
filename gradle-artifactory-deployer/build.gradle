@@ -1,3 +1,14 @@
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "com.gradle.publish:plugin-publish-plugin:0.9.7"
+  }
+}
+
 apply plugin: 'groovy'
 apply plugin: 'maven-publish'
 apply plugin: 'maven'
@@ -17,11 +28,18 @@ dependencies {
 group = "de.monkeyworks.buildmonkey"
 version = '0.1'
 
+apply plugin: "com.gradle.plugin-publish"
 
-publishing {
-    publications {
-        mavenGroovy(MavenPublication) {
-            from components.java
-        }
+pluginBundle {
+  website = 'https://github.com/MONKEY-WORKS/BuildMonkey/wiki'
+  vcsUrl = 'https://github.com/MONKEY-WORKS/BuildMonkey'
+  description = 'Publishs folder structures at an Artifactory server'
+  tags = ['artifactory', 'publish', 'gradle']
+
+  plugins {
+    artifactoryUploadPlugin {
+      id = 'de.monkeyworks.buildmonkey.ArtifactoryUploadPlugin'
+      displayName = 'Artifactory Upload plugin'
     }
+  }
 }

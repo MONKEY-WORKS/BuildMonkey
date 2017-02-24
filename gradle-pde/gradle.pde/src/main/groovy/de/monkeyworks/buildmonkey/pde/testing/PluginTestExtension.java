@@ -107,7 +107,7 @@ public class PluginTestExtension {
     }
 
     public void setLauncherVersion(String version) {
-        this.launcherVersion = version
+        this.launcherVersion = version;
     }
 
     public String getProjectPattern() {
@@ -115,6 +115,6 @@ public class PluginTestExtension {
     }
 
     public void setProjectPattern(String pattern) {
-        this.projectPattern = pattern
+        this.projectPattern = pattern;
     }
 }

@@ -15,9 +15,9 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.internal.os.OperatingSystem
 
-import de.monkeyworks.buildmonkey.mavenizer.mavenize.BundleMavenDeployer
-import de.monkeyworks.buildmonkey.p2.tools.DownloadEclipseSdkTask
-import de.monkeyworks.buildmonkey.p2.utils.FileSemaphore
+import de.monkeyworks.buildmonkey.pde.mavenize.BundleMavenDeployer
+import de.monkeyworks.buildmonkey.pde.tools.DownloadEclipseSdkTask
+import de.monkeyworks.buildmonkey.pde.utils.FileSemaphore
 
 /**
  * Gradle plugin for the root project of the Eclipse plugin build.

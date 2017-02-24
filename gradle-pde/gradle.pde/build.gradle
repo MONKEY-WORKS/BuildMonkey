@@ -1,13 +1,38 @@
-
-
 dependencies {
-    compile 'eclipse:org.eclipse.core.runtime:+'
-    compile 'eclipse:org.eclipse.equinox.common:+'
-    compile('eclipse:org.eclipse.jdt.junit.core:+'){
-        exclude group: 'eclipse', module: 'org.eclipse.jdt.debug'
-        exclude group: 'eclipse', module: 'org.eclipse.jdt.core'
+    compile 'org.eclipse.platform:org.eclipse.core.runtime:+'
+    compile 'org.eclipse.platform:org.eclipse.equinox.common:+'
+    compile('org.eclipse.jdt:org.eclipse.jdt.junit.core:+'){
+        exclude group: 'org.eclipse.jdt', module: 'org.eclipse.jdt.debug'
+        exclude group: 'org.eclipse.jdt', module: 'org.eclipse.jdt.core'
     }
-    compile 'eclipse:org.eclipse.osgi:+'
-    compile 'eclipse:org.eclipse.osgi.compatibility.state:+'
+    compile 'org.eclipse.platform:org.eclipse.osgi:+'
+    compile 'org.eclipse.platform:org.eclipse.osgi.compatibility.state:+'
     compile 'bcel:bcel:+'
+
+    //DUPLICATED BundleMavenDeployer, must be into replaced by a common bundle
+    compile 'org.apache.maven:maven-ant-tasks:2.1.3'
+}
+
+group = "de.monkeyworks.buildmonkey"
+version = '0.1'
+
+apply plugin: "com.gradle.plugin-publish"
+
+pluginBundle {
+    website = 'https://github.com/MONKEY-WORKS/BuildMonkey/wiki'
+    vcsUrl = 'https://github.com/MONKEY-WORKS/BuildMonkey'
+    description = 'Plugins for materialize eclipse rcp applications and execution plugins based tests'
+    tags = ['OSGi', 'PDE', 'eclipse']
+
+    plugins {
+        pluginTestPlugin {
+          id = 'de.monkeyworks.buildmonkey.pde.PluginTestPlugin'
+          displayName = 'Executing OSGi plugin tests'
+        }
+
+        testDefinitionPlugin {
+          id = 'de.monkeyworks.buildmonkey.pde.TestDefinitionPlugin'
+          displayName = 'Defining OSGi plugin tests'
+        }
+    }
 }

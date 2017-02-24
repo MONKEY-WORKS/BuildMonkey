@@ -1,4 +1,4 @@
-package de.monkeyworks.buildmonkey.p2.tools
+package de.monkeyworks.buildmonkey.pde.tools
 
 import java.io.File;
 
@@ -9,7 +9,7 @@ import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import org.gradle.internal.os.OperatingSystem
-import de.monkeyworks.buildmonkey.p2.utils.FileSemaphore
+import de.monkeyworks.buildmonkey.pde.utils.FileSemaphore
 //DUPLICATED, must be part of a common bundle
 class DownloadEclipseSdkTask extends DefaultTask {
 

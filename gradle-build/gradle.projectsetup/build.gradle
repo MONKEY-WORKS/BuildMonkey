@@ -1,0 +1,18 @@
+group = "de.monkeyworks.buildmonkey"
+version = '0.1'
+
+apply plugin: "com.gradle.plugin-publish"
+
+pluginBundle {
+    website = 'https://github.com/MONKEY-WORKS/BuildMonkey/wiki'
+    vcsUrl = 'https://github.com/MONKEY-WORKS/BuildMonkey'
+    description = 'Setups projects to be build from OSGi manifest files'
+    tags = ['OSGi', 'build', 'MANIFEST']
+
+    plugins {
+        projectSetupPlugin {
+          id = 'de.monkeyworks.buildmonkey.ProjectSetupPlugin'
+          displayName = 'OSGi project setup plugin'
+        }
+    }
+}

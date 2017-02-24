@@ -2,5 +2,27 @@ dependencies {
     compile 'org.apache.maven:maven-ant-tasks:2.1.3'
     compile 'org.osgi:org.eclipse.osgi:3.10.100.v20150529-1857'
 
-    compile project(':gradle.p2')
+//    compile project(':gradle.p2')
+
 }
+
+apply plugin: "com.gradle.plugin-publish"
+
+group = "de.monkeyworks.buildmonkey"
+version = '0.1'
+
+pluginBundle {
+    website = 'https://github.com/MONKEY-WORKS/BuildMonkey/wiki'
+    vcsUrl = 'https://github.com/MONKEY-WORKS/BuildMonkey'
+
+    plugins {
+        mavenizerPlugin {
+            description = 'Create maven repositories from p2'
+            tags = ['MAVEN', 'eclipse', 'P2']
+            id = 'de.monkeyworks.buildmonkey.mavenizer.MavenizerPlugin'
+            displayName = 'Mavenize p2 repository plugin'
+        }
+    }
+}
+
+publishPlugins.dependsOn(build)
