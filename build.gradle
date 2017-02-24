@@ -14,7 +14,10 @@ subprojects {
 
     apply plugin: 'groovy'
     apply plugin: 'maven-publish'
+    apply plugin: 'maven'
     apply plugin: 'eclipse'
+
+    group = "de.monkeyworks.buildmonkey"
 
     repositories {
         mavenCentral()

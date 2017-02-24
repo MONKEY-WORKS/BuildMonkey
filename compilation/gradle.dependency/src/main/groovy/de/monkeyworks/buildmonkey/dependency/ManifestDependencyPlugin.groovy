@@ -62,7 +62,7 @@ class ManifestDependencyPlugin implements Plugin<Project> {
     private Project project
 
     @Override
-    public void apply(Project project) {
+    void apply(Project project) {
         this.project = project
         project.extensions.create(DSL_EXTENSION_NAME, ManifestDependencyPluginExtension, project)
 

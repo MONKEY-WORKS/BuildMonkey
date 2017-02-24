@@ -10,6 +10,7 @@ import java.util.zip.ZipOutputStream
 
 class P2MirrorPlugin implements Plugin<Project> {
 
+    static final String DSL_EXTENSION_NAME = "eclipseMirror"
 	static final String TASK_NAME_MIRROR_P2 = "mirrorP2Repository"
 	static final String TASK_NAME_CREATE_ANT = "createAntScript"
     static final String TASK_NAME_CREATE_TARGET_FILE = "createTargetPlatform"
@@ -62,6 +63,7 @@ class P2MirrorPlugin implements Plugin<Project> {
 
 	@Override
     public void apply(Project project) {
+        project.extensions.create(DSL_EXTENSION_NAME, EclipseMirror)
 
         DownloadHelper.addEclipseConfigurationExtension(project)
         DownloadHelper.addTaskDownloadEclipseSdk(project)
