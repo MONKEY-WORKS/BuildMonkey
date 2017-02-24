@@ -1,29 +1,25 @@
 buildscript {
     repositories {
-        maven {url "https://plugins.gradle.org/m2/"}
-        mavenCentral()
-        jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
-
 
     dependencies {
         classpath "com.gradle.publish:plugin-publish-plugin:0.9.7"
     }
-
 }
 
 subprojects {
 
     apply plugin: 'groovy'
     apply plugin: 'maven-publish'
-    apply plugin: 'maven'
     apply plugin: 'eclipse'
 
     repositories {
         mavenCentral()
         jcenter()
     }
-
 
     dependencies {
         compile gradleApi()
