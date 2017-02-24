@@ -25,7 +25,7 @@ env:
     - PROJECT_DIR=gradle-pde
 
 script:
-  - cd $PROJECT_DIR && gradlew clean assemble
+  - cd $PROJECT_DIR && ./gradlew clean assemble
 
 notifications:
   email:
