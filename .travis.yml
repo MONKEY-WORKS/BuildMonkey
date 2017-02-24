@@ -18,14 +18,8 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
-env:
-    - PROJECT_DIR=gradle-artifactory-deployer
-    - PROJECT_DIR=gradle-build
-    - PROJECT_DIR=gradle-p2
-    - PROJECT_DIR=gradle-pde
-
 script:
-  - cd $PROJECT_DIR && ./gradlew clean assemble
+  - ./gradlew clean assemble
 
 notifications:
   email:
