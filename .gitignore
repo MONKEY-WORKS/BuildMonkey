@@ -2,3 +2,5 @@ build
 .gradle
 .DS_Store
 bin
+
+.idea/
