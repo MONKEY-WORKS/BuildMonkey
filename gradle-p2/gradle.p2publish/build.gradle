@@ -1,0 +1,32 @@
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+}
+
+
+apply plugin: "com.gradle.plugin-publish"
+
+group = "de.monkeyworks.buildmonkey"
+version = '0.1'
+
+pluginBundle {
+    website = 'https://github.com/MONKEY-WORKS/BuildMonkey/wiki'
+    vcsUrl = 'https://github.com/MONKEY-WORKS/BuildMonkey'
+
+    plugins {
+        p2Plugin {
+            description = 'Deployed build artefacts as p2 repository'
+            tags = ['eclipse', 'P2', 'repository']
+            id = 'de.monkeyworks.buildmonkey.p2.P2DeployerPlugin'
+            displayName = 'Build artefact as P2 deployer'
+        }
+    }
+}
+
+publishPlugins.dependsOn(build)

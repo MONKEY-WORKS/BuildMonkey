@@ -1,8 +1,9 @@
 rootProject.name = "gradle-p2"
 
 def projects = [
+    'gradle.mavenize',
     'gradle.p2',
-    'gradle.mavenize'
+    'gradle.p2publish'
 ]
 
 for(p in projects) {
