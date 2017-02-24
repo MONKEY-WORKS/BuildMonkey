@@ -19,6 +19,7 @@ apply plugin: 'de.monkeyworks.buildmonkey.mavenizer.MavenizerPlugin'
 
 def buildUri = buildDir.toURI()
 def buildUrl = buildUri.toURL()
+
 eclipseMirror {
     sliceStrict false
     latestVersionOnly false
@@ -33,8 +34,10 @@ eclipseMirror {
 eclipseMirror.targetFile = "targetBuildMonkey.target"
 
 mavenize {
-    sourceP2Repository "$buildDir/p2-repository"
-    targetDir "$buildDir/m2-repository"
+    mavenizeTask {
+        targetDir = "$buildDir/m2-repository"
+        sourceP2Repository = "$buildDir/p2-repository"
+    }
 }  
 
 subprojects {
