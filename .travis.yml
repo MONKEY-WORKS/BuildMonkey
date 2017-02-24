@@ -26,3 +26,9 @@ env:
 
 script:
   - cd $PROJECT_DIR && gradle clean assemble
+
+notifications:
+  email:
+    recipients:
+      - michael.barth@monkey-works.de
+      - johannes.tandler@monkey-works.de
