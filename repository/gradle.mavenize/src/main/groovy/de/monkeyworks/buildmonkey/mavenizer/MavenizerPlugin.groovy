@@ -1,12 +1,8 @@
 package de.monkeyworks.buildmonkey.mavenizer
 
+import de.monkeyworks.buildmonkey.mavenizer.mavenize.BundleMavenDeployer
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.logging.LogLevel
-import org.gradle.internal.os.OperatingSystem
-import de.monkeyworks.buildmonkey.mavenizer.tools.DownloadEclipseSdkTask
-import de.monkeyworks.buildmonkey.mavenizer.mavenize.BundleMavenDeployer
-import groovy.xml.MarkupBuilder
 
 class MavenizerPlugin implements Plugin<Project> {
 
@@ -55,7 +51,8 @@ class MavenizerPlugin implements Plugin<Project> {
     		description = "Converts created p2 repository into m2 repository"
 
 			MavenizeExtension parameter = project.mavenize
-    		
+
+			// why does this project depend on downloading a p2 repository?
     		project.afterEvaluate {
 	    		if(project.tasks.findByPath(TASK_NAME_MIRROR_P2) != null) {
 	    			if(project.mavenize.sourceP2Repository.equals("$project.buildDir/p2-repository")) {

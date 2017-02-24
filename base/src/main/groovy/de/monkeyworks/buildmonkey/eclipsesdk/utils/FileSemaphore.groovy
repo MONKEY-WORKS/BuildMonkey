@@ -9,7 +9,7 @@
  *     Donát Csikós (Gradle Inc.) - initial API and implementation and initial documentation
  */
 //DUPLICATED, must be part of a common bundle
-package de.monkeyworks.buildmonkey.p2.utils
+package de.monkeyworks.buildmonkey.eclipsesdk.utils
 
 import java.nio.channels.FileLock
 

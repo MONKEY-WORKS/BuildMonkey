@@ -1,16 +1,11 @@
-package de.monkeyworks.buildmonkey.p2.tools
-
-import java.io.File;
+package de.monkeyworks.buildmonkey.eclipsesdk.tools
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
-import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.OutputDirectory
-import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import org.gradle.internal.os.OperatingSystem
-import de.monkeyworks.buildmonkey.p2.utils.FileSemaphore
-//DUPLICATED, must be part of a common bundle
+import de.monkeyworks.buildmonkey.eclipsesdk.utils.FileSemaphore
+
 class DownloadEclipseSdkTask extends DefaultTask {
 
     String downloadUrl
@@ -18,7 +13,7 @@ class DownloadEclipseSdkTask extends DefaultTask {
     File targetDir
 
     @TaskAction
-    public void downloadSdk() {
+    void downloadSdk() {
         // if multiple builds start on the same machine (which is the case with a CI server)
         // we want to prevent them downloading the same file to the same destination
         def directoryLock = new FileSemaphore(targetDir)

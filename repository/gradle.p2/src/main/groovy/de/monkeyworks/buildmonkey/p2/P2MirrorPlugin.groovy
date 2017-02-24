@@ -1,18 +1,15 @@
 package de.monkeyworks.buildmonkey.p2
 
+import de.monkeyworks.buildmonkey.eclipsesdk.DownloadHelper
+import groovy.xml.MarkupBuilder
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.logging.LogLevel
-import org.gradle.internal.os.OperatingSystem
-import de.monkeyworks.buildmonkey.p2.tools.DownloadEclipseSdkTask
-import groovy.xml.MarkupBuilder
+
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
 class P2MirrorPlugin implements Plugin<Project> {
 
-	static final String DSL_EXTENSION_NAME = "eclipseMirror"
-	static final String TASK_NAME_DOWNLOAD_ECLIPSE_SDK = "downloadEclipseSdk"
 	static final String TASK_NAME_MIRROR_P2 = "mirrorP2Repository"
 	static final String TASK_NAME_CREATE_ANT = "createAntScript"
     static final String TASK_NAME_CREATE_TARGET_FILE = "createTargetPlatform"
@@ -29,17 +26,11 @@ class P2MirrorPlugin implements Plugin<Project> {
         def targetFeatureName
         def targetPlatform
         def targetFile
-        def eclipseSdkURL
-        def eclipseVersion
-        def launcherVersion
 
 	    EclipseMirror() {
 	        sliceStrict = true
             includeFeatures = true
             latestVersionOnly = false
-            eclipseSdkURL = 'http://ftp-stud.hs-esslingen.de/Mirrors/eclipse/eclipse/downloads/drops4/R-4.6.1-201609071200'
-            eclipseVersion = '4.6.1'
-            launcherVersion = '1.3.200.v20160318-1642'
             targetFile = 'p2.target'
 	    }
 	}
@@ -71,9 +62,10 @@ class P2MirrorPlugin implements Plugin<Project> {
 
 	@Override
     public void apply(Project project) {
-        project.extensions.create(DSL_EXTENSION_NAME, EclipseMirror)
 
-        addTaskDownloadEclipseSdk(project)
+        DownloadHelper.addEclipseConfigurationExtension(project)
+        DownloadHelper.addTaskDownloadEclipseSdk(project)
+
         addTaskToCreateP2MirrorAntScript(project)
         addTaskToMirrorP2Repository(project)
         addTaskToCreateTargetFile(project)
@@ -81,34 +73,6 @@ class P2MirrorPlugin implements Plugin<Project> {
 
         project.gradle.taskGraph.whenReady {
             loadTargetFile(project)
-        }
-    }
-
-    static void addTaskDownloadEclipseSdk(Project project) {
-        project.task(TASK_NAME_DOWNLOAD_ECLIPSE_SDK, type: DownloadEclipseSdkTask) {
-            def mirror = project.eclipseMirror
-            description = "Downloads an Eclipse SDK to perform P2 operations with."
-
-            onlyIf { 
-                return !project.buildDir
-                    .toPath()
-                    .resolve("eclipse/eclipse/plugins/org.eclipse.equinox.launcher_${mirror.launcherVersion}.jar")
-                    .toFile().exists()
-            }
-
-            def os = org.gradle.internal.os.OperatingSystem.current()
-		    def arch = System.getProperty("os.arch").contains("64") ? "-x86_64" : ""
-            def eclipseUrl = mirror.eclipseSdkURL
-            def eclipseVersion = mirror.eclipseVersion
-		    if (os.windows) {
-		        downloadUrl = "${eclipseUrl}/eclipse-SDK-${eclipseVersion}-win32${arch}.zip"
-		    } else if (os.macOsX) {
-		        downloadUrl = "${eclipseUrl}/eclipse-SDK-${eclipseVersion}-macosx-cocoa${arch}.tar.gz"
-		    } else if (os.linux) {
-		        downloadUrl = "${eclipseUrl}/eclipse-SDK-${eclipseVersion}-linux-gtk${arch}.tar.gz"
-		    }
-
-            targetDir = project.buildDir.toPath().resolve("eclipse").toFile()
         }
     }
 
@@ -210,7 +174,7 @@ class P2MirrorPlugin implements Plugin<Project> {
         if (project.tasks.findByPath('clean') == null) {project.tasks.create('clean')}
         project.tasks.clean.dependsOn 'cleanP2Repository'
 
-        project.task(TASK_NAME_MIRROR_P2, dependsOn: [TASK_NAME_DOWNLOAD_ECLIPSE_SDK, TASK_NAME_CREATE_ANT]) {
+        project.task(TASK_NAME_MIRROR_P2, dependsOn: [DownloadHelper.TASK_NAME_DOWNLOAD_ECLIPSE_SDK, TASK_NAME_CREATE_ANT]) {
             description = "Mirrors a p2 repository"
             def targetDir = project.buildDir.toPath().resolve("p2-repository").toFile()            
             outputs.upToDateWhen { 
@@ -284,9 +248,9 @@ class P2MirrorPlugin implements Plugin<Project> {
             // redirect the external process output to the logging
             //standardOutput = new LogOutputStream(project.logger, LogLevel.INFO)
             //errorOutput = new LogOutputStream(project.logger, LogLevel.INFO)
-            def mirror = project.eclipseMirror
+            def config = project.eclipseConfiguration
             commandLine("java",
-            		'-cp', project.buildDir.toPath().resolve("eclipse/eclipse/plugins/org.eclipse.equinox.launcher_${mirror.launcherVersion}.jar").toFile(),
+            		'-cp', project.buildDir.toPath().resolve("eclipse/eclipse/plugins/org.eclipse.equinox.launcher_${config.launcherVersion}.jar").toFile(),
             		'org.eclipse.core.launcher.Main', 
                     '-application', 'org.eclipse.ant.core.antRunner',
                     '-consoleLog',
@@ -332,10 +296,6 @@ class P2MirrorPlugin implements Plugin<Project> {
                             }
                         }
 
-                        //xmlMarkup.delete() {
-                        //    xmlMarkup.fileset(dir:project.eclipseMirror.target, includes:"**/org.eclipse.jdt.core_*OTDT*.jar*, **/org.eclipse.objectteams.otdt*.jar*")
-                        //    xmlMarkup.fileset(dir:project.eclipseMirror.target, includes:"**/*.pack.gz, **/org.eclipse.jdt.core_*OTDT*.jar*, **/org.eclipse.objectteams.otdt*.jar*")
-                        //}
                         xmlMarkup."p2.publish.featuresAndBundles"(metadataRepository:"file:${project.eclipseMirror.target}", artifactRepository:"file:${project.eclipseMirror.target}", source:"${project.eclipseMirror.target}", compress:"false")
                         xmlMarkup."p2.publish.featuresAndBundles"(metadataRepository:"file:${project.eclipseMirror.target}", artifactRepository:"file:${project.eclipseMirror.target}", source:"${project.buildDir}/targetFeature", publishArtifacts:"true", compress:"true", append:"true")
 					}
