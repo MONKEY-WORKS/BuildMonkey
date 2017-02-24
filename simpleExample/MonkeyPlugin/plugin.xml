@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            name="Monkey Category"
+            id="MonkeyPlugin.commands.category">
+      </category>
+      <command
+            name="Monkey Action"
+            categoryId="MonkeyPlugin.commands.category"
+            id="MonkeyPlugin.commands.monkeyCommand">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            commandId="MonkeyPlugin.commands.monkeyCommand"
+            class="de.monkeyworks.plugins.monkeyplugin.MonkeyHandler">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="MonkeyPlugin.commands.monkeyCommand"
+            contextId="org.eclipse.ui.contexts.window"
+            sequence="M1+6"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
+      </key>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+         <menu
+               label="Monkey Action"
+               mnemonic="M"
+               id="MonkeyPlugin.menus.sampleMenu">
+            <command
+                  commandId="MonkeyPlugin.commands.monkeyCommand"
+                  id="MonkeyPlugin.menus.monkeyCommand"
+                  label="Do the Monkey Action!"
+                  mnemonic="S">
+            </command>
+         </menu>
+      </menuContribution>
+      <menuContribution
+            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+         <toolbar
+               id="MonkeyPlugin.toolbars.sampleToolbar">
+            <command
+                  commandId="MonkeyPlugin.commands.monkeyCommand"
+                  icon="resources/icons/monkey.png"
+                  tooltip="Say hello monkey"
+                  id="MonkeyPlugin.toolbars.monkeyCommand">
+            </command>
+         </toolbar>
+      </menuContribution>
+   </extension>
+
+</plugin>
