@@ -8,7 +8,7 @@ import de.monkeyworks.buildmonkey.p2.tools.DownloadEclipseSdkTask
 import groovy.xml.MarkupBuilder
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
-//DUPLICATED, must be part of a common bundle
+
 class P2MirrorPlugin implements Plugin<Project> {
 
 	static final String DSL_EXTENSION_NAME = "eclipseMirror"
@@ -28,6 +28,7 @@ class P2MirrorPlugin implements Plugin<Project> {
         def updateURL
         def targetFeatureName
         def targetPlatform
+        def targetFile
         def eclipseSdkURL
         def eclipseVersion
         def launcherVersion
@@ -39,6 +40,7 @@ class P2MirrorPlugin implements Plugin<Project> {
             eclipseSdkURL = 'http://ftp-stud.hs-esslingen.de/Mirrors/eclipse/eclipse/downloads/drops4/R-4.6.1-201609071200'
             eclipseVersion = '4.6.1'
             launcherVersion = '1.3.200.v20160318-1642'
+            targetFile = 'p2.target'
 	    }
 	}
 
@@ -221,14 +223,16 @@ class P2MirrorPlugin implements Plugin<Project> {
 
     static void addTaskToCreateTargetFile(Project project) {
         project.task(TASK_NAME_CREATE_TARGET_FILE) {
-            description = "Creates Target Platform file"
-            def targetDir = project.buildDir.toPath().resolve("hmi.commons.target").toFile()            
+            description = "Creates Target Platform file"    
             outputs.upToDateWhen { 
                 return false 
             }
 
             doLast { 
+                def targetFilename = project.eclipseMirror.targetFile
+                def targetDir = project.buildDir.toPath().resolve("${targetFilename}").toFile()
                 println "Create target platform $targetDir"
+                println "File: ${targetFilename}" 
                 createTargetFile(project, targetDir) 
 	        }
         }
@@ -254,7 +258,7 @@ class P2MirrorPlugin implements Plugin<Project> {
             return builder
         }
 
-        xmlMarkup.'target'(name :"hmi.commons", 'sequenceNumber' :"1") {
+        xmlMarkup.'target'(name :"buildmonkey", 'sequenceNumber' :"1") {
             xmlMarkup.'locations'() {
                 xmlMarkup.'location'(includeAllPlatforms: "false", includeConfigurePhase: "true", includeMode:"planner", includeSource:"true", type: "InstallableUnit") {
                     buildInstallableUnits(xmlMarkup)

@@ -11,6 +11,8 @@ import groovy.xml.MarkupBuilder
 class MavenizerPlugin implements Plugin<Project> {
 
 	static final String TASK_NAME_CONVERT_P2_M2 = "mavenizeP2Repository"
+	// Must be a common constant
+	static final String TASK_NAME_MIRROR_P2 = "mirrorP2Repository"
 
 	static class MavenizeExtension {
 		def sourceP2Repository
@@ -31,7 +33,7 @@ class MavenizerPlugin implements Plugin<Project> {
 
         // if eclipse plugin is configured, use it as source path 
         project.afterEvaluate {
-			if(project.tasks.findByPath(de.monkeyworks.gradle.p2.P2MirrorPlugin.TASK_NAME_MIRROR_P2) != null) {
+			if(project.tasks.findByPath(TASK_NAME_MIRROR_P2) != null) {
 				project.mavenize.sourceP2Repository = "$project.buildDir/p2-repository" 					
 			}
 		}
@@ -55,9 +57,9 @@ class MavenizerPlugin implements Plugin<Project> {
 			MavenizeExtension parameter = project.mavenize
     		
     		project.afterEvaluate {
-	    		if(project.tasks.findByPath(de.monkeyworks.gradle.p2.P2MirrorPlugin.TASK_NAME_MIRROR_P2) != null) {
+	    		if(project.tasks.findByPath(TASK_NAME_MIRROR_P2) != null) {
 	    			if(project.mavenize.sourceP2Repository.equals("$project.buildDir/p2-repository")) {
-						dependsOn de.monkeyworks.gradle.p2.P2MirrorPlugin.TASK_NAME_MIRROR_P2
+						dependsOn TASK_NAME_MIRROR_P2
 					}
 				}
 			}
