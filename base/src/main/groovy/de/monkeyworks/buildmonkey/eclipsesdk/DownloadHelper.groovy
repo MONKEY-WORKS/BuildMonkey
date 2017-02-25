@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2015 the original author or authors.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ */
 package de.monkeyworks.buildmonkey.eclipsesdk
 
 import de.monkeyworks.buildmonkey.eclipsesdk.tools.DownloadEclipseSdkTask
@@ -13,7 +20,7 @@ class DownloadHelper {
 
     static void addEclipseConfigurationExtension(Project project) {
         if(project.extensions.findByName(ECLIPSE_CONFIGURATION_EXTENSION_NAME) == null) {
-            project.extensions.create(ECLIPSE_CONFIGURATION_EXTENSION_NAME, EclipseConfiguration)
+            project.extensions.create(ECLIPSE_CONFIGURATION_EXTENSION_NAME, EclipseConfiguration, project)
         }
     }
 
@@ -24,12 +31,8 @@ class DownloadHelper {
             EclipseConfiguration config = project.eclipseConfiguration
 
             onlyIf {
-                return !project.buildDir
-                        .toPath()
-                        .resolve("eclipse/eclipse/plugins/org.eclipse.equinox.launcher_${config.launcherVersion}.jar")
-                        .toFile().exists()
+                return !config.isDownloded()
             }
-
 
             def os = org.gradle.internal.os.OperatingSystem.current()
             def arch = System.getProperty("os.arch").contains("64") ? "-x86_64" : ""
@@ -44,7 +47,7 @@ class DownloadHelper {
                 downloadUrl = "${eclipseUrl}/eclipse-SDK-${eclipseVersion}-linux-gtk${arch}.tar.gz"
             }
 
-            targetDir = project.buildDir.toPath().resolve("eclipse").toFile()
+            targetDir = new File(config.localEclipseDir)
         }
     }
 }

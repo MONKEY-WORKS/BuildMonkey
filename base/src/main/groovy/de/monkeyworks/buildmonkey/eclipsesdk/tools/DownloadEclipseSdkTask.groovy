@@ -1,10 +1,21 @@
+/*
+ * Copyright (c) 2015 the original author or authors.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ */
 package de.monkeyworks.buildmonkey.eclipsesdk.tools
 
+import de.monkeyworks.buildmonkey.eclipsesdk.EclipseConfiguration
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
 import org.gradle.api.tasks.TaskAction
 import org.gradle.internal.os.OperatingSystem
 import de.monkeyworks.buildmonkey.eclipsesdk.utils.FileSemaphore
+
+import java.nio.file.Files
+import java.nio.file.Path
 
 class DownloadEclipseSdkTask extends DefaultTask {
 
@@ -33,11 +44,30 @@ class DownloadEclipseSdkTask extends DefaultTask {
 
         // extract it to the same location where it was extracted
         project.logger.info("Extract '$sdkArchive' to '$sdkArchive.parentFile.absolutePath'")
-        if (OperatingSystem.current().isWindows()) {
+        def os = OperatingSystem.current();
+        if (os.isWindows()) {
             project.ant.unzip(src: sdkArchive, dest: sdkArchive.parentFile, overwrite: true)
         } else {
             project.ant.untar(src: sdkArchive, dest: sdkArchive.parentFile, compression: "gzip", overwrite: true)
         }
+
+
+        Path folder = sdkArchive.parentFile.toPath()
+        if(os.isMacOsX()) {
+            folder = folder.resolve("Eclipse.app")
+        } else {
+            folder = folder.resolve("eclipse")
+        }
+
+        Files.list(folder).each { file ->
+            Path from = file
+            Path to = sdkArchive.parentFile.toPath().resolve(file.getFileName().toString())
+
+            project.logger.info("Moving eclipse from $from to $to")
+
+            Files.move(from, to)
+        }
+        Files.delete(folder)
     }
 
     private File eclipseSdkArchive() {

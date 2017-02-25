@@ -1,6 +1,14 @@
+/*
+ * Copyright (c) 2015 the original author or authors.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ */
 package de.monkeyworks.buildmonkey.p2
 
 import de.monkeyworks.buildmonkey.eclipsesdk.DownloadHelper
+import de.monkeyworks.buildmonkey.eclipsesdk.EclipseConfiguration
 import groovy.xml.MarkupBuilder
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -250,9 +258,10 @@ class P2MirrorPlugin implements Plugin<Project> {
             // redirect the external process output to the logging
             //standardOutput = new LogOutputStream(project.logger, LogLevel.INFO)
             //errorOutput = new LogOutputStream(project.logger, LogLevel.INFO)
-            def config = project.eclipseConfiguration
+            EclipseConfiguration config = project.eclipseConfiguration
+
             commandLine("java",
-            		'-cp', project.buildDir.toPath().resolve("eclipse/eclipse/plugins/org.eclipse.equinox.launcher_${config.launcherVersion}.jar").toFile(),
+            		'-cp', config.getLauncherPath().toFile(),
             		'org.eclipse.core.launcher.Main', 
                     '-application', 'org.eclipse.ant.core.antRunner',
                     '-consoleLog',
