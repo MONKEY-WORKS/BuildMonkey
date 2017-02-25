@@ -19,7 +19,7 @@ cache:
     - $HOME/.gradle/wrapper/
 
 script:
-  - ./gradlew clean assemble
+  - ./gradlew clean assemble && cd examples/example1 && ./build.sh
 
 notifications:
   email:
