@@ -8,6 +8,7 @@
 package de.monkeyworks.buildmonkey.p2
 
 import de.monkeyworks.buildmonkey.eclipsesdk.DownloadHelper
+import de.monkeyworks.buildmonkey.eclipsesdk.EclipseConfiguration
 import groovy.xml.MarkupBuilder
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -257,15 +258,10 @@ class P2MirrorPlugin implements Plugin<Project> {
             // redirect the external process output to the logging
             //standardOutput = new LogOutputStream(project.logger, LogLevel.INFO)
             //errorOutput = new LogOutputStream(project.logger, LogLevel.INFO)
-            def config = project.eclipseConfiguration
-            def os = org.gradle.internal.os.OperatingSystem.current()
-            def basePath =  project.buildDir.toPath().resolve("eclipse/eclipse/plugins/")
-            if(os.isMacOsX()) {
-                basePath = project.buildDir.toPath().resolve("eclipse/Eclipse.app/Contents/Eclipse/plugins/")
-            }
+            EclipseConfiguration config = project.eclipseConfiguration
 
             commandLine("java",
-            		'-cp', basePath.resolve("org.eclipse.equinox.launcher_${config.launcherVersion}.jar").toFile(),
+            		'-cp', config.getLauncherPath().toFile(),
             		'org.eclipse.core.launcher.Main', 
                     '-application', 'org.eclipse.ant.core.antRunner',
                     '-consoleLog',

@@ -20,7 +20,7 @@ class DownloadHelper {
 
     static void addEclipseConfigurationExtension(Project project) {
         if(project.extensions.findByName(ECLIPSE_CONFIGURATION_EXTENSION_NAME) == null) {
-            project.extensions.create(ECLIPSE_CONFIGURATION_EXTENSION_NAME, EclipseConfiguration)
+            project.extensions.create(ECLIPSE_CONFIGURATION_EXTENSION_NAME, EclipseConfiguration, project)
         }
     }
 
@@ -31,12 +31,8 @@ class DownloadHelper {
             EclipseConfiguration config = project.eclipseConfiguration
 
             onlyIf {
-                return !project.buildDir
-                        .toPath()
-                        .resolve("eclipse/eclipse/plugins/org.eclipse.equinox.launcher_${config.launcherVersion}.jar")
-                        .toFile().exists()
+                return !config.isDownloded()
             }
-
 
             def os = org.gradle.internal.os.OperatingSystem.current()
             def arch = System.getProperty("os.arch").contains("64") ? "-x86_64" : ""
@@ -51,7 +47,7 @@ class DownloadHelper {
                 downloadUrl = "${eclipseUrl}/eclipse-SDK-${eclipseVersion}-linux-gtk${arch}.tar.gz"
             }
 
-            targetDir = project.buildDir.toPath().resolve("eclipse").toFile()
+            targetDir = new File(config.localEclipseDir)
         }
     }
 }
