@@ -6,7 +6,7 @@ dependencies {
     compile 'org.apache.maven:maven-ant-tasks:2.1.3'
     compile 'org.osgi:org.eclipse.osgi:3.10.100.v20150529-1857'
 
-    compile 'de.monkeyworks.buildmonkey:PluginCommons:+'
+    compile 'de.monkeyworks.buildmonkey:base:+'
 }
 
 apply plugin: "com.gradle.plugin-publish"

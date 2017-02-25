@@ -1,12 +1,12 @@
 buildscript {
     repositories {
+        mavenLocal()
         maven {
             url "https://hackathon.monkey-works.de/artifactory/Plugins"
         }
         maven {url "https://plugins.gradle.org/m2/"}
         mavenCentral()
         jcenter()
-        mavenLocal()
     }
     dependencies {
         classpath "de.monkeyworks.buildmonkey:gradle.p2:+"
