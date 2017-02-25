@@ -1,0 +1,23 @@
+version = '1.0'
+group = 'de.monkeyworks.buildmonkey'
+
+publishing {
+    publications {
+        mavenGroovy(MavenPublication) {
+            groupId "${group}"
+            version project.version
+            from components.java
+        }
+    }
+
+    repositories {
+        maven {
+            url "https://hackathon.monkey-works.de/artifactory/artefacts"
+
+            credentials {
+                username "admin"
+                password "password"
+            }
+        }
+    }
+}

@@ -1,8 +1,12 @@
+repositories {
+    maven {url "https://hackathon.monkey-works.de/artifactory/artefacts"}
+}
+
 dependencies {
     compile 'org.apache.maven:maven-ant-tasks:2.1.3'
     compile 'org.osgi:org.eclipse.osgi:3.10.100.v20150529-1857'
 
-    compile project(":base")
+    compile 'de.monkeyworks.buildmonkey:PluginCommons:+'
 }
 
 apply plugin: "com.gradle.plugin-publish"

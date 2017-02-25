@@ -30,23 +30,25 @@ subprojects {
     }
     build.dependsOn install
 
-    publishing {
-        publications {
-            mavenGroovy(MavenPublication) {
-                def projectName = project.name.replace("gradle", "")
-                groupId "${group}${projectName}"
-                version project.version
-                from components.java
+
+    if(project.name != 'base') {
+        publishing {
+            publications {
+                mavenGroovy(MavenPublication) {
+                    groupId "${group}"
+                    version project.version
+                    from components.java
+                }
             }
-        }
 
-        repositories {
-            maven {
-                url "https://hackathon.monkey-works.de/artifactory/Plugins"
+            repositories {
+                maven {
+                    url "https://hackathon.monkey-works.de/artifactory/Plugins"
 
-                credentials {
-                    username "admin"
-                    password "password"
+                    credentials {
+                        username "admin"
+                        password "password"
+                    }
                 }
             }
         }
