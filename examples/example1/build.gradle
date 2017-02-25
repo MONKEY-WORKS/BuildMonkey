@@ -8,8 +8,8 @@ buildscript {
     dependencies {
         classpath "de.monkeyworks.buildmonkey:gradle.p2:+"
         classpath "de.monkeyworks.buildmonkey:gradle.mavenize:+"
-        classpath "gradle.plugin.de.monkeyworks.buildmonkey:gradle.dependency:0.1"
-        classpath "org.codehaus.groovy.modules.http-builder:http-builder:0.5.2"  
+        classpath "de.monkeyworks.buildmonkey:gradle.dependency:+"
+//        classpath "org.codehaus.groovy.modules.http-builder:http-builder:0.5.2"  
     }
 }
 
