@@ -8,15 +8,15 @@
 package de.monkeyworks.buildmonkey.eclipsesdk.tools
 
 import de.monkeyworks.buildmonkey.eclipsesdk.EclipseConfiguration
+import de.monkeyworks.buildmonkey.eclipsesdk.utils.FileSemaphore
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
 import org.gradle.api.tasks.TaskAction
 import org.gradle.internal.os.OperatingSystem
-import de.monkeyworks.buildmonkey.eclipsesdk.utils.FileSemaphore
 
-import java.nio.file.FileVisitOption
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
 
 class DownloadEclipseSdkTask extends DefaultTask {
 
@@ -41,6 +41,9 @@ class DownloadEclipseSdkTask extends DefaultTask {
         // download the archive
         File sdkArchive = eclipseSdkArchive()
 
+        EclipseConfiguration config = project.eclipseConfiguration
+
+        // delete folder for extracted zip
         Path folder = sdkArchive.parentFile.toPath()
         def os = OperatingSystem.current()
         if(os.isMacOsX()) {
@@ -63,17 +66,12 @@ class DownloadEclipseSdkTask extends DefaultTask {
             project.ant.untar(src: sdkArchive, dest: sdkArchive.parentFile, compression: "gzip", overwrite: true)
         }
 
-
-
-        Files.list(folder).each { file ->
-            Path from = file
-            Path to = sdkArchive.parentFile.toPath().resolve(file.getFileName().toString())
-
-            project.logger.info("Moving eclipse from $from to $to")
-
-            Files.move(from, to)
+        def targetEclipseDir = Paths.get(config.localEclipseDir)
+        if(Files.exists(targetEclipseDir)) {
+            targetEclipseDir.deleteDir()
         }
-        Files.delete(folder)
+
+        Files.move(folder, targetEclipseDir)
     }
 
     private File eclipseSdkArchive() {

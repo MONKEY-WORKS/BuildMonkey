@@ -47,7 +47,7 @@ class DownloadHelper {
                 downloadUrl = "${eclipseUrl}/eclipse-SDK-${eclipseVersion}-linux-gtk${arch}.tar.gz"
             }
 
-            targetDir = new File(config.localEclipseDir)
+            targetDir = project.buildDir.toPath().resolve("downloads").toFile()
         }
     }
 }

@@ -43,6 +43,12 @@ class EclipseConfiguration {
         eclipseVersion = '4.6.1'
         localEclipseDir = project.buildDir.toPath().resolve("eclipsesdk")
 
+        // if eclipse home variable is there use it
+        def homeEnv = "$System.env.ECLIPSE_HOME"
+        if(homeEnv != null && homeEnv.length() > 0) {
+            localEclipseDir = Paths.get(homeEnv)
+        }
+
         project.project.gradle.taskGraph.whenReady {
             if(launcherVersion != null) {
                 return
