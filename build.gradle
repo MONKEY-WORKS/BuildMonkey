@@ -38,4 +38,29 @@ subprojects {
         compile gradleApi()
         compile localGroovy()
     }
+    build.dependsOn install
+
+    publishing {
+        publications {
+            mavenGroovy(MavenPublication) {
+                def projectName = project.name.replace("gradle", "")
+                groupId "${group}${projectName}"
+                version project.version
+                from components.java
+            }
+        }
+
+        repositories {
+            maven {
+                url "https://hackathon.monkey-works.de/artifactory/Plugins"
+
+                credentials {
+                    username "admin"
+                    password "password"
+                }
+            }
+        }
+    }
 }
+
+

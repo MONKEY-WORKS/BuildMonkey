@@ -14,7 +14,7 @@ dependencies {
 }
 
 group = "de.monkeyworks.buildmonkey"
-version = '0.1'
+version = '0.2'
 
 apply plugin: "com.gradle.plugin-publish"
 
