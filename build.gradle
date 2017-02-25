@@ -7,6 +7,7 @@ buildscript {
 
     dependencies {
         classpath "com.gradle.publish:plugin-publish-plugin:0.9.7"
+        classpath "gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.13.1"
     }
 }
 
@@ -18,6 +19,15 @@ subprojects {
     apply plugin: 'eclipse'
 
     group = "de.monkeyworks.buildmonkey"
+
+
+    apply plugin: "com.github.hierynomus.license"
+
+    license {
+        header rootProject.file('LICENSE')
+        strictCheck true
+        skipExistingHeaders true
+    }
 
     repositories {
         mavenCentral()

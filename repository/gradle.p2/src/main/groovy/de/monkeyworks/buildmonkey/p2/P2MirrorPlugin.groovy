@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2015 the original author or authors.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ */
 package de.monkeyworks.buildmonkey.p2
 
 import de.monkeyworks.buildmonkey.eclipsesdk.DownloadHelper
@@ -251,8 +258,14 @@ class P2MirrorPlugin implements Plugin<Project> {
             //standardOutput = new LogOutputStream(project.logger, LogLevel.INFO)
             //errorOutput = new LogOutputStream(project.logger, LogLevel.INFO)
             def config = project.eclipseConfiguration
+            def os = org.gradle.internal.os.OperatingSystem.current()
+            def basePath =  project.buildDir.toPath().resolve("eclipse/eclipse/plugins/")
+            if(os.isMacOsX()) {
+                basePath = project.buildDir.toPath().resolve("eclipse/Eclipse.app/Contents/Eclipse/plugins/")
+            }
+
             commandLine("java",
-            		'-cp', project.buildDir.toPath().resolve("eclipse/eclipse/plugins/org.eclipse.equinox.launcher_${config.launcherVersion}.jar").toFile(),
+            		'-cp', basePath.resolve("org.eclipse.equinox.launcher_${config.launcherVersion}.jar").toFile(),
             		'org.eclipse.core.launcher.Main', 
                     '-application', 'org.eclipse.ant.core.antRunner',
                     '-consoleLog',
