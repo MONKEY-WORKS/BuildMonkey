@@ -14,6 +14,7 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.internal.os.OperatingSystem
 import de.monkeyworks.buildmonkey.eclipsesdk.utils.FileSemaphore
 
+import java.nio.file.FileVisitOption
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -39,12 +40,23 @@ class DownloadEclipseSdkTask extends DefaultTask {
     private void downloadEclipseSdkUnprotected(Project project) {
         // download the archive
         File sdkArchive = eclipseSdkArchive()
+
+        Path folder = sdkArchive.parentFile.toPath()
+        def os = OperatingSystem.current()
+        if(os.isMacOsX()) {
+            folder = folder.resolve("Eclipse.app")
+        } else {
+            folder = folder.resolve("eclipse")
+        }
+        if(Files.exists(folder)) {
+            folder.deleteDir()
+        }
+
         project.logger.info("Download Eclipse SDK from '${downloadUrl}' to '${sdkArchive.absolutePath}'")
         project.ant.get(src: new URL(downloadUrl), dest: sdkArchive)
 
         // extract it to the same location where it was extracted
         project.logger.info("Extract '$sdkArchive' to '$sdkArchive.parentFile.absolutePath'")
-        def os = OperatingSystem.current();
         if (os.isWindows()) {
             project.ant.unzip(src: sdkArchive, dest: sdkArchive.parentFile, overwrite: true)
         } else {
@@ -52,12 +64,6 @@ class DownloadEclipseSdkTask extends DefaultTask {
         }
 
 
-        Path folder = sdkArchive.parentFile.toPath()
-        if(os.isMacOsX()) {
-            folder = folder.resolve("Eclipse.app")
-        } else {
-            folder = folder.resolve("eclipse")
-        }
 
         Files.list(folder).each { file ->
             Path from = file
