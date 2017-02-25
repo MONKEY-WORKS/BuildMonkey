@@ -48,7 +48,7 @@ class MavenizerPlugin implements Plugin<Project> {
         project.extensions.create("mavenize", MavenizeExtension, project)
 
         def name = TASK_NAME_CONVERT_P2_M2
-        project.tasks.create(name)
+        def rootTask = project.tasks.create(name)
 
         project.afterEvaluate {
             MavenizeExtension config = project.mavenize
@@ -65,7 +65,7 @@ class MavenizerPlugin implements Plugin<Project> {
                 }
                 project.tasks.clean.dependsOn cleanTask
 
-                project.task(name + "_$i", dependsOn: [name]) {
+                project.task(name + "_$i") {
                     description = "Converts created p2 repository into m2 repository"
 
                     if(project.tasks.findByPath(TASK_NAME_MIRROR_P2) != null) {
@@ -77,6 +77,7 @@ class MavenizerPlugin implements Plugin<Project> {
                         converter.deploy(new File(task.sourceP2Repository), new File(task.targetDir))
                     }
                 }
+                rootTask.dependsOn(name + "_$i")
 
                 i++
             }
