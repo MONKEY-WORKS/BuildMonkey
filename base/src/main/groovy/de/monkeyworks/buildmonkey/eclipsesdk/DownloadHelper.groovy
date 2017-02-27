@@ -11,7 +11,7 @@ import de.monkeyworks.buildmonkey.eclipsesdk.tools.DownloadEclipseSdkTask
 import org.gradle.api.Project
 
 /**
- * Created by jake on 24/02/2017.
+ * Created by Johannes Tandler on 24/02/2017.
  */
 class DownloadHelper {
 

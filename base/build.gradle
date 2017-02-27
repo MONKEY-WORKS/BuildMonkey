@@ -1,18 +1,29 @@
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'java'
+
 version = '1.0'
 group = 'de.monkeyworks.buildmonkey'
 
 publishing {
     publications {
         mavenGroovy(MavenPublication) {
-            groupId "${group}"
-            version project.version
             from components.java
+            artifact sourcesJar
+            artifact javadocJar
+            groupId "${group}"
+            artifactId 'base'
+            version project.version
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', 'Common tasks and classes for the BuildMonkey project')
+                root.appendNode('name', 'base')
+                root.appendNode('url', 'https://github.com/MONKEY-WORKS/BuildMonkey/tree/master/base')
+            }
         }
     }
-
-    repositories {
+/*    repositories {
         maven {
-            url "https://hackathon.monkey-works.de/artifactory/artefacts"
+            url "https://hackathon.monkey-works.de/artifactory/Plugins"
 
             credentials {
                 username "admin"
@@ -20,4 +31,46 @@ publishing {
             }
         }
     }
+    */
 }
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+    // options.encoding = 'UTF-8'
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+Properties properties = new Properties()
+File propFile = "${System.properties['user.home']}${File.separator}.gradle${File.separator}bintray.properties" as File
+properties.load(propFile.newDataInputStream())
+
+bintray {   
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+    publications = ['mavenGroovy'] 
+//    configurations = ['archives']
+    pkg {
+        repo = 'BuildMonkey'
+        name = 'base'
+        userOrg = 'michael-barth-monkey-works'
+        licenses = ['EPL-1.0']
+        vcsUrl = 'https://github.com/MONKEY-WORKS/BuildMonkey.git'
+        version {
+            name = '1.0'
+            desc = 'Common tasks and classes for the BuildMonkey project'
+            released  = new Date()
+        }
+    }
+}
+

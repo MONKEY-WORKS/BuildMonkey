@@ -15,7 +15,7 @@ include 'base'
 include 'artifactoryupload'
 
 include 'compilation:gradle.dependency'
-//include 'compilation:gradle.projectsetup'
+include 'compilation:gradle.projectsetup'
 
 //include 'materialisation:gradle.pde'
 

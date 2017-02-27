@@ -3,17 +3,17 @@ package de.monkeyworks.buildmonkey.projectsetup
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
-class ManifestDependencyPlugin implements Plugin<Project> {
+class ProjectSetupPlugin implements Plugin<Project> {
 
     private static final String xtextVersion = '+'
 
     @Override
     public void apply(Project project) {
-        
     }
 
+
     private void applyXtendIfPresent(Project project) {
-        if (project.file('src/main/xtend').exists() || project.file('src/test/xtend').exists()) {
+/*        if (project.file('src/main/xtend').exists() || project.file('src/test/xtend').exists()) {
             project.configure(project) {
                 apply plugin: 'org.xtext.xtend'
             }
@@ -33,6 +33,7 @@ class ManifestDependencyPlugin implements Plugin<Project> {
             }
             clean.dependsOn "cleanXtend"
         }
+        */
     }
 
     

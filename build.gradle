@@ -3,9 +3,11 @@ buildscript {
         maven {
             url "https://plugins.gradle.org/m2/"
         }
+        jcenter()
     }
 
     dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
         classpath "com.gradle.publish:plugin-publish-plugin:0.9.7"
         classpath "gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.13.1"
     }

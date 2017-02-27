@@ -4,14 +4,17 @@ buildscript {
         maven {
             url "https://hackathon.monkey-works.de/artifactory/Plugins"
         }
+        maven {url "https://hackathon.monkey-works.de/artifactory/artefacts"}
         maven {url "https://plugins.gradle.org/m2/"}
         mavenCentral()
         jcenter()
     }
+
     dependencies {
         classpath "de.monkeyworks.buildmonkey:gradle.p2:+"
         classpath "de.monkeyworks.buildmonkey:gradle.mavenize:+"
         classpath "de.monkeyworks.buildmonkey:gradle.dependency:+"
+        classpath "de.monkeyworks.buildmonkey:gradle.projectsetup:+"
 //        classpath "org.codehaus.groovy.modules.http-builder:http-builder:0.5.2"  
     }
 }
@@ -47,6 +50,7 @@ subprojects {
 
     repositories {
         maven {url uri("${buildUri}/m2-repository")}
+
     }
 
     apply plugin: 'java'
@@ -87,49 +91,10 @@ subprojects {
                     // transit dependencies definition
                     from components.java
 
+                    apply plugin: 'de.monkeyworks.buildmonkey.FixDependencyVersion'
+
                     // Replace every '+' version with the version resolved by gradle plugin de.monkeyworks.buildmonkey.dependency.ManifestDependencyPlugin
-                    pom.withXml {
-                        def node = asNode()
-                        def dependenciesNode = node.dependencies
-                        
 
-                        dependenciesNode.each { dependencyListNode ->
-
-                            def blackList = []
-
-                            dependencyListNode.each { dependencyNode ->
-                                def groupId = dependencyNode.groupId.text()
-                                def artifactId = dependencyNode.artifactId.text()
-                                def scope = dependencyNode.scope.text()
-
-                                if(dependencyNode.version.size() > 0) {
-
-                                    def versionNode = dependencyNode.version.get(0)
-                                    def version = versionNode.value()
-
-                                    if(version.toString().contains('+')) {
-                                        def matches = project
-                                            .configurations."${scope}"
-                                            .resolvedConfiguration.resolvedArtifacts.findAll{
-                                                def dep = it.moduleVersion.id
-                                                return dep.group == groupId && dep.name == artifactId
-                                        }
-                                        if(matches.size() > 0) {
-                                            def newVersion = matches.first().moduleVersion.id.version
-                                            versionNode.setValue(newVersion)
-                                        }
-                                    }
-                                }
-                                else {
-                                    println "No version node found for ${groupId}:${artifactId}"
-                                    blackList.add(dependencyNode)
-                                }
-                            }
-                            blackList.each {
-                                dependencyListNode.remove(it)
-                            }
-                        }
-                    }
 
                     configurations.archives.allArtifacts.forEach {
                         def cls = it.classifier;

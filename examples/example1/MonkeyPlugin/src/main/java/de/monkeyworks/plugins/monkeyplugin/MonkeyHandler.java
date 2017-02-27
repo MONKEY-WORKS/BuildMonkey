@@ -20,7 +20,7 @@ public class MonkeyHandler extends AbstractHandler {
 		MessageDialog.openInformation(
 				window.getShell(),
 				"MonkeyPlugin",
-				"Hello Monkey!");
+				"Hello BuildMonkey!");
 		return null;
 	}
 }
