@@ -7,10 +7,10 @@ buildscript {
     }
 
     dependencies {
-        classpath "de.monkeyworks.buildmonkey:gradle.p2:+"
-        classpath "de.monkeyworks.buildmonkey:gradle.mavenize:+"
-        classpath "gradle.plugins.de.monkeyworks.buildmonkey:gradle.dependency:0.2"
-        classpath "gradle.plugins.de.monkeyworks.buildmonkey:gradle.projectsetup:0.3"
+        classpath "de.monkeyworks.buildmonkey:gradle.p2:0.4"
+        classpath "de.monkeyworks.buildmonkey:gradle.mavenize:0.4"
+        classpath "de.monkeyworks.buildmonkey:gradle.dependency:0.4"
+        classpath "de.monkeyworks.buildmonkey:gradle.projectsetup:0.4"
     }
 }
 
@@ -137,6 +137,11 @@ subprojects {
     }
     // add install task to basic build step
     build.dependsOn install
+    build.dependsOn createTargetPlatform
+    build.dependsOn mavenizeP2Repository
+    assemble.dependsOn mirrorP2Repository
+    createTargetPlatform.dependsOn mirrorP2Repository
+    mavenizeP2Repository.dependsOn mirrorP2Repository
 }
  
 
