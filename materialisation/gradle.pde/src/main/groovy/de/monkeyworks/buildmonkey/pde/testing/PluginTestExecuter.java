@@ -28,8 +28,7 @@ import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
 import org.gradle.api.tasks.testing.Test;
 import org.gradle.api.tasks.testing.TestOutputEvent;
-import org.gradle.internal.TrueTimeProvider;
-import org.gradle.internal.progress.OperationIdGenerator;
+import org.gradle.internal.time.TrueTimeProvider;
 import org.gradle.process.ExecResult;
 import org.gradle.process.internal.DefaultJavaExecAction;
 import org.gradle.process.internal.JavaExecAction;
@@ -224,14 +223,13 @@ public final class PluginTestExecuter implements TestExecuter {
         if (testTask.isScanForTestClasses()) {
             TestFrameworkDetector testFrameworkDetector = testTask.getTestFramework().getDetector();
             testFrameworkDetector.setTestClassesDirectory(testTask.getTestClassesDir());
-            testFrameworkDetector.setTestClasspath(testTask.getClasspath());
+            testFrameworkDetector.setTestClasspath(testTask.getClasspath().getFiles());
             detector = new PluginTestClassScanner(testClassFiles, processor);
         } else {
             detector = new PluginTestClassScanner(testClassFiles, processor);
         }
 
-        final Object testTaskOperationId = OperationIdGenerator.generateId(testTask);
-        new TestMainAction(detector, processor, new NoOpTestResultProcessor(), new TrueTimeProvider(), testTaskOperationId, testTask.getPath(), String.format("Gradle Eclipse Test Run %s", testTask.getPath())).run();
+        new TestMainAction(detector, processor, new NoOpTestResultProcessor(), new TrueTimeProvider(), testTask.toString(), testTask.getPath(), String.format("Gradle Eclipse Test Run %s", testTask.getPath())).run();
         LOGGER.info("collected test class names: {}", processor.classNames);
         return processor.classNames;
     }
