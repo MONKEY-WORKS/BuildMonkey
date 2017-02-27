@@ -42,25 +42,26 @@ artifacts {
 
 Properties properties = new Properties()
 File propFile = "${System.properties['user.home']}${File.separator}.gradle${File.separator}bintray.properties" as File
-properties.load(propFile.newDataInputStream())
+if(propFile.exists()) {
+    properties.load(propFile.newDataInputStream())
 
 
-// Use gradle bintrayUpload for uploading.
-bintray {   
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
-    publications = ['mavenGroovy'] 
-    pkg {
-        repo = 'BuildMonkey'
-        name = 'base'
-        userOrg = 'michael-barth-monkey-works'
-        licenses = ['EPL-1.0']
-        vcsUrl = 'https://github.com/MONKEY-WORKS/BuildMonkey.git'
-        version {
-            name = '1.0'
-            desc = 'Common tasks and classes for the BuildMonkey project'
-            released  = new Date()
+    // Use gradle bintrayUpload for uploading.
+    bintray {   
+        user = properties.getProperty("bintray.user")
+        key = properties.getProperty("bintray.apikey")
+        publications = ['mavenGroovy'] 
+        pkg {
+            repo = 'BuildMonkey'
+            name = 'base'
+            userOrg = 'michael-barth-monkey-works'
+            licenses = ['EPL-1.0']
+            vcsUrl = 'https://github.com/MONKEY-WORKS/BuildMonkey.git'
+            version {
+                name = '1.0'
+                desc = 'Common tasks and classes for the BuildMonkey project'
+                released  = new Date()
+            }
         }
     }
 }
-
