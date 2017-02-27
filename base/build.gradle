@@ -21,17 +21,6 @@ publishing {
             }
         }
     }
-/*    repositories {
-        maven {
-            url "https://hackathon.monkey-works.de/artifactory/Plugins"
-
-            credentials {
-                username "admin"
-                password "password"
-            }
-        }
-    }
-    */
 }
 
 task sourcesJar(type: Jar) {
@@ -55,11 +44,12 @@ Properties properties = new Properties()
 File propFile = "${System.properties['user.home']}${File.separator}.gradle${File.separator}bintray.properties" as File
 properties.load(propFile.newDataInputStream())
 
+
+// Use gradle bintrayUpload for uploading.
 bintray {   
     user = properties.getProperty("bintray.user")
     key = properties.getProperty("bintray.apikey")
     publications = ['mavenGroovy'] 
-//    configurations = ['archives']
     pkg {
         repo = 'BuildMonkey'
         name = 'base'
