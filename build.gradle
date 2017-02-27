@@ -34,6 +34,8 @@ subprojects {
     repositories {
         mavenCentral()
         jcenter()
+        //Until the package is not linked to jcenter we need this line
+        maven {url "https://dl.bintray.com/michael-barth-monkey-works/BuildMonkey"}
     }
 
     dependencies {
@@ -50,17 +52,6 @@ subprojects {
                     groupId "${group}"
                     version project.version
                     from components.java
-                }
-            }
-
-            repositories {
-                maven {
-                    url "https://hackathon.monkey-works.de/artifactory/Plugins"
-
-                    credentials {
-                        username "admin"
-                        password "password"
-                    }
                 }
             }
         }

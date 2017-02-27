@@ -4,7 +4,7 @@ buildscript {
         maven {
             url "https://hackathon.monkey-works.de/artifactory/Plugins"
         }
-        maven {url "https://hackathon.monkey-works.de/artifactory/artefacts"}
+//        maven {url "https://hackathon.monkey-works.de/artifactory/artefacts"}
         maven {url "https://plugins.gradle.org/m2/"}
         mavenCentral()
         jcenter()
@@ -91,10 +91,8 @@ subprojects {
                     // transit dependencies definition
                     from components.java
 
-                    apply plugin: 'de.monkeyworks.buildmonkey.FixDependencyVersion'
-
                     // Replace every '+' version with the version resolved by gradle plugin de.monkeyworks.buildmonkey.dependency.ManifestDependencyPlugin
-
+                    apply plugin: 'de.monkeyworks.buildmonkey.FixDependencyVersion'
 
                     configurations.archives.allArtifacts.forEach {
                         def cls = it.classifier;
