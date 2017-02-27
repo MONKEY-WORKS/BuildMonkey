@@ -65,13 +65,13 @@ class DownloadEclipseSdkTask extends DefaultTask {
         } else {
             project.ant.untar(src: sdkArchive, dest: sdkArchive.parentFile, compression: "gzip", overwrite: true)
         }
-
+        
         def targetEclipseDir = Paths.get(config.localEclipseDir)
         if(Files.exists(targetEclipseDir)) {
             targetEclipseDir.deleteDir()
         }
 
-        Files.move(folder, targetEclipseDir)
+        Files.move(folder, Paths.get(config.localEclipseDir))
     }
 
     private File eclipseSdkArchive() {

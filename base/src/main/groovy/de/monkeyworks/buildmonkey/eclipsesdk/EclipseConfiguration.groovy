@@ -44,7 +44,7 @@ class EclipseConfiguration {
         localEclipseDir = project.buildDir.toPath().resolve("eclipsesdk")
 
         // if eclipse home variable is there use it
-        def homeEnv = "$System.env.ECLIPSE_HOME"
+        def homeEnv = System.getenv()["ECLIPSE_HOME"]
         if(homeEnv != null && homeEnv.length() > 0) {
             localEclipseDir = Paths.get(homeEnv)
         }
