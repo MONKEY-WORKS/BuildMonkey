@@ -1,5 +1,5 @@
 group = "de.monkeyworks.buildmonkey"
-version = '0.2'
+version = '0.4'
 
 apply plugin: "com.gradle.plugin-publish"
 
@@ -14,5 +14,8 @@ pluginBundle {
           id = 'de.monkeyworks.buildmonkey.ManifestDependencyPlugin'
           displayName = 'Dependencies from manifest plugin'
         }
+    }
+    mavenCoordinates {
+        groupId = "de.monkeyworks.buildmonkey"
     }
 }

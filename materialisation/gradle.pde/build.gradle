@@ -14,7 +14,7 @@ dependencies {
 }
 
 group = "de.monkeyworks.buildmonkey"
-version = '0.2'
+version = '0.4'
 
 apply plugin: "com.gradle.plugin-publish"
 
@@ -35,4 +35,7 @@ pluginBundle {
           displayName = 'Defining OSGi plugin tests'
         }
     }
+    mavenCoordinates {
+        groupId = "de.monkeyworks.buildmonkey"
+    }    
 }

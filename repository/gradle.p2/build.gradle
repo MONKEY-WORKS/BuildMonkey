@@ -11,7 +11,7 @@ dependencies {
 apply plugin: "com.gradle.plugin-publish"
 
 group = "de.monkeyworks.buildmonkey"
-version = '0.3'
+version = '0.4'
 
 pluginBundle {
     website = 'https://github.com/MONKEY-WORKS/BuildMonkey/wiki'
@@ -25,6 +25,9 @@ pluginBundle {
             displayName = 'P2 repository creator plugin'
         }
     }
+    mavenCoordinates {
+        groupId = "de.monkeyworks.buildmonkey"
+    }    
 }
 
 publishPlugins.dependsOn(build)

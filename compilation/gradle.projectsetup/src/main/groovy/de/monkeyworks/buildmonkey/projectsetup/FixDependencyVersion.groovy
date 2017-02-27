@@ -17,10 +17,13 @@ class FixDependencyVersion implements Plugin<Project> {
     @Override
     public void apply(Project project) {
     	
+    	if(!project.publishing.hasProperty('publications')) {
+    		return
+    	}
+
     	project.publishing.publications.each {
     		if(it instanceof DefaultMavenPublication) {
 	    		DefaultMavenPublication publication = it as DefaultMavenPublication
-	    		println publication.pom
 		    	publication.pom.withXml {
 		            def node = asNode()
 		            def dependenciesNode = node.dependencies

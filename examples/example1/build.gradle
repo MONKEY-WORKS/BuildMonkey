@@ -9,8 +9,8 @@ buildscript {
     dependencies {
         classpath "de.monkeyworks.buildmonkey:gradle.p2:+"
         classpath "de.monkeyworks.buildmonkey:gradle.mavenize:+"
-        classpath "de.monkeyworks.buildmonkey:gradle.dependency:+"
-        classpath "de.monkeyworks.buildmonkey:gradle.projectsetup:+"
+        classpath "gradle.plugins.de.monkeyworks.buildmonkey:gradle.dependency:0.2"
+        classpath "gradle.plugins.de.monkeyworks.buildmonkey:gradle.projectsetup:0.3"
     }
 }
 

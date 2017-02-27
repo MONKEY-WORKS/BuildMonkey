@@ -14,11 +14,30 @@ include 'base'
 
 include 'artifactoryupload'
 
-include 'compilation:gradle.dependency'
-include 'compilation:gradle.projectsetup'
+def projectTreeRootDir = new File( "${rootProject.dir}" )
 
-//include 'materialisation:gradle.pde'
+// Shared components
 
-include 'repository:gradle.mavenize'
-include 'repository:gradle.p2'
-include 'repository:gradle.p2publish'
+def sharedRootDir = new File( projectTreeRootDir, 'compilation' )
+
+include ':gradle.dependency'
+project( ':gradle.dependency' ).projectDir = new File( sharedRootDir, 'gradle.dependency' )
+include ':gradle.projectsetup'
+project( ':gradle.projectsetup' ).projectDir = new File( sharedRootDir, 'gradle.projectsetup' )
+
+
+sharedRootDir = new File( projectTreeRootDir, 'materialisation' )
+
+include ':gradle.pde'
+project( ':gradle.pde' ).projectDir = new File( sharedRootDir, 'gradle.pde' )
+
+
+sharedRootDir = new File( projectTreeRootDir, 'repository' )
+
+include ':gradle.mavenize'
+project( ':gradle.mavenize' ).projectDir = new File( sharedRootDir, 'gradle.mavenize' )
+include ':gradle.p2'
+project( ':gradle.p2' ).projectDir = new File( sharedRootDir, 'gradle.p2' )
+include ':gradle.p2publish'
+project( ':gradle.p2publish' ).projectDir = new File( sharedRootDir, 'gradle.p2publish' )
+

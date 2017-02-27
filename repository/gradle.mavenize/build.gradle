@@ -9,7 +9,7 @@ dependencies {
 apply plugin: "com.gradle.plugin-publish"
 
 group = "de.monkeyworks.buildmonkey"
-version = '0.2'
+version = '0.4'
 
 pluginBundle {
     website = 'https://github.com/MONKEY-WORKS/BuildMonkey/wiki'
@@ -23,6 +23,9 @@ pluginBundle {
             displayName = 'Mavenize p2 repository plugin'
         }
     }
+    mavenCoordinates {
+        groupId = "de.monkeyworks.buildmonkey"
+    }    
 }
 
 publishPlugins.dependsOn(build)
