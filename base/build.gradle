@@ -9,7 +9,7 @@ publishing {
         mavenGroovy(MavenPublication) {
             from components.java
             artifact sourcesJar
-            artifact javadocJar
+            artifact groovydocJar
             groupId "${group}"
             artifactId 'base'
             version project.version
@@ -24,19 +24,19 @@ publishing {
 }
 
 task sourcesJar(type: Jar) {
-    from sourceSets.main.java.srcDirs
+    from sourceSets.main.groovy.srcDirs
     classifier = 'sources'
 }
 
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
+task groovydocJar(type: Jar, dependsOn: groovydoc) {
+    classifier = 'groovydoc'
     from javadoc.destinationDir
     // options.encoding = 'UTF-8'
 }
 
 artifacts {
-    archives javadocJar
+    archives groovydocJar
     archives sourcesJar
 }
 

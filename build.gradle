@@ -34,8 +34,6 @@ subprojects {
     repositories {
         mavenCentral()
         jcenter()
-        //Until the package is not linked to jcenter we need this line
-        maven {url "https://dl.bintray.com/michael-barth-monkey-works/BuildMonkey"}
     }
 
     dependencies {
