@@ -1,0 +1,844 @@
+The Task.leftShift(Closure) method has been deprecated and is scheduled to be removed in Gradle 5.0. Please use Task.doLast(Action) instead.
+	at build_s091rnc5ao66fjenjnhyxd6b$_run_closure3.doCall(/home/micha/branches/github/BuildMonkey/examples/exampleApp/build.gradle:105)
+:MonkeyExampleE4Application:dependencies
+
+------------------------------------------------------------
+Project :MonkeyExampleE4Application
+------------------------------------------------------------
+
+archives - Configuration for archive artifacts.
+No dependencies
+
+compile - Dependencies for source set 'main'.
++--- eclipse:javax.inject:+ -> 1.0.0
++--- eclipse:org.eclipse.core.runtime:+ -> 3.12.0
+|    +--- eclipse:org.eclipse.osgi:3.11.0
+|    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.core.jobs:3.8.0
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.equinox.registry:3.6.100
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.equinox.preferences:3.6.0
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.core.contenttype:3.5.100
+|    |    +--- eclipse:org.eclipse.equinox.preferences:3.6.0 (*)
+|    |    +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    \--- eclipse:org.eclipse.equinox.app:1.3.400
+|         +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|         \--- eclipse:org.eclipse.equinox.common:3.8.0
++--- eclipse:org.eclipse.swt:+ -> 3.105.0
++--- eclipse:org.eclipse.e4.ui.model.workbench:+ -> 1.2.0
+|    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.services:2.0.100
+|    |    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    |    +--- eclipse:org.eclipse.equinox.preferences:3.6.0 (*)
+|    |    +--- eclipse:org.eclipse.core.jobs:3.8.0 (*)
+|    |    +--- eclipse:org.eclipse.e4.core.di:1.6.0
+|    |    |    \--- eclipse:org.eclipse.e4.core.di.annotations:1.5.0
+|    |    \--- eclipse:org.eclipse.e4.core.contexts:1.5.0
+|    |         \--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.contexts:1.5.0 (*)
+|    +--- eclipse:org.eclipse.core.commands:3.8.0
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.emf.ecore:2.12.0
+|    |    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    +--- eclipse:org.eclipse.emf.common:2.12.0
+|    |    |    \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    \--- eclipse:org.eclipse.core.resources:3.11.0
+|    |         +--- eclipse:org.eclipse.core.expressions:3.5.100
+|    |         |    \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |         +--- eclipse:org.eclipse.core.filesystem:1.6.0
+|    |         |    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    |         |    +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|    |         |    \--- eclipse:org.eclipse.osgi:3.11.0
+|    |         \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    \--- eclipse:org.eclipse.e4.emf.xpath:0.1.200
+|         +--- eclipse:org.apache.commons.jxpath:1.3.0
+|         \--- eclipse:org.eclipse.emf.ecore:2.12.0 (*)
++--- eclipse:org.eclipse.jface:+ -> 3.12.0
+|    +--- eclipse:org.eclipse.swt:3.105.0
+|    +--- eclipse:org.eclipse.core.commands:3.8.0 (*)
+|    \--- eclipse:org.eclipse.equinox.common:3.8.0
++--- eclipse:org.eclipse.e4.ui.services:+ -> 1.2.100
+|    +--- eclipse:org.eclipse.core.commands:3.8.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.services:2.0.100 (*)
+|    +--- eclipse:org.eclipse.osgi:3.11.0
+|    +--- eclipse:org.eclipse.e4.core.contexts:1.5.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    \--- eclipse:org.eclipse.e4.ui.di:1.1.100
+|         +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|         +--- eclipse:org.eclipse.e4.core.di.extensions:0.14.0
+|         |    \--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|         \--- eclipse:org.eclipse.osgi.services:3.5.100
++--- eclipse:org.eclipse.e4.ui.workbench:+ -> 1.4.0
+|    +--- eclipse:org.eclipse.e4.ui.model.workbench:1.2.0 (*)
+|    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.osgi:3.11.0
+|    +--- eclipse:org.eclipse.e4.ui.services:1.2.100 (*)
+|    +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|    +--- eclipse:org.eclipse.e4.core.services:2.0.100 (*)
+|    +--- eclipse:org.eclipse.e4.core.contexts:1.5.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.core.jobs:3.8.0 (*)
+|    +--- eclipse:org.eclipse.core.commands:3.8.0 (*)
+|    +--- eclipse:org.eclipse.osgi.services:3.5.100
+|    +--- eclipse:org.eclipse.e4.core.commands:0.11.100
+|    |    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    |    \--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.emf.ecore.change:2.11.0
+|    |    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    \--- eclipse:org.eclipse.emf.ecore:2.12.0 (*)
+|    +--- eclipse:org.eclipse.core.expressions:3.5.100 (*)
+|    +--- eclipse:org.eclipse.e4.ui.di:1.1.100 (*)
+|    +--- eclipse:org.eclipse.emf.ecore.xmi:2.12.0
+|    |    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    \--- eclipse:org.eclipse.emf.ecore:2.12.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.di.extensions:0.14.0 (*)
+|    \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
++--- eclipse:org.eclipse.e4.core.di:+ -> 1.6.0 (*)
++--- eclipse:org.eclipse.e4.ui.di:+ -> 1.1.100 (*)
+\--- eclipse:org.eclipse.e4.core.contexts:+ -> 1.5.0 (*)
+
+compileClasspath - Compile classpath for source set 'main'.
++--- eclipse:javax.inject:+ -> 1.0.0
++--- eclipse:org.eclipse.core.runtime:+ -> 3.12.0
+|    +--- eclipse:org.eclipse.osgi:3.11.0
+|    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.core.jobs:3.8.0
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.equinox.registry:3.6.100
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.equinox.preferences:3.6.0
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.core.contenttype:3.5.100
+|    |    +--- eclipse:org.eclipse.equinox.preferences:3.6.0 (*)
+|    |    +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    \--- eclipse:org.eclipse.equinox.app:1.3.400
+|         +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|         \--- eclipse:org.eclipse.equinox.common:3.8.0
++--- eclipse:org.eclipse.swt:+ -> 3.105.0
++--- eclipse:org.eclipse.e4.ui.model.workbench:+ -> 1.2.0
+|    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.services:2.0.100
+|    |    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    |    +--- eclipse:org.eclipse.equinox.preferences:3.6.0 (*)
+|    |    +--- eclipse:org.eclipse.core.jobs:3.8.0 (*)
+|    |    +--- eclipse:org.eclipse.e4.core.di:1.6.0
+|    |    |    \--- eclipse:org.eclipse.e4.core.di.annotations:1.5.0
+|    |    \--- eclipse:org.eclipse.e4.core.contexts:1.5.0
+|    |         \--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.contexts:1.5.0 (*)
+|    +--- eclipse:org.eclipse.core.commands:3.8.0
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.emf.ecore:2.12.0
+|    |    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    +--- eclipse:org.eclipse.emf.common:2.12.0
+|    |    |    \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    \--- eclipse:org.eclipse.core.resources:3.11.0
+|    |         +--- eclipse:org.eclipse.core.expressions:3.5.100
+|    |         |    \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |         +--- eclipse:org.eclipse.core.filesystem:1.6.0
+|    |         |    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    |         |    +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|    |         |    \--- eclipse:org.eclipse.osgi:3.11.0
+|    |         \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    \--- eclipse:org.eclipse.e4.emf.xpath:0.1.200
+|         +--- eclipse:org.apache.commons.jxpath:1.3.0
+|         \--- eclipse:org.eclipse.emf.ecore:2.12.0 (*)
++--- eclipse:org.eclipse.jface:+ -> 3.12.0
+|    +--- eclipse:org.eclipse.swt:3.105.0
+|    +--- eclipse:org.eclipse.core.commands:3.8.0 (*)
+|    \--- eclipse:org.eclipse.equinox.common:3.8.0
++--- eclipse:org.eclipse.e4.ui.services:+ -> 1.2.100
+|    +--- eclipse:org.eclipse.core.commands:3.8.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.services:2.0.100 (*)
+|    +--- eclipse:org.eclipse.osgi:3.11.0
+|    +--- eclipse:org.eclipse.e4.core.contexts:1.5.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    \--- eclipse:org.eclipse.e4.ui.di:1.1.100
+|         +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|         +--- eclipse:org.eclipse.e4.core.di.extensions:0.14.0
+|         |    \--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|         \--- eclipse:org.eclipse.osgi.services:3.5.100
++--- eclipse:org.eclipse.e4.ui.workbench:+ -> 1.4.0
+|    +--- eclipse:org.eclipse.e4.ui.model.workbench:1.2.0 (*)
+|    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.osgi:3.11.0
+|    +--- eclipse:org.eclipse.e4.ui.services:1.2.100 (*)
+|    +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|    +--- eclipse:org.eclipse.e4.core.services:2.0.100 (*)
+|    +--- eclipse:org.eclipse.e4.core.contexts:1.5.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.core.jobs:3.8.0 (*)
+|    +--- eclipse:org.eclipse.core.commands:3.8.0 (*)
+|    +--- eclipse:org.eclipse.osgi.services:3.5.100
+|    +--- eclipse:org.eclipse.e4.core.commands:0.11.100
+|    |    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    |    \--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.emf.ecore.change:2.11.0
+|    |    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    \--- eclipse:org.eclipse.emf.ecore:2.12.0 (*)
+|    +--- eclipse:org.eclipse.core.expressions:3.5.100 (*)
+|    +--- eclipse:org.eclipse.e4.ui.di:1.1.100 (*)
+|    +--- eclipse:org.eclipse.emf.ecore.xmi:2.12.0
+|    |    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    \--- eclipse:org.eclipse.emf.ecore:2.12.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.di.extensions:0.14.0 (*)
+|    \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
++--- eclipse:org.eclipse.e4.core.di:+ -> 1.6.0 (*)
++--- eclipse:org.eclipse.e4.ui.di:+ -> 1.1.100 (*)
+\--- eclipse:org.eclipse.e4.core.contexts:+ -> 1.5.0 (*)
+
+compileOnly - Compile dependencies for source set 'main'.
++--- eclipse:javax.inject:+ -> 1.0.0
++--- eclipse:org.eclipse.core.runtime:+ -> 3.12.0
+|    +--- eclipse:org.eclipse.osgi:3.11.0
+|    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.core.jobs:3.8.0
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.equinox.registry:3.6.100
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.equinox.preferences:3.6.0
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.core.contenttype:3.5.100
+|    |    +--- eclipse:org.eclipse.equinox.preferences:3.6.0 (*)
+|    |    +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    \--- eclipse:org.eclipse.equinox.app:1.3.400
+|         +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|         \--- eclipse:org.eclipse.equinox.common:3.8.0
++--- eclipse:org.eclipse.swt:+ -> 3.105.0
++--- eclipse:org.eclipse.e4.ui.model.workbench:+ -> 1.2.0
+|    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.services:2.0.100
+|    |    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    |    +--- eclipse:org.eclipse.equinox.preferences:3.6.0 (*)
+|    |    +--- eclipse:org.eclipse.core.jobs:3.8.0 (*)
+|    |    +--- eclipse:org.eclipse.e4.core.di:1.6.0
+|    |    |    \--- eclipse:org.eclipse.e4.core.di.annotations:1.5.0
+|    |    \--- eclipse:org.eclipse.e4.core.contexts:1.5.0
+|    |         \--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.contexts:1.5.0 (*)
+|    +--- eclipse:org.eclipse.core.commands:3.8.0
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.emf.ecore:2.12.0
+|    |    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    +--- eclipse:org.eclipse.emf.common:2.12.0
+|    |    |    \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    \--- eclipse:org.eclipse.core.resources:3.11.0
+|    |         +--- eclipse:org.eclipse.core.expressions:3.5.100
+|    |         |    \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |         +--- eclipse:org.eclipse.core.filesystem:1.6.0
+|    |         |    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    |         |    +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|    |         |    \--- eclipse:org.eclipse.osgi:3.11.0
+|    |         \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    \--- eclipse:org.eclipse.e4.emf.xpath:0.1.200
+|         +--- eclipse:org.apache.commons.jxpath:1.3.0
+|         \--- eclipse:org.eclipse.emf.ecore:2.12.0 (*)
++--- eclipse:org.eclipse.jface:+ -> 3.12.0
+|    +--- eclipse:org.eclipse.swt:3.105.0
+|    +--- eclipse:org.eclipse.core.commands:3.8.0 (*)
+|    \--- eclipse:org.eclipse.equinox.common:3.8.0
++--- eclipse:org.eclipse.e4.ui.services:+ -> 1.2.100
+|    +--- eclipse:org.eclipse.core.commands:3.8.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.services:2.0.100 (*)
+|    +--- eclipse:org.eclipse.osgi:3.11.0
+|    +--- eclipse:org.eclipse.e4.core.contexts:1.5.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    \--- eclipse:org.eclipse.e4.ui.di:1.1.100
+|         +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|         +--- eclipse:org.eclipse.e4.core.di.extensions:0.14.0
+|         |    \--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|         \--- eclipse:org.eclipse.osgi.services:3.5.100
++--- eclipse:org.eclipse.e4.ui.workbench:+ -> 1.4.0
+|    +--- eclipse:org.eclipse.e4.ui.model.workbench:1.2.0 (*)
+|    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.osgi:3.11.0
+|    +--- eclipse:org.eclipse.e4.ui.services:1.2.100 (*)
+|    +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|    +--- eclipse:org.eclipse.e4.core.services:2.0.100 (*)
+|    +--- eclipse:org.eclipse.e4.core.contexts:1.5.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.core.jobs:3.8.0 (*)
+|    +--- eclipse:org.eclipse.core.commands:3.8.0 (*)
+|    +--- eclipse:org.eclipse.osgi.services:3.5.100
+|    +--- eclipse:org.eclipse.e4.core.commands:0.11.100
+|    |    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    |    \--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.emf.ecore.change:2.11.0
+|    |    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    \--- eclipse:org.eclipse.emf.ecore:2.12.0 (*)
+|    +--- eclipse:org.eclipse.core.expressions:3.5.100 (*)
+|    +--- eclipse:org.eclipse.e4.ui.di:1.1.100 (*)
+|    +--- eclipse:org.eclipse.emf.ecore.xmi:2.12.0
+|    |    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    \--- eclipse:org.eclipse.emf.ecore:2.12.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.di.extensions:0.14.0 (*)
+|    \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
++--- eclipse:org.eclipse.e4.core.di:+ -> 1.6.0 (*)
++--- eclipse:org.eclipse.e4.ui.di:+ -> 1.1.100 (*)
+\--- eclipse:org.eclipse.e4.core.contexts:+ -> 1.5.0 (*)
+
+default - Configuration for default artifacts.
++--- eclipse:javax.inject:+ -> 1.0.0
++--- eclipse:org.eclipse.core.runtime:+ -> 3.12.0
+|    +--- eclipse:org.eclipse.osgi:3.11.0
+|    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.core.jobs:3.8.0
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.equinox.registry:3.6.100
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.equinox.preferences:3.6.0
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.core.contenttype:3.5.100
+|    |    +--- eclipse:org.eclipse.equinox.preferences:3.6.0 (*)
+|    |    +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    \--- eclipse:org.eclipse.equinox.app:1.3.400
+|         +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|         \--- eclipse:org.eclipse.equinox.common:3.8.0
++--- eclipse:org.eclipse.swt:+ -> 3.105.0
++--- eclipse:org.eclipse.e4.ui.model.workbench:+ -> 1.2.0
+|    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.services:2.0.100
+|    |    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    |    +--- eclipse:org.eclipse.equinox.preferences:3.6.0 (*)
+|    |    +--- eclipse:org.eclipse.core.jobs:3.8.0 (*)
+|    |    +--- eclipse:org.eclipse.e4.core.di:1.6.0
+|    |    |    \--- eclipse:org.eclipse.e4.core.di.annotations:1.5.0
+|    |    \--- eclipse:org.eclipse.e4.core.contexts:1.5.0
+|    |         \--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.contexts:1.5.0 (*)
+|    +--- eclipse:org.eclipse.core.commands:3.8.0
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.emf.ecore:2.12.0
+|    |    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    +--- eclipse:org.eclipse.emf.common:2.12.0
+|    |    |    \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    \--- eclipse:org.eclipse.core.resources:3.11.0
+|    |         +--- eclipse:org.eclipse.core.expressions:3.5.100
+|    |         |    \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |         +--- eclipse:org.eclipse.core.filesystem:1.6.0
+|    |         |    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    |         |    +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|    |         |    \--- eclipse:org.eclipse.osgi:3.11.0
+|    |         \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    \--- eclipse:org.eclipse.e4.emf.xpath:0.1.200
+|         +--- eclipse:org.apache.commons.jxpath:1.3.0
+|         \--- eclipse:org.eclipse.emf.ecore:2.12.0 (*)
++--- eclipse:org.eclipse.jface:+ -> 3.12.0
+|    +--- eclipse:org.eclipse.swt:3.105.0
+|    +--- eclipse:org.eclipse.core.commands:3.8.0 (*)
+|    \--- eclipse:org.eclipse.equinox.common:3.8.0
++--- eclipse:org.eclipse.e4.ui.services:+ -> 1.2.100
+|    +--- eclipse:org.eclipse.core.commands:3.8.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.services:2.0.100 (*)
+|    +--- eclipse:org.eclipse.osgi:3.11.0
+|    +--- eclipse:org.eclipse.e4.core.contexts:1.5.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    \--- eclipse:org.eclipse.e4.ui.di:1.1.100
+|         +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|         +--- eclipse:org.eclipse.e4.core.di.extensions:0.14.0
+|         |    \--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|         \--- eclipse:org.eclipse.osgi.services:3.5.100
++--- eclipse:org.eclipse.e4.ui.workbench:+ -> 1.4.0
+|    +--- eclipse:org.eclipse.e4.ui.model.workbench:1.2.0 (*)
+|    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.osgi:3.11.0
+|    +--- eclipse:org.eclipse.e4.ui.services:1.2.100 (*)
+|    +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|    +--- eclipse:org.eclipse.e4.core.services:2.0.100 (*)
+|    +--- eclipse:org.eclipse.e4.core.contexts:1.5.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.core.jobs:3.8.0 (*)
+|    +--- eclipse:org.eclipse.core.commands:3.8.0 (*)
+|    +--- eclipse:org.eclipse.osgi.services:3.5.100
+|    +--- eclipse:org.eclipse.e4.core.commands:0.11.100
+|    |    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    |    \--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.emf.ecore.change:2.11.0
+|    |    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    \--- eclipse:org.eclipse.emf.ecore:2.12.0 (*)
+|    +--- eclipse:org.eclipse.core.expressions:3.5.100 (*)
+|    +--- eclipse:org.eclipse.e4.ui.di:1.1.100 (*)
+|    +--- eclipse:org.eclipse.emf.ecore.xmi:2.12.0
+|    |    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    \--- eclipse:org.eclipse.emf.ecore:2.12.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.di.extensions:0.14.0 (*)
+|    \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
++--- eclipse:org.eclipse.e4.core.di:+ -> 1.6.0 (*)
++--- eclipse:org.eclipse.e4.ui.di:+ -> 1.1.100 (*)
+\--- eclipse:org.eclipse.e4.core.contexts:+ -> 1.5.0 (*)
+
+runtime - Runtime dependencies for source set 'main'.
++--- eclipse:javax.inject:+ -> 1.0.0
++--- eclipse:org.eclipse.core.runtime:+ -> 3.12.0
+|    +--- eclipse:org.eclipse.osgi:3.11.0
+|    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.core.jobs:3.8.0
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.equinox.registry:3.6.100
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.equinox.preferences:3.6.0
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.core.contenttype:3.5.100
+|    |    +--- eclipse:org.eclipse.equinox.preferences:3.6.0 (*)
+|    |    +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    \--- eclipse:org.eclipse.equinox.app:1.3.400
+|         +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|         \--- eclipse:org.eclipse.equinox.common:3.8.0
++--- eclipse:org.eclipse.swt:+ -> 3.105.0
++--- eclipse:org.eclipse.e4.ui.model.workbench:+ -> 1.2.0
+|    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.services:2.0.100
+|    |    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    |    +--- eclipse:org.eclipse.equinox.preferences:3.6.0 (*)
+|    |    +--- eclipse:org.eclipse.core.jobs:3.8.0 (*)
+|    |    +--- eclipse:org.eclipse.e4.core.di:1.6.0
+|    |    |    \--- eclipse:org.eclipse.e4.core.di.annotations:1.5.0
+|    |    \--- eclipse:org.eclipse.e4.core.contexts:1.5.0
+|    |         \--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.contexts:1.5.0 (*)
+|    +--- eclipse:org.eclipse.core.commands:3.8.0
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.emf.ecore:2.12.0
+|    |    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    +--- eclipse:org.eclipse.emf.common:2.12.0
+|    |    |    \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    \--- eclipse:org.eclipse.core.resources:3.11.0
+|    |         +--- eclipse:org.eclipse.core.expressions:3.5.100
+|    |         |    \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |         +--- eclipse:org.eclipse.core.filesystem:1.6.0
+|    |         |    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    |         |    +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|    |         |    \--- eclipse:org.eclipse.osgi:3.11.0
+|    |         \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    \--- eclipse:org.eclipse.e4.emf.xpath:0.1.200
+|         +--- eclipse:org.apache.commons.jxpath:1.3.0
+|         \--- eclipse:org.eclipse.emf.ecore:2.12.0 (*)
++--- eclipse:org.eclipse.jface:+ -> 3.12.0
+|    +--- eclipse:org.eclipse.swt:3.105.0
+|    +--- eclipse:org.eclipse.core.commands:3.8.0 (*)
+|    \--- eclipse:org.eclipse.equinox.common:3.8.0
++--- eclipse:org.eclipse.e4.ui.services:+ -> 1.2.100
+|    +--- eclipse:org.eclipse.core.commands:3.8.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.services:2.0.100 (*)
+|    +--- eclipse:org.eclipse.osgi:3.11.0
+|    +--- eclipse:org.eclipse.e4.core.contexts:1.5.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    \--- eclipse:org.eclipse.e4.ui.di:1.1.100
+|         +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|         +--- eclipse:org.eclipse.e4.core.di.extensions:0.14.0
+|         |    \--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|         \--- eclipse:org.eclipse.osgi.services:3.5.100
++--- eclipse:org.eclipse.e4.ui.workbench:+ -> 1.4.0
+|    +--- eclipse:org.eclipse.e4.ui.model.workbench:1.2.0 (*)
+|    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.osgi:3.11.0
+|    +--- eclipse:org.eclipse.e4.ui.services:1.2.100 (*)
+|    +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|    +--- eclipse:org.eclipse.e4.core.services:2.0.100 (*)
+|    +--- eclipse:org.eclipse.e4.core.contexts:1.5.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.core.jobs:3.8.0 (*)
+|    +--- eclipse:org.eclipse.core.commands:3.8.0 (*)
+|    +--- eclipse:org.eclipse.osgi.services:3.5.100
+|    +--- eclipse:org.eclipse.e4.core.commands:0.11.100
+|    |    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    |    \--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.emf.ecore.change:2.11.0
+|    |    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    \--- eclipse:org.eclipse.emf.ecore:2.12.0 (*)
+|    +--- eclipse:org.eclipse.core.expressions:3.5.100 (*)
+|    +--- eclipse:org.eclipse.e4.ui.di:1.1.100 (*)
+|    +--- eclipse:org.eclipse.emf.ecore.xmi:2.12.0
+|    |    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    \--- eclipse:org.eclipse.emf.ecore:2.12.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.di.extensions:0.14.0 (*)
+|    \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
++--- eclipse:org.eclipse.e4.core.di:+ -> 1.6.0 (*)
++--- eclipse:org.eclipse.e4.ui.di:+ -> 1.1.100 (*)
+\--- eclipse:org.eclipse.e4.core.contexts:+ -> 1.5.0 (*)
+
+testCompile - Dependencies for source set 'test'.
++--- eclipse:javax.inject:+ -> 1.0.0
++--- eclipse:org.eclipse.core.runtime:+ -> 3.12.0
+|    +--- eclipse:org.eclipse.osgi:3.11.0
+|    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.core.jobs:3.8.0
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.equinox.registry:3.6.100
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.equinox.preferences:3.6.0
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.core.contenttype:3.5.100
+|    |    +--- eclipse:org.eclipse.equinox.preferences:3.6.0 (*)
+|    |    +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    \--- eclipse:org.eclipse.equinox.app:1.3.400
+|         +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|         \--- eclipse:org.eclipse.equinox.common:3.8.0
++--- eclipse:org.eclipse.swt:+ -> 3.105.0
++--- eclipse:org.eclipse.e4.ui.model.workbench:+ -> 1.2.0
+|    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.services:2.0.100
+|    |    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    |    +--- eclipse:org.eclipse.equinox.preferences:3.6.0 (*)
+|    |    +--- eclipse:org.eclipse.core.jobs:3.8.0 (*)
+|    |    +--- eclipse:org.eclipse.e4.core.di:1.6.0
+|    |    |    \--- eclipse:org.eclipse.e4.core.di.annotations:1.5.0
+|    |    \--- eclipse:org.eclipse.e4.core.contexts:1.5.0
+|    |         \--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.contexts:1.5.0 (*)
+|    +--- eclipse:org.eclipse.core.commands:3.8.0
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.emf.ecore:2.12.0
+|    |    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    +--- eclipse:org.eclipse.emf.common:2.12.0
+|    |    |    \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    \--- eclipse:org.eclipse.core.resources:3.11.0
+|    |         +--- eclipse:org.eclipse.core.expressions:3.5.100
+|    |         |    \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |         +--- eclipse:org.eclipse.core.filesystem:1.6.0
+|    |         |    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    |         |    +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|    |         |    \--- eclipse:org.eclipse.osgi:3.11.0
+|    |         \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    \--- eclipse:org.eclipse.e4.emf.xpath:0.1.200
+|         +--- eclipse:org.apache.commons.jxpath:1.3.0
+|         \--- eclipse:org.eclipse.emf.ecore:2.12.0 (*)
++--- eclipse:org.eclipse.jface:+ -> 3.12.0
+|    +--- eclipse:org.eclipse.swt:3.105.0
+|    +--- eclipse:org.eclipse.core.commands:3.8.0 (*)
+|    \--- eclipse:org.eclipse.equinox.common:3.8.0
++--- eclipse:org.eclipse.e4.ui.services:+ -> 1.2.100
+|    +--- eclipse:org.eclipse.core.commands:3.8.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.services:2.0.100 (*)
+|    +--- eclipse:org.eclipse.osgi:3.11.0
+|    +--- eclipse:org.eclipse.e4.core.contexts:1.5.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    \--- eclipse:org.eclipse.e4.ui.di:1.1.100
+|         +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|         +--- eclipse:org.eclipse.e4.core.di.extensions:0.14.0
+|         |    \--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|         \--- eclipse:org.eclipse.osgi.services:3.5.100
++--- eclipse:org.eclipse.e4.ui.workbench:+ -> 1.4.0
+|    +--- eclipse:org.eclipse.e4.ui.model.workbench:1.2.0 (*)
+|    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.osgi:3.11.0
+|    +--- eclipse:org.eclipse.e4.ui.services:1.2.100 (*)
+|    +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|    +--- eclipse:org.eclipse.e4.core.services:2.0.100 (*)
+|    +--- eclipse:org.eclipse.e4.core.contexts:1.5.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.core.jobs:3.8.0 (*)
+|    +--- eclipse:org.eclipse.core.commands:3.8.0 (*)
+|    +--- eclipse:org.eclipse.osgi.services:3.5.100
+|    +--- eclipse:org.eclipse.e4.core.commands:0.11.100
+|    |    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    |    \--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.emf.ecore.change:2.11.0
+|    |    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    \--- eclipse:org.eclipse.emf.ecore:2.12.0 (*)
+|    +--- eclipse:org.eclipse.core.expressions:3.5.100 (*)
+|    +--- eclipse:org.eclipse.e4.ui.di:1.1.100 (*)
+|    +--- eclipse:org.eclipse.emf.ecore.xmi:2.12.0
+|    |    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    \--- eclipse:org.eclipse.emf.ecore:2.12.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.di.extensions:0.14.0 (*)
+|    \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
++--- eclipse:org.eclipse.e4.core.di:+ -> 1.6.0 (*)
++--- eclipse:org.eclipse.e4.ui.di:+ -> 1.1.100 (*)
+\--- eclipse:org.eclipse.e4.core.contexts:+ -> 1.5.0 (*)
+
+testCompileClasspath - Compile classpath for source set 'test'.
++--- eclipse:javax.inject:+ -> 1.0.0
++--- eclipse:org.eclipse.core.runtime:+ -> 3.12.0
+|    +--- eclipse:org.eclipse.osgi:3.11.0
+|    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.core.jobs:3.8.0
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.equinox.registry:3.6.100
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.equinox.preferences:3.6.0
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.core.contenttype:3.5.100
+|    |    +--- eclipse:org.eclipse.equinox.preferences:3.6.0 (*)
+|    |    +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    \--- eclipse:org.eclipse.equinox.app:1.3.400
+|         +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|         \--- eclipse:org.eclipse.equinox.common:3.8.0
++--- eclipse:org.eclipse.swt:+ -> 3.105.0
++--- eclipse:org.eclipse.e4.ui.model.workbench:+ -> 1.2.0
+|    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.services:2.0.100
+|    |    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    |    +--- eclipse:org.eclipse.equinox.preferences:3.6.0 (*)
+|    |    +--- eclipse:org.eclipse.core.jobs:3.8.0 (*)
+|    |    +--- eclipse:org.eclipse.e4.core.di:1.6.0
+|    |    |    \--- eclipse:org.eclipse.e4.core.di.annotations:1.5.0
+|    |    \--- eclipse:org.eclipse.e4.core.contexts:1.5.0
+|    |         \--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.contexts:1.5.0 (*)
+|    +--- eclipse:org.eclipse.core.commands:3.8.0
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.emf.ecore:2.12.0
+|    |    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    +--- eclipse:org.eclipse.emf.common:2.12.0
+|    |    |    \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    \--- eclipse:org.eclipse.core.resources:3.11.0
+|    |         +--- eclipse:org.eclipse.core.expressions:3.5.100
+|    |         |    \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |         +--- eclipse:org.eclipse.core.filesystem:1.6.0
+|    |         |    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    |         |    +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|    |         |    \--- eclipse:org.eclipse.osgi:3.11.0
+|    |         \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    \--- eclipse:org.eclipse.e4.emf.xpath:0.1.200
+|         +--- eclipse:org.apache.commons.jxpath:1.3.0
+|         \--- eclipse:org.eclipse.emf.ecore:2.12.0 (*)
++--- eclipse:org.eclipse.jface:+ -> 3.12.0
+|    +--- eclipse:org.eclipse.swt:3.105.0
+|    +--- eclipse:org.eclipse.core.commands:3.8.0 (*)
+|    \--- eclipse:org.eclipse.equinox.common:3.8.0
++--- eclipse:org.eclipse.e4.ui.services:+ -> 1.2.100
+|    +--- eclipse:org.eclipse.core.commands:3.8.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.services:2.0.100 (*)
+|    +--- eclipse:org.eclipse.osgi:3.11.0
+|    +--- eclipse:org.eclipse.e4.core.contexts:1.5.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    \--- eclipse:org.eclipse.e4.ui.di:1.1.100
+|         +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|         +--- eclipse:org.eclipse.e4.core.di.extensions:0.14.0
+|         |    \--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|         \--- eclipse:org.eclipse.osgi.services:3.5.100
++--- eclipse:org.eclipse.e4.ui.workbench:+ -> 1.4.0
+|    +--- eclipse:org.eclipse.e4.ui.model.workbench:1.2.0 (*)
+|    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.osgi:3.11.0
+|    +--- eclipse:org.eclipse.e4.ui.services:1.2.100 (*)
+|    +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|    +--- eclipse:org.eclipse.e4.core.services:2.0.100 (*)
+|    +--- eclipse:org.eclipse.e4.core.contexts:1.5.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.core.jobs:3.8.0 (*)
+|    +--- eclipse:org.eclipse.core.commands:3.8.0 (*)
+|    +--- eclipse:org.eclipse.osgi.services:3.5.100
+|    +--- eclipse:org.eclipse.e4.core.commands:0.11.100
+|    |    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    |    \--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.emf.ecore.change:2.11.0
+|    |    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    \--- eclipse:org.eclipse.emf.ecore:2.12.0 (*)
+|    +--- eclipse:org.eclipse.core.expressions:3.5.100 (*)
+|    +--- eclipse:org.eclipse.e4.ui.di:1.1.100 (*)
+|    +--- eclipse:org.eclipse.emf.ecore.xmi:2.12.0
+|    |    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    \--- eclipse:org.eclipse.emf.ecore:2.12.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.di.extensions:0.14.0 (*)
+|    \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
++--- eclipse:org.eclipse.e4.core.di:+ -> 1.6.0 (*)
++--- eclipse:org.eclipse.e4.ui.di:+ -> 1.1.100 (*)
+\--- eclipse:org.eclipse.e4.core.contexts:+ -> 1.5.0 (*)
+
+testCompileOnly - Compile dependencies for source set 'test'.
++--- eclipse:javax.inject:+ -> 1.0.0
++--- eclipse:org.eclipse.core.runtime:+ -> 3.12.0
+|    +--- eclipse:org.eclipse.osgi:3.11.0
+|    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.core.jobs:3.8.0
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.equinox.registry:3.6.100
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.equinox.preferences:3.6.0
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.core.contenttype:3.5.100
+|    |    +--- eclipse:org.eclipse.equinox.preferences:3.6.0 (*)
+|    |    +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    \--- eclipse:org.eclipse.equinox.app:1.3.400
+|         +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|         \--- eclipse:org.eclipse.equinox.common:3.8.0
++--- eclipse:org.eclipse.swt:+ -> 3.105.0
++--- eclipse:org.eclipse.e4.ui.model.workbench:+ -> 1.2.0
+|    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.services:2.0.100
+|    |    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    |    +--- eclipse:org.eclipse.equinox.preferences:3.6.0 (*)
+|    |    +--- eclipse:org.eclipse.core.jobs:3.8.0 (*)
+|    |    +--- eclipse:org.eclipse.e4.core.di:1.6.0
+|    |    |    \--- eclipse:org.eclipse.e4.core.di.annotations:1.5.0
+|    |    \--- eclipse:org.eclipse.e4.core.contexts:1.5.0
+|    |         \--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.contexts:1.5.0 (*)
+|    +--- eclipse:org.eclipse.core.commands:3.8.0
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.emf.ecore:2.12.0
+|    |    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    +--- eclipse:org.eclipse.emf.common:2.12.0
+|    |    |    \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    \--- eclipse:org.eclipse.core.resources:3.11.0
+|    |         +--- eclipse:org.eclipse.core.expressions:3.5.100
+|    |         |    \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |         +--- eclipse:org.eclipse.core.filesystem:1.6.0
+|    |         |    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    |         |    +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|    |         |    \--- eclipse:org.eclipse.osgi:3.11.0
+|    |         \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    \--- eclipse:org.eclipse.e4.emf.xpath:0.1.200
+|         +--- eclipse:org.apache.commons.jxpath:1.3.0
+|         \--- eclipse:org.eclipse.emf.ecore:2.12.0 (*)
++--- eclipse:org.eclipse.jface:+ -> 3.12.0
+|    +--- eclipse:org.eclipse.swt:3.105.0
+|    +--- eclipse:org.eclipse.core.commands:3.8.0 (*)
+|    \--- eclipse:org.eclipse.equinox.common:3.8.0
++--- eclipse:org.eclipse.e4.ui.services:+ -> 1.2.100
+|    +--- eclipse:org.eclipse.core.commands:3.8.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.services:2.0.100 (*)
+|    +--- eclipse:org.eclipse.osgi:3.11.0
+|    +--- eclipse:org.eclipse.e4.core.contexts:1.5.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    \--- eclipse:org.eclipse.e4.ui.di:1.1.100
+|         +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|         +--- eclipse:org.eclipse.e4.core.di.extensions:0.14.0
+|         |    \--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|         \--- eclipse:org.eclipse.osgi.services:3.5.100
++--- eclipse:org.eclipse.e4.ui.workbench:+ -> 1.4.0
+|    +--- eclipse:org.eclipse.e4.ui.model.workbench:1.2.0 (*)
+|    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.osgi:3.11.0
+|    +--- eclipse:org.eclipse.e4.ui.services:1.2.100 (*)
+|    +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|    +--- eclipse:org.eclipse.e4.core.services:2.0.100 (*)
+|    +--- eclipse:org.eclipse.e4.core.contexts:1.5.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.core.jobs:3.8.0 (*)
+|    +--- eclipse:org.eclipse.core.commands:3.8.0 (*)
+|    +--- eclipse:org.eclipse.osgi.services:3.5.100
+|    +--- eclipse:org.eclipse.e4.core.commands:0.11.100
+|    |    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    |    \--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.emf.ecore.change:2.11.0
+|    |    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    \--- eclipse:org.eclipse.emf.ecore:2.12.0 (*)
+|    +--- eclipse:org.eclipse.core.expressions:3.5.100 (*)
+|    +--- eclipse:org.eclipse.e4.ui.di:1.1.100 (*)
+|    +--- eclipse:org.eclipse.emf.ecore.xmi:2.12.0
+|    |    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    \--- eclipse:org.eclipse.emf.ecore:2.12.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.di.extensions:0.14.0 (*)
+|    \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
++--- eclipse:org.eclipse.e4.core.di:+ -> 1.6.0 (*)
++--- eclipse:org.eclipse.e4.ui.di:+ -> 1.1.100 (*)
+\--- eclipse:org.eclipse.e4.core.contexts:+ -> 1.5.0 (*)
+
+testRuntime - Runtime dependencies for source set 'test'.
++--- eclipse:javax.inject:+ -> 1.0.0
++--- eclipse:org.eclipse.core.runtime:+ -> 3.12.0
+|    +--- eclipse:org.eclipse.osgi:3.11.0
+|    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.core.jobs:3.8.0
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.equinox.registry:3.6.100
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.equinox.preferences:3.6.0
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.core.contenttype:3.5.100
+|    |    +--- eclipse:org.eclipse.equinox.preferences:3.6.0 (*)
+|    |    +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    \--- eclipse:org.eclipse.equinox.app:1.3.400
+|         +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|         \--- eclipse:org.eclipse.equinox.common:3.8.0
++--- eclipse:org.eclipse.swt:+ -> 3.105.0
++--- eclipse:org.eclipse.e4.ui.model.workbench:+ -> 1.2.0
+|    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.services:2.0.100
+|    |    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    |    +--- eclipse:org.eclipse.equinox.preferences:3.6.0 (*)
+|    |    +--- eclipse:org.eclipse.core.jobs:3.8.0 (*)
+|    |    +--- eclipse:org.eclipse.e4.core.di:1.6.0
+|    |    |    \--- eclipse:org.eclipse.e4.core.di.annotations:1.5.0
+|    |    \--- eclipse:org.eclipse.e4.core.contexts:1.5.0
+|    |         \--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.contexts:1.5.0 (*)
+|    +--- eclipse:org.eclipse.core.commands:3.8.0
+|    |    \--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.emf.ecore:2.12.0
+|    |    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    +--- eclipse:org.eclipse.emf.common:2.12.0
+|    |    |    \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    \--- eclipse:org.eclipse.core.resources:3.11.0
+|    |         +--- eclipse:org.eclipse.core.expressions:3.5.100
+|    |         |    \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |         +--- eclipse:org.eclipse.core.filesystem:1.6.0
+|    |         |    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    |         |    +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|    |         |    \--- eclipse:org.eclipse.osgi:3.11.0
+|    |         \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    \--- eclipse:org.eclipse.e4.emf.xpath:0.1.200
+|         +--- eclipse:org.apache.commons.jxpath:1.3.0
+|         \--- eclipse:org.eclipse.emf.ecore:2.12.0 (*)
++--- eclipse:org.eclipse.jface:+ -> 3.12.0
+|    +--- eclipse:org.eclipse.swt:3.105.0
+|    +--- eclipse:org.eclipse.core.commands:3.8.0 (*)
+|    \--- eclipse:org.eclipse.equinox.common:3.8.0
++--- eclipse:org.eclipse.e4.ui.services:+ -> 1.2.100
+|    +--- eclipse:org.eclipse.core.commands:3.8.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.services:2.0.100 (*)
+|    +--- eclipse:org.eclipse.osgi:3.11.0
+|    +--- eclipse:org.eclipse.e4.core.contexts:1.5.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    \--- eclipse:org.eclipse.e4.ui.di:1.1.100
+|         +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|         +--- eclipse:org.eclipse.e4.core.di.extensions:0.14.0
+|         |    \--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|         \--- eclipse:org.eclipse.osgi.services:3.5.100
++--- eclipse:org.eclipse.e4.ui.workbench:+ -> 1.4.0
+|    +--- eclipse:org.eclipse.e4.ui.model.workbench:1.2.0 (*)
+|    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    +--- eclipse:org.eclipse.osgi:3.11.0
+|    +--- eclipse:org.eclipse.e4.ui.services:1.2.100 (*)
+|    +--- eclipse:org.eclipse.equinox.registry:3.6.100 (*)
+|    +--- eclipse:org.eclipse.e4.core.services:2.0.100 (*)
+|    +--- eclipse:org.eclipse.e4.core.contexts:1.5.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.core.jobs:3.8.0 (*)
+|    +--- eclipse:org.eclipse.core.commands:3.8.0 (*)
+|    +--- eclipse:org.eclipse.osgi.services:3.5.100
+|    +--- eclipse:org.eclipse.e4.core.commands:0.11.100
+|    |    +--- eclipse:org.eclipse.equinox.common:3.8.0
+|    |    \--- eclipse:org.eclipse.e4.core.di:1.6.0 (*)
+|    +--- eclipse:org.eclipse.emf.ecore.change:2.11.0
+|    |    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    \--- eclipse:org.eclipse.emf.ecore:2.12.0 (*)
+|    +--- eclipse:org.eclipse.core.expressions:3.5.100 (*)
+|    +--- eclipse:org.eclipse.e4.ui.di:1.1.100 (*)
+|    +--- eclipse:org.eclipse.emf.ecore.xmi:2.12.0
+|    |    +--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
+|    |    \--- eclipse:org.eclipse.emf.ecore:2.12.0 (*)
+|    +--- eclipse:org.eclipse.e4.core.di.extensions:0.14.0 (*)
+|    \--- eclipse:org.eclipse.core.runtime:3.12.0 (*)
++--- eclipse:org.eclipse.e4.core.di:+ -> 1.6.0 (*)
++--- eclipse:org.eclipse.e4.ui.di:+ -> 1.1.100 (*)
+\--- eclipse:org.eclipse.e4.core.contexts:+ -> 1.5.0 (*)
+
+(*) - dependencies omitted (listed previously)
+
+BUILD SUCCESSFUL
+
+Total time: 1.084 secs

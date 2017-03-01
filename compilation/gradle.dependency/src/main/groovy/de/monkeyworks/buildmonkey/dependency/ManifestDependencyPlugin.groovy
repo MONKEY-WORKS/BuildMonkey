@@ -52,6 +52,7 @@ class ManifestDependencyPlugin implements Plugin<Project> {
      */
     private static final List pluginsDependeningOnSWT = [
         "org.eclipse.ui",
+        "org.eclipse.swt",
         "org.eclipse.xtext.xbase.ui"
     ]
 
