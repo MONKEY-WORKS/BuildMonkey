@@ -1,6 +1,3 @@
-group = "de.monkeyworks.buildmonkey"
-version = '0.4'
-
 apply plugin: "com.gradle.plugin-publish"
 
 pluginBundle {

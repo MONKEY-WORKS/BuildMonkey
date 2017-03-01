@@ -12,9 +12,6 @@ dependencies {
 
 apply plugin: "com.gradle.plugin-publish"
 
-group = "de.monkeyworks.buildmonkey"
-version = '0.4'
-
 pluginBundle {
     website = 'https://github.com/MONKEY-WORKS/BuildMonkey/wiki'
     vcsUrl = 'https://github.com/MONKEY-WORKS/BuildMonkey'
