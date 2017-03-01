@@ -27,8 +27,11 @@ public class P2DeployerPlugin implements Plugin<Project> {
 
     private final String taskName = "publishP2"
 
+    private Project project
+
     @Override
     void apply(Project project) {
+        this.project = project
 
         // create project extension if it doesn't exist yet
         if(project.extensions.findByName(extensionName) == null) {
@@ -51,15 +54,19 @@ public class P2DeployerPlugin implements Plugin<Project> {
                 featureJar.toFile())
 
             
-            doBuildP2Repository()
+            doBuildP2Repository(config)
         }
     }
 
     private Set<Jar> doCopyArtifacts(P2DeploymentExtension config) {
         def pluginsDir = new File(config.targetRepository, "plugins")
+        def featureDir = new File(config.targetRepository, "features")
 
         if(!pluginsDir.exists())
             pluginsDir.mkdirs()
+
+        if(!featureDir.exists())
+            featureDir.mkdirs()
 
         // collect all deployed artifacts
         Set<Jar> jarTasks = new HashSet<>()
@@ -81,9 +88,16 @@ public class P2DeployerPlugin implements Plugin<Project> {
 
                     // setup new file name
                     def targetFileName = "${it.baseName}${classifier}_${it.version}.${it.extension}"
+                    
+                    // check if feature or plugin
+                    def targetDir = pluginsDir
+                    println(it.baseName)
+                    if(it.baseName.endsWith("feature")) {
+                        targetDir = featureDir
+                    }
 
                     // copy file
-                    Files.copy(file.toPath(), pluginsDir.toPath().resolve(targetFileName), StandardCopyOption.REPLACE_EXISTING)
+                    Files.copy(file.toPath(), targetDir.toPath().resolve(targetFileName), StandardCopyOption.REPLACE_EXISTING)
 
                     // collect artifact for feature generation
                     jarTasks.add(it)
