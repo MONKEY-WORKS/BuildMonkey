@@ -7,10 +7,11 @@ buildscript {
     }
 
     dependencies {
-        classpath "de.monkeyworks.buildmonkey:gradle.p2:0.4"
-        classpath "de.monkeyworks.buildmonkey:gradle.mavenize:0.4"
-        classpath "de.monkeyworks.buildmonkey:gradle.dependency:0.4"
-        classpath "de.monkeyworks.buildmonkey:gradle.projectsetup:0.4"
+        classpath "de.monkeyworks.buildmonkey:gradle.p2:+"
+        classpath "de.monkeyworks.buildmonkey:gradle.mavenize:+"
+        classpath "de.monkeyworks.buildmonkey:gradle.dependency:+"
+        classpath "de.monkeyworks.buildmonkey:gradle.projectsetup:+"
+        classpath "de.monkeyworks.buildmonkey:gradle.p2publish:+"
     }
 }
 
@@ -28,11 +29,9 @@ eclipseMirror {
     target = "$buildDir/p2-repository"
     targetDefinition = file("exampleE4App.target")
     targetFeatureName = "feature-ExampleE4App"
-
+    targetFile = "targetExampleE4App.target"
     updateURL "${buildUrl}p2-repository"
 }
-
-eclipseMirror.targetFile = "targetExampleE4App.target"
 
 mavenize {
     mavenizeTask {
@@ -60,7 +59,9 @@ subprojects {
     tasks.withType(JavaCompile) {
        options.encoding = 'UTF-8'
     }
-     
+
+    version = '1.0.0'
+
     // plugin which resolves the dependencies from the manifest and the build.properties file
     apply plugin: 'de.monkeyworks.buildmonkey.ManifestDependencyPlugin'
 
@@ -102,8 +103,10 @@ subprojects {
         }
     }
 
-    task install(dependsOn:'publishToMavenLocal') << {
+    task install(dependsOn:'publishToMavenLocal') {
+        doLast {
 
+        }
     }
 
     jar {
@@ -139,9 +142,20 @@ subprojects {
     build.dependsOn install
     build.dependsOn createTargetPlatform
     build.dependsOn mavenizeP2Repository
+    //build.dependsOn p2Deployment
+    //p2Deployment.dependsOn assemble
     assemble.dependsOn mirrorP2Repository
     createTargetPlatform.dependsOn mirrorP2Repository
     mavenizeP2Repository.dependsOn mirrorP2Repository
 }
  
+apply plugin: 'de.monkeyworks.buildmonkey.p2.P2DeployerPlugin'
+
+p2Deployment {
+    eclipseHome = file("/home/micha/bin/neon")
+    targetRepository = file("$buildDir/p2-repository")
+    featureId = "ExampleE4App"
+    featureLabel = "Example Feature"
+    version = "1.0.0"
+}
 
