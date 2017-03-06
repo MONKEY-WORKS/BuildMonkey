@@ -12,9 +12,10 @@ buildscript {
         classpath "de.monkeyworks.buildmonkey:gradle.dependency:+"
         classpath "de.monkeyworks.buildmonkey:gradle.projectsetup:+"
         classpath "de.monkeyworks.buildmonkey:gradle.p2publish:+"
+        classpath "gradle.plugin.com.dorongold.plugins:task-tree:1.3"
     }
 }
-
+apply plugin: "com.dorongold.task-tree"
 
 apply plugin: 'de.monkeyworks.buildmonkey.p2.P2MirrorPlugin'
 apply plugin: 'de.monkeyworks.buildmonkey.mavenizer.MavenizerPlugin'
@@ -142,7 +143,7 @@ subprojects {
     build.dependsOn install
     build.dependsOn createTargetPlatform
     build.dependsOn mavenizeP2Repository
-    assemble.dependsOn mavenizeP2Repository
+    assemble.dependsOn mirrorP2Repository
     createTargetPlatform.dependsOn mirrorP2Repository
     mavenizeP2Repository.dependsOn mirrorP2Repository
 }
