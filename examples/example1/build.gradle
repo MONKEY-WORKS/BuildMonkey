@@ -169,7 +169,7 @@ subprojects {
     build.dependsOn install
     build.dependsOn createTargetPlatform
     build.dependsOn mavenizeP2Repository
-    assemble.dependsOn mirrorP2Repository
+    assemble.dependsOn mavenizeP2Repository
     createTargetPlatform.dependsOn mirrorP2Repository
     mavenizeP2Repository.dependsOn mirrorP2Repository
 }
