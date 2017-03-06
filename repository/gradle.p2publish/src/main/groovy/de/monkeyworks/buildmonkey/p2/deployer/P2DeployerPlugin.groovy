@@ -16,6 +16,9 @@ import org.gradle.api.tasks.bundling.Jar
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 
+import de.monkeyworks.buildmonkey.eclipsesdk.DownloadHelper
+import de.monkeyworks.buildmonkey.eclipsesdk.EclipseConfiguration
+
 /**
  * Gradle plugin to bundle all build artifacts into one p2 repository
  *
@@ -32,6 +35,9 @@ public class P2DeployerPlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
         this.project = project
+
+        DownloadHelper.addEclipseConfigurationExtension(project)
+        DownloadHelper.addTaskDownloadEclipseSdk(project)
 
         // create project extension if it doesn't exist yet
         if(project.extensions.findByName(extensionName) == null) {
@@ -109,12 +115,11 @@ public class P2DeployerPlugin implements Plugin<Project> {
 
 
     private void doBuildP2Repository(P2DeploymentExtension config) {
-        def eclipseHome = config.eclipseHome
-        def launcherJar = eclipseHome.getAbsolutePath() + "/plugins/org.eclipse.equinox.launcher_1.3.201.v20161025-1711.jar"
+        def eclipseHome = config.project.eclipseConfiguration
         def repoDirUri = config.targetRepository.toURI()
 
         project.exec {
-            commandLine 'java', '-jar', launcherJar,
+            commandLine 'java', '-jar', eclipseHome.getLauncherPath().toFile(),
                     '-application', 'org.eclipse.equinox.p2.publisher.FeaturesAndBundlesPublisher',
                     '-metadataRepository', repoDirUri,
                     '-artifactRepository', repoDirUri,

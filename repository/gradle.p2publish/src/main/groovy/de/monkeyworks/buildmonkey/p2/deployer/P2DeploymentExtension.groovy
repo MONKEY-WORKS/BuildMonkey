@@ -23,9 +23,6 @@ class P2DeploymentExtension {
     // feature version 
     String version = "1.0.0"
 
-    // eclipse home
-    File eclipseHome
-
     // target repository dir
     File targetRepository
 
