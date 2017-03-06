@@ -141,8 +141,8 @@ subprojects {
     }
     // add install task to basic build step
     build.dependsOn install
-    build.dependsOn createTargetPlatform
-    build.dependsOn mavenizeP2Repository
+    assemble.dependsOn createTargetPlatform
+    assemble.dependsOn mavenizeP2Repository
     assemble.dependsOn mirrorP2Repository
     createTargetPlatform.dependsOn mirrorP2Repository
     mavenizeP2Repository.dependsOn mirrorP2Repository
