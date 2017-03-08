@@ -151,7 +151,6 @@ subprojects {
 apply plugin: 'de.monkeyworks.buildmonkey.p2.P2DeployerPlugin'
 
 p2Deployment {
-    eclipseHome = file("/home/micha/bin/neon")
     targetRepository = file("$buildDir/p2-repository")
     featureId = "ExampleE4App"
     featureLabel = "Example Feature"
