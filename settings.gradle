@@ -34,6 +34,8 @@ project( ':gradle.pde' ).projectDir = new File( sharedRootDir, 'gradle.pde' )
 
 sharedRootDir = new File( projectTreeRootDir, 'repository' )
 
+include ':mavenArtefacts'
+project( ':mavenArtefacts' ).projectDir = new File( sharedRootDir, 'mavenArtefacts' )
 include ':gradle.mavenize'
 project( ':gradle.mavenize' ).projectDir = new File( sharedRootDir, 'gradle.mavenize' )
 include ':gradle.p2'

@@ -1,0 +1,51 @@
+buildscript {
+    repositories {
+        // Uncomment for local deployment of built plugins
+         mavenLocal()
+
+        // The BuildMonkey plugins are published here
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+
+        // Default repositories for all the maven dependencies of this world
+        mavenCentral()
+        jcenter()
+    }
+
+    // Get BuildMonkey plugins
+    dependencies {
+        classpath "de.monkeyworks.buildmonkey:gradle.mavenize:0.4"
+        classpath "de.monkeyworks.buildmonkey:mavenArtefacts:0.4.1"
+        classpath 'de.monkeyworks.buildmonkey:artifactoryupload:0.4.1'
+        classpath 'org.standardout:bnd-platform:1.4.0'
+    }
+}
+
+repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+}
+
+apply plugin: 'de.monkeyworks.buildmonkey.maven.MavenArtefactsPlugin'
+
+convertMaven {
+    artefacts = ['org.objenesis:objenesis:2.2', 'org.mockito:mockito-core:1.10.19', 'org.hamcrest:hamcrest-core:1.3']
+    prefix = 'buildMonkey'
+    updateSiteDir = "${project.buildDir}/site"
+    targetDir = "${project.buildDir}/maven-repository"
+
+    featureId = 'BuildMonkeyTestDependencies'
+    featureName = 'BuildMonkeyTestDependencies'
+    featureVersion = '1.0.0'
+
+    repositoryServerURL = 'put in url of your artifactory server: https://myArtifactoryServer.mydomain/artifactory/'
+    repositoryUser = 'put in user name with write access'
+    repositoryPassword = 'put in password of the user above'
+
+    mavenRepositoryName = 'Thirdparty/buildmonkey/MavenM2'
+    p2RepositoryName = 'Thirdparty/buildmonkey/MavenP2'
+} 
+
+

@@ -1,7 +1,7 @@
 buildscript {
     repositories {
         // Uncomment for local deployment of built plugins
-        // mavenLocal()
+         mavenLocal()
 
         // The BuildMonkey plugins are published here
         maven {
@@ -20,6 +20,9 @@ buildscript {
         classpath "de.monkeyworks.buildmonkey:gradle.mavenize:0.4"
         classpath "de.monkeyworks.buildmonkey:gradle.dependency:0.4"
         classpath "de.monkeyworks.buildmonkey:gradle.projectsetup:0.4"
+        classpath "de.monkeyworks.buildmonkey:mavenArtefacts:0.4.1"
+        classpath 'de.monkeyworks.buildmonkey:artifactoryupload:0.4.1'
+        classpath 'org.standardout:bnd-platform:1.4.0'
     }
 }
 
@@ -51,13 +54,20 @@ eclipseMirror {
 // Second plugin makes a maven repository from the P2 repository of the first step
 apply plugin: 'de.monkeyworks.buildmonkey.mavenizer.MavenizerPlugin'
 
-// Configure mavanize plugin
+// Configure mavenize plugin
 mavenize {
     mavenizeTask {
         targetDir = "$buildDir/m2-repository"
         sourceP2Repository = "$buildDir/p2-repository"
     }
-}  
+} 
+
+repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+}
+
 
 // Process each sub project, build the eclipse plugins
 subprojects {
@@ -167,9 +177,9 @@ subprojects {
 
     // add tasks to basic build step and create the sequence mirroP2Repository - mavenizeP2Repository/createtargetPlatform - assemble - install
     build.dependsOn install
-    build.dependsOn createTargetPlatform
-    build.dependsOn mavenizeP2Repository
+    assemble.dependsOn createTargetPlatform
     assemble.dependsOn mavenizeP2Repository
+    assemble.dependsOn mirrorP2Repository
     createTargetPlatform.dependsOn mirrorP2Repository
     mavenizeP2Repository.dependsOn mirrorP2Repository
 }
@@ -180,8 +190,6 @@ apply plugin: 'de.monkeyworks.buildmonkey.p2.P2DeployerPlugin'
 
 // Configure publishing to a P2 repository
 p2Deployment {
-    // Until inlsude to common eclipse handling the path to an preinstalled eclipse preventing SDK download
-    eclipseHome = file("/home/micha/bin/neon")
     // Repository, where the plugin is publsihed to
     targetRepository = file("$buildDir/monkey-repository")
     // Name of the feature

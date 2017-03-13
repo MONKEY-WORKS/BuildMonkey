@@ -12,13 +12,11 @@ buildscript {
         classpath "de.monkeyworks.buildmonkey:gradle.dependency:+"
         classpath "de.monkeyworks.buildmonkey:gradle.projectsetup:+"
         classpath "de.monkeyworks.buildmonkey:gradle.p2publish:+"
-        classpath "gradle.plugin.com.dorongold.plugins:task-tree:1.3"
     }
 }
-apply plugin: "com.dorongold.task-tree"
 
 apply plugin: 'de.monkeyworks.buildmonkey.p2.P2MirrorPlugin'
-apply plugin: 'de.monkeyworks.buildmonkey.mavenizer.MavenizerPlugin'
+apply plugin: 'de.monkeyworks.buildmonkey.maven.MavenizerPlugin'
 
 def buildUri = buildDir.toURI()
 def buildUrl = buildUri.toURL()
@@ -151,8 +149,7 @@ subprojects {
 apply plugin: 'de.monkeyworks.buildmonkey.p2.P2DeployerPlugin'
 
 p2Deployment {
-    eclipseHome = file("/home/micha/bin/neon")
-    targetRepository = file("$buildDir/p2-repository")
+    targetRepository = file("$buildDir/monkey-repository")
     featureId = "ExampleE4App"
     featureLabel = "Example Feature"
     version = "1.0.0"

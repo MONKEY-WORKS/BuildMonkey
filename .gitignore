@@ -4,3 +4,4 @@ build
 bin
 
 .idea/
+examples/exampleApp/product/
