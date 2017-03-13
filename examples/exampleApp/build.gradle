@@ -149,7 +149,7 @@ subprojects {
 apply plugin: 'de.monkeyworks.buildmonkey.p2.P2DeployerPlugin'
 
 p2Deployment {
-    targetRepository = file("$buildDir/monkey-repository")
+    targetRepository = file("$buildDir/p2-repository")
     featureId = "ExampleE4App"
     featureLabel = "Example Feature"
     version = "1.0.0"
