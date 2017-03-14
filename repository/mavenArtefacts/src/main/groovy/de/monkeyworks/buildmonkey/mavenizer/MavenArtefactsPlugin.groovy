@@ -55,6 +55,7 @@ class MavenArtefactsPlugin implements Plugin<Project> {
             configureMavenize(project, config)
             configureUpload(project, config)
 
+            project.updateSite.dependsOn('downloadEclipseSdk')
             project.artifactoryUpload.dependsOn('updateSite')
             project.mavenizeP2Repository.dependsOn('updateSite')
             project.mavenizeP2Repository_1.dependsOn('updateSite')
@@ -62,6 +63,7 @@ class MavenArtefactsPlugin implements Plugin<Project> {
             project.artifactoryUpload_0.dependsOn('updateSite')
             project.artifactoryUpload_1.dependsOn('mavenizeP2Repository')
 
+            rootTask.dependsOn('downloadEclipseSdk')
             rootTask.dependsOn('updateSite')
             rootTask.dependsOn('mavenizeP2Repository')
             rootTask.dependsOn('artifactoryUpload')
@@ -132,7 +134,7 @@ buildscript {
 
         flattenedDeps.each { name, dep ->
             extension.bnd(name) {
-                setSymbolicName("${config.prefix}" + (dep.getModuleName().toString() as String))
+                setSymbolicName("${config.prefix}." + (dep.getModuleName().toString() as String))
             }
         }
         // Manipulate mockito-core
@@ -168,6 +170,7 @@ buildscript {
 
         extension.useFeatureHashQualifiers = false
         extension.addBndPlatformManifestHeaders = true
+        extension.useBndHashQualifiers = false
         extension.defaultQualifier = ""
         extension.featureId = "${config.featureId}"
         extension.featureName = "${config.featureName}"

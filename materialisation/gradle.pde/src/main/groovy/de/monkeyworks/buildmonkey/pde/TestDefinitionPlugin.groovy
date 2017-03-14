@@ -182,7 +182,7 @@ class TestDefinitionPlugin implements Plugin<Project> {
         project.task(TASK_NAME_DOWNLOAD_ECLIPSE_SDK, type: DownloadEclipseSdkTask) {
             group = Config.gradleTaskGroupName
             description = "Downloads an Eclipse SDK to perform P2 operations with."
-            downloadUrl = Config.getEclipseSdkDownloadUrl(project)
+            downloadUrl = project.pluginTestBuild.getEclipseSdkDownloadUrl(project)
             targetDir = config.eclipseSdkDir
             def launcherVersion = project.pluginTestBuild.launcherVersion
 

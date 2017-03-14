@@ -21,7 +21,7 @@ buildscript {
         classpath "de.monkeyworks.buildmonkey:gradle.dependency:0.4"
         classpath "de.monkeyworks.buildmonkey:gradle.projectsetup:0.4"
         classpath "de.monkeyworks.buildmonkey:mavenArtefacts:0.4.1"
-        classpath 'de.monkeyworks.buildmonkey:artifactoryupload:0.4.1'
+        classpath 'de.monkeyworks.buildmonkey:artifactoryupload:0.4'
         classpath 'org.standardout:bnd-platform:1.4.0'
     }
 }
