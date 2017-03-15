@@ -7,6 +7,8 @@
  */
 package de.monkeyworks.buildmonkey.mavenizer
 
+import org.gradle.api.Project
+
 /**
  * Created by micha on 13.03.17.
  */
@@ -15,6 +17,7 @@ class MavenArtefactsExtension {
     def prefix
     def updateSiteDir
     def targetDir
+    def uploadThreads
 
     def featureId
     def featureName
@@ -33,5 +36,13 @@ class MavenArtefactsExtension {
     def p2RepositoryName
     def p2RepositoryUser
     def p2RepositoryPassword
+
+    private final Project project
+
+    MavenArtefactsExtension(Project project) {
+        this.project = project
+
+        uploadThreads = '4'
+    }
 
 }

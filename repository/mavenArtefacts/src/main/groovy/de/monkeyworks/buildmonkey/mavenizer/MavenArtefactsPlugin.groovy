@@ -237,6 +237,7 @@ buildscript {
         upload.setRepositoryPath(name)
         upload.credentials['username'] = user
         upload.credentials['password'] = pwd
+        upload.threads = config.uploadThreads
 
         sourceFolder = config.targetDir
         url = config.repositoryServerURL == null ? config.mavenRepositoryServerURL : config.repositoryServerURL
@@ -250,5 +251,6 @@ buildscript {
         upload.setRepositoryPath(name)
         upload.credentials['username'] = user
         upload.credentials['password'] = pwd
+        upload.threads = config.uploadThreads
     }
 }

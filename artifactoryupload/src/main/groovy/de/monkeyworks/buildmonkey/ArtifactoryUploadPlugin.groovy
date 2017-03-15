@@ -38,8 +38,11 @@ class ArtifactoryUploadExtension {
     
     Project project
 
+    String threads
+
     ArtifactoryUploadExtension(Project project) {
         this.project = project
+        threads = '4'
     }
 
     void credentials(Closure closure) {
@@ -154,7 +157,7 @@ class ArtifactoryUploadPlugin implements Plugin<Project> {
                             ignoreExitValue = true
                             commandLine(
                                     "$tool", "rt", "u", parameters.sourceDirectory + "/(*)", parameters.repositoryPath + '/{1}',
-                                    "--url=$parameters.artifactoryURL", "--user=$credentials.username", "--password=$credentials.password", "--threads=4"
+                                    "--url=$parameters.artifactoryURL", "--user=$credentials.username", "--password=$credentials.password", "--threads=${parameters.threads}"
                             )
                         }
                     }
