@@ -33,7 +33,6 @@ class Feature2Pom {
     Pom convert(File bundleFileOrDirectory) {
         def pom = new Pom()
         def featurexmlStream
-        def id
 
         if (bundleFileOrDirectory.isDirectory()) {
             featurexmlStream = new FileInputStream(new File(bundleFileOrDirectory, 'feature.xml'))
@@ -45,9 +44,8 @@ class Feature2Pom {
 
         def parsedXML = new XmlSlurper().parse(featurexmlStream)
         featurexmlStream.close()
-        id = parsedXML['@id']
 
-        pom.artifact = id
+        pom.artifact = parsedXML['@id']
 
         pom.group = group ?: pom.artifact
         def version = new Version(parsedXML['@version'].toString())
@@ -58,21 +56,23 @@ class Feature2Pom {
         return pom
     }
 
+    /**
+     *
+     * This method extracts dependencies from a given feature xml using a node name for identifying elements that hold a dependency
+     * and an attribute which holds the artifact name
+     *
+     * @param depBundles
+     * @param xml
+     */
     private void parseDependencies(List<DependencyBundle> depBundles, GPathResult xml) {
-        def plugins = xml.'**'.findAll{ node-> node.name() == 'plugin'}
-        plugins.forEach { plugin ->
-            DependencyBundle bundle = new DependencyBundle(name: plugin['@id'], resolution: Constants.RESOLUTION_MANDATORY, visibility: Constants.VISIBILITY_PRIVATE, version: "[1.0,)")
-            depBundles.add(bundle)
+        def extractDependenciesFromXML = { nodeName, attribute ->
+            xml.'**'.findAll{ node-> node.name() == nodeName}.forEach { plugin ->
+                depBundles.add(new DependencyBundle(name: plugin["@${attribute}"], resolution: Constants.RESOLUTION_MANDATORY, visibility: Constants.VISIBILITY_PRIVATE, version: "[1.0,)"))
+            }
         }
-        def required = xml.'**'.findAll{node -> node.name() == 'import'}
-        required.forEach { it ->
-            DependencyBundle bundle = new DependencyBundle(name: it['@plugin'], resolution: Constants.RESOLUTION_MANDATORY, visibility: Constants.VISIBILITY_PRIVATE, version: "[1.0,)")
-            depBundles.add(bundle)
-        }
-        def includes = xml.'**'.findAll{node -> node.name() == 'includes'}
-        includes.forEach { it ->
-            DependencyBundle bundle = new DependencyBundle(name: it['@id'], resolution: Constants.RESOLUTION_MANDATORY, visibility: Constants.VISIBILITY_PRIVATE, version: "[1.0,)")
-            depBundles.add(bundle)
-        }
+
+        extractDependenciesFromXML("plugin", "id")
+        extractDependenciesFromXML("import", "plugin")
+        extractDependenciesFromXML("includes", "id")
     }
 }

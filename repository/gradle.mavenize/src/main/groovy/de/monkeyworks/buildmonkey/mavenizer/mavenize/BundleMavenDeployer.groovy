@@ -114,6 +114,7 @@ final class BundleMavenDeployer {
                 e.printStackTrace()
             }
         }
+
         logger.info("Reading bundles in $artifactsSourceDir")
         try {
             artifactsSourceDir.eachDir processFile

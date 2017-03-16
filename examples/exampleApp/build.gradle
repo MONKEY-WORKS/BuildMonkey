@@ -8,15 +8,15 @@ buildscript {
 
     dependencies {
         classpath "de.monkeyworks.buildmonkey:gradle.p2:+"
+        classpath "de.monkeyworks.buildmonkey:gradle.p2publish:+"
         classpath "de.monkeyworks.buildmonkey:gradle.mavenize:+"
         classpath "de.monkeyworks.buildmonkey:gradle.dependency:+"
         classpath "de.monkeyworks.buildmonkey:gradle.projectsetup:+"
-        classpath "de.monkeyworks.buildmonkey:gradle.p2publish:+"
     }
 }
 
 apply plugin: 'de.monkeyworks.buildmonkey.p2.P2MirrorPlugin'
-apply plugin: 'de.monkeyworks.buildmonkey.maven.MavenizerPlugin'
+apply plugin: 'de.monkeyworks.buildmonkey.mavenizer.MavenizerPlugin'
 
 def buildUri = buildDir.toURI()
 def buildUrl = buildUri.toURL()
@@ -43,7 +43,6 @@ subprojects {
 
     repositories {
         maven {url uri("${buildUri}/m2-repository")}
-
     }
 
     apply plugin: 'java'
@@ -68,7 +67,7 @@ subprojects {
         mavenGroup = "buildmonkey"
 
         addProjectPattern {
-          projectPattern = "Monkey(.*)"
+          projectPattern = "Monkey(\\.*)"
           projectGroup = "de.monkeyworks"
         }
     }

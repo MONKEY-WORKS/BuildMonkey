@@ -43,6 +43,7 @@ public final class Pom {
         def builder = new MarkupBuilder(writer)
         builder.mkp.xmlDeclaration(version: '1.0', encoding: encoding)
         def pom = this
+        println "HERE!!! = ${pom.dependencyGroup} = ${pom.group} = ${pom.artifact} ="
         builder.project xmlns: 'http://maven.apache.org/POM/4.0.0', 'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance', {
             modelVersion '4.0.0'
             if(pom.group)
@@ -57,12 +58,13 @@ public final class Pom {
                 dependencies {
                     for(def depBundle in pom.dependencyBundles)
                         dependency {
+                            println "HERE ALSO!!! = ${depBundle.group} = ${dependencyGroup} = ${depBundle.name} ="
                             if(depBundle.group)
                                 groupId depBundle.group
                             else if(dependencyGroup)
                                 groupId dependencyGroup
                             else
-                                groupId depBundle.name
+                                groupId pom.group // TODO: that is a very naive guess, verify with Micha!!!
                             artifactId depBundle.name
                             if(depBundle.version)
                                 version depBundle.version

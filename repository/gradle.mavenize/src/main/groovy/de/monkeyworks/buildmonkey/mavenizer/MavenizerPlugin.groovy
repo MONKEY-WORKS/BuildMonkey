@@ -80,6 +80,7 @@ class MavenizerPlugin implements Plugin<Project> {
                     }
 
                     doLast {
+
                         def converter = new BundleMavenDeployer(project.ant, task.groupId, project.logger)
                         converter.deploy(new File(task.sourceP2Repository), new File(task.targetDir))
                     }

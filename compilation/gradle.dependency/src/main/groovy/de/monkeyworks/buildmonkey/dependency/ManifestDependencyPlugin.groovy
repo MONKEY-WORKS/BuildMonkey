@@ -14,8 +14,6 @@ import org.gradle.api.artifacts.Configuration
 import org.gradle.internal.os.OperatingSystem
 
 import java.util.jar.Manifest
-import java.util.Properties
-import java.lang.IllegalArgumentException
 
 class ManifestDependencyPattern {
     String projectPattern
@@ -50,14 +48,14 @@ class ManifestDependencyPlugin implements Plugin<Project> {
     /**
      * List with bundles requiring swt dependencies including the platform specific bundles.
      */
-    private static final List pluginsDependeningOnSWT = [
+    private static final List pluginsDependingOnSWT = [
         "org.eclipse.ui",
         "org.eclipse.swt",
         "org.eclipse.xtext.xbase.ui"
     ]
 
     /**
-     * List with dependecies to javax.inject for special handling.
+     * List with dependencies to javax.inject for special handling.
      */
     private static final List pluginsDependingOnJavaxInject = [
         "org.eclipse.ui.workbench",
@@ -95,21 +93,26 @@ class ManifestDependencyPlugin implements Plugin<Project> {
         project.tasks."${name}".dependsOn project.configurations.compile, project.configurations.testCompile
 
         project.afterEvaluate {
-            // Resolves the dependencies become a compile dependency.
-            project.configurations.getByName('compile') { Configuration config -> 
+            // Resolves the dependencies for the compile configuration
+            project.configurations.getByName('compile') { Configuration config ->
                 requireBundles().each { String dependency ->    
                     setProjectDependencies(config, dependency)
                 }
                 fragmentHost().each { String dependency ->    
                     setProjectDependencies(config, dependency)
                 }
-            }
+                featureDependencies().each { String dependency ->
+                    setProjectDependencies(config, dependency)
+                }
 
-            // Resolves the dependencies become a test compile dependency.
+            }
+            // Resolves the dependencies for the test compile configuration.
             project.configurations.getByName('testCompile') { Configuration config ->
                 testBundles().each { String dependency ->    
                     setProjectDependencies(config, dependency)
                 }
+
+
             }
         }
     }
@@ -120,12 +123,13 @@ class ManifestDependencyPlugin implements Plugin<Project> {
      * @return List with additional bundles.
      */
     private List testBundles() {
-        String bundles  = project.file("build.properties").withInputStream {
-            def properties = new Properties() 
+        def evaluationStrategy = {
+            def properties = new Properties()
             properties.load(it)
-            properties.get('additional.bundles')
+            def bundles = properties.get('additional.bundles')
+            return bundles ? bundles.split(',') : []
         }
-        return bundles ? bundles.split(',') : []   
+       return evaluateDependencyFile("build.properties", evaluationStrategy)
     }
 
     /**
@@ -134,11 +138,11 @@ class ManifestDependencyPlugin implements Plugin<Project> {
      * @return List with additional bundles.
      */
     private List requireBundles() {
-        String bundles = project.file("META-INF/MANIFEST.MF").withInputStream {
-            def mani = new Manifest(it)
-            mani.getMainAttributes().getValue('Require-Bundle')
+        def evaluationStrategy = {
+            def bundles = new Manifest(it).getMainAttributes().getValue('Require-Bundle')
+            return bundles ? bundles.split(',') : []
         }
-        return bundles ? bundles.split(',') : []
+        return evaluateDependencyFile("META-INF/MANIFEST.MF", evaluationStrategy)
     }
 
     /**
@@ -147,15 +151,41 @@ class ManifestDependencyPlugin implements Plugin<Project> {
      * @return List with additional bundles.
      */
     private List fragmentHost() {
-        String bundles = project.file("META-INF/MANIFEST.MF").withInputStream {
-            def mani = new Manifest(it)
-            mani.getMainAttributes().getValue('Fragment-Host')
+        def evaluationStrategy = {
+            def bundles = new Manifest(it).getMainAttributes().getValue('Fragment-Host')
+            return bundles ? bundles.split(',') : []
         }
-        return bundles ? bundles.split(',') : []
+        return evaluateDependencyFile("META-INF/MANIFEST.MF", evaluationStrategy)
     }
 
+    /**
+     * Reads in the feature.xml file and returns a list with the entries of several properties holding dependency information.
+     *
+     * @return List with additional bundles.
+     */
+    private List featureDependencies() {
+        def evaluationStrategy = {
+            def parsedXML = new XmlSlurper().parse(it)
+            def extractFromXML = { String nodeName, String attribute ->
+                return parsedXML.'**'.findAll { node -> node.name() == nodeName }.collect { it["@$attribute"] }
+            }
+            return extractFromXML("plugin", "id") + extractFromXML("import", "plugin") + extractFromXML("include", "id")
+        }
+        return evaluateDependencyFile("feature.xml", evaluationStrategy)
+    }
+
+    /**
+     * Helper method that checks if the file to be read exists and if it does applies a evaluation strategy that should yield a list.
+     *
+     * @param config Configuration of the dependency. can be compile or testCompile.
+     * @param dependency Dependency to check.
+     */
+    private List evaluateDependencyFile(String path, Closure evaluationStrategy){
+        def file = project.file(path)
+        return (file.exists()) ? file.withInputStream(evaluationStrategy) : []
+    }
         /**
-     * Checks given dependecy for special handling and sets the resulting dependency as maven artefact.
+     * Checks given dependency for special handling and sets the resulting dependency as maven artefact.
      *
      * @param config Configuration of the dependency. can be compile or testCompile.
      * @param dependency Dependency to check.
@@ -175,7 +205,6 @@ class ManifestDependencyPlugin implements Plugin<Project> {
                 handledByPattern = true
             }
         }
-
         if(handledByPattern) {
             return
         }
@@ -196,18 +225,19 @@ class ManifestDependencyPlugin implements Plugin<Project> {
             addDependency(config, 'junit', 'junit', '4.+')
 
         // finally these are the eclipse dependencies. just add them and handle some specific stuff
-        // TODO Handle remaining, group is eclipse as default, 
+        // TODO Handle remaining, group is eclipse as default,
         } else {
-            addDependency(config, 'eclipse', name)
+            def groupName = "eclipse"
+            addDependency(config, groupName, name)
 
             // yep. SWT is platform dependent. handle the name and add it
-            if (pluginsDependeningOnSWT.contains(name)) {
-                addDependency(config, 'eclipse', getSWTBundleName())
+            if (pluginsDependingOnSWT.contains(name)) {
+                addDependency(config, groupName, getSWTBundleName())
             }
             
             // injection. of. dependencies. needed here!
             if (pluginsDependingOnJavaxInject.contains(name)) {
-                addDependency(config, 'eclipse', 'javax.inject')  
+                addDependency(config, groupName, 'javax.inject')
             }
         }    
     }
@@ -221,7 +251,7 @@ class ManifestDependencyPlugin implements Plugin<Project> {
     private void handleCustomDependency(Configuration config, String name, String group) {
         final Project rootProject = project.rootProject
 
-        // check if the required project is a sibbling of this subproject
+        // check if the required project is a sibling of this subproject
         def subProject = rootProject.subprojects.find {
             it.name.equals(name)
         }
@@ -231,7 +261,7 @@ class ManifestDependencyPlugin implements Plugin<Project> {
                 delegate."${config.name}" subProject
             }
 
-        // if not, construct the required dependecy from the project configuration and add it this way
+        // if not, construct the required dependency from the project configuration and add it this way
         } else {
             def groupId = name.split('\\.')[1]
             def projectGroup = group + '.' + groupId
@@ -249,7 +279,9 @@ class ManifestDependencyPlugin implements Plugin<Project> {
      * @param version Version of the artefact. Default is '+', will be resolved at publishing step.
      */
     private void addDependency(Configuration config, String group, String artifact, String version='+') {
+//        config.dependencies.add project.dependencies.create("${group}:${artifact}:${version}")
         config.dependencies.add project.dependencies.create("${group}:${artifact}:${version}")
+
     }
 
     /**
@@ -258,7 +290,7 @@ class ManifestDependencyPlugin implements Plugin<Project> {
      * @return Platform dependend swt bundle name.
      */
     private static String getSWTBundleName() {
-        final def os = OperatingSystem.current()
+        final os = OperatingSystem.current()
         String osString
         if (os.isWindows()) {
             osString = 'win32.win32'
