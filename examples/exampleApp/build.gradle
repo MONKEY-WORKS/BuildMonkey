@@ -67,7 +67,7 @@ subprojects {
         mavenGroup = "buildmonkey"
 
         addProjectPattern {
-          projectPattern = "Monkey(\\.*)"
+          projectPattern = "Monkey(.*)"
           projectGroup = "de.monkeyworks"
         }
     }
