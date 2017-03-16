@@ -62,7 +62,7 @@ public final class Pom {
                             else if(dependencyGroup)
                                 groupId dependencyGroup
                             else
-                                groupId pom.group // TODO: that is a very naive guess, verify with Micha!!!
+                                groupId pom.group
                             artifactId depBundle.name
                             if(depBundle.version)
                                 version depBundle.version
