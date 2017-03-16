@@ -227,17 +227,16 @@ class ManifestDependencyPlugin implements Plugin<Project> {
         // finally these are the eclipse dependencies. just add them and handle some specific stuff
         // TODO Handle remaining, group is eclipse as default,
         } else {
-            def groupName = "eclipse"
-            addDependency(config, groupName, name)
+            addDependency(config, mavenGroup, name)
 
             // yep. SWT is platform dependent. handle the name and add it
             if (pluginsDependingOnSWT.contains(name)) {
-                addDependency(config, groupName, getSWTBundleName())
+                addDependency(config, mavenGroup, getSWTBundleName())
             }
             
             // injection. of. dependencies. needed here!
             if (pluginsDependingOnJavaxInject.contains(name)) {
-                addDependency(config, groupName, 'javax.inject')
+                addDependency(config, mavenGroup, 'javax.inject')
             }
         }    
     }
