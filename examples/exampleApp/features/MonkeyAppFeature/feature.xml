@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+        id="buildmonkey.exampleapp.feature"
+        label="BuildMonkey Example App"
+        version="1.0.0">
+
+    <description url="https://github.com/MONKEY-WORKS/BuildMonkey/">
+        Example app demonstrating building Eclipse RCP products with gradle.
+    </description>
+
+    <copyright url="http://www.example.com/copyright">
+        Copyright (c) 2015 the original author or authors.
+        All rights reserved.
+    </copyright>
+
+    <license url="http://www.example.com/license">
+        This program and the accompanying materials
+        are made available under the terms of the Eclipse Public License v1.0
+        which accompanies this distribution, and is available at
+        http://www.eclipse.org/legal/epl-v10.html
+    </license>
+
+    <includes
+            id="org.eclipse.platform.feature"
+            version="4.6.3"/>
+
+    <includes
+            id="org.eclipse.equinox.executable.feature"
+            version="3.6.300"/>
+
+    <plugin
+            id="MonkeyExampleE4Application"
+            download-size="0"
+            install-size="0"
+            version="0.0.0"
+            unpack="false"/>
+
+    <plugin
+            id="MonkeyHandlerPlugin"
+            download-size="0"
+            install-size="0"
+            version="0.0.0"
+            unpack="false"/>
+
+
+</feature>
