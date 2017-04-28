@@ -70,7 +70,6 @@ class TestDefinitionPlugin implements Plugin<Project> {
     static final String TASK_NAME_PREPARE_TARGET_PLATFORM = "prepareTargetPlatform"
     static final String TASK_NAME_INSTALL_TARGET_PLATFORM = "installTargetPlatform"
     static final String TASK_NAME_UNINSTALL_TARGET_PLATFORM = "uninstallTargetPlatform"
-    static final String TASK_NAME_UNINSTALL_ALL_TARGET_PLATFORMS = "uninstallAllTargetPlatforms"
 
     @Override
     public void apply(Project project) {
@@ -82,7 +81,6 @@ class TestDefinitionPlugin implements Plugin<Project> {
         addTaskAssembleTargetPlatform(project, config)
         addTaskInstallTargetPlatform(project, config)
         addTaskUninstallTargetPlatform(project, config)
-        addTaskUninstallAllTargetPlatforms(project, config)
     }
 
     static void configureProject(Project project) {
@@ -164,14 +162,6 @@ class TestDefinitionPlugin implements Plugin<Project> {
             group = Config.gradleTaskGroupName
             description = "Deletes the target platform."
             doLast { deleteFolder(project, project.pluginTestBuildDir) }
-        }
-    }
-
-    static void addTaskUninstallAllTargetPlatforms(Project project, Config config) {
-        project.task(TASK_NAME_UNINSTALL_ALL_TARGET_PLATFORMS) {
-            group = Config.gradleTaskGroupName
-            description = "Deletes all target platforms from the current machine."
-            doLast { deleteFolder(project, project.pluginTestBuildsDir) }
         }
     }
 

@@ -52,7 +52,7 @@ import java.util.zip.ZipOutputStream
  * P2. (3) Launch Eclipse with the PDE testing application (4) Collect the test results.
  * <p/>
  * The way how the tests are collected from the testing project and how the results are collected is
- * defined in the {@link eclipsebuild.testing} package.
+ * defined in the testing package.
  * <p/>
  * More information on the PDE testing automation:
  * <a href="http://www.eclipse.org/articles/Article-PDEJUnitAntAutomation/">
