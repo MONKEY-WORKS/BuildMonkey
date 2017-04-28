@@ -152,8 +152,11 @@ subprojects {
     build.dependsOn createTargetPlatform
     build.dependsOn mavenizeP2Repository
     assemble.dependsOn mavenizeP2Repository
+    assemble.dependsOn mirrorP2Repository
+    assemble.dependsOn createTargetPlatform
     createTargetPlatform.dependsOn mirrorP2Repository
     mavenizeP2Repository.dependsOn mirrorP2Repository
+
 }
  
 apply plugin: 'de.monkeyworks.buildmonkey.p2.P2DeployerPlugin'
@@ -176,3 +179,4 @@ apply plugin: 'de.monkeyworks.buildmonkey.ProductPublishPlugin'
 product {
     productFile = "MonkeyExampleE4Application/MonkeyExcampleE4Application.product"
 }
+
