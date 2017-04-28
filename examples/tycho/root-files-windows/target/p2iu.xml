@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+  <unit id='org.tycho.demo.rootfiles.win' version='1.0.0.201703200936' singleton='false'>
+	
+    
+	<properties>
+		
+      
+		<property name='org.eclipse.equinox.p2.name' value='Root files for my product'/>
+    
+		<property name="maven-groupId" value="example.group"/>
+		<property name="maven-artifactId" value="org.tycho.demo.rootfiles.win"/>
+		<property name="maven-version" value="1.0.0-SNAPSHOT"/>
+	</properties>
+    
+	<touchpoint id='org.eclipse.equinox.p2.native' version='1.0.0'/>
+      
+	<touchpointData>
+		
+      
+		<instructions>
+			
+        
+			<instruction key='install'>
+          unzip(source:@artifact, target:${installFolder});
+        </instruction>
+        
+			<instruction key='uninstall'>
+          cleanupzip(source:@artifact, target:${installFolder});
+        </instruction>
+      
+		</instructions>
+    
+	</touchpointData>
+  
+	<artifacts>
+		<artifact classifier="binary" id="org.tycho.demo.rootfiles.win" version="1.0.0.201703200936"/>
+	</artifacts>
+</unit>

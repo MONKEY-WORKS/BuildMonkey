@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<units size='1'>
+  <unit id='org.tycho.demo.rootfiles' version='1.0.0' singleton='false'>
+    <properties size='5'>
+      <property name='org.eclipse.equinox.p2.name' value='Root files for my product'/>
+      <property name='maven-groupId' value='example.group'/>
+      <property name='maven-artifactId' value='org.tycho.demo.rootfiles'/>
+      <property name='maven-version' value='1.0.0'/>
+      <property name='org.eclipse.equinox.p2.type.iu' value='true'/>
+    </properties>
+    <provides size='1'>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='org.tycho.demo.rootfiles' version='1.0.0'/>
+    </provides>
+    <requires size='1'>
+      <required namespace='org.eclipse.equinox.p2.iu' name='org.tycho.demo.rootfiles.win' range='1.0.0.201703200936'>
+        <filter>
+          (&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32))
+        </filter>
+      </required>
+    </requires>
+    <artifacts size='1'>
+      <artifact classifier='binary' id='org.tycho.demo.rootfiles' version='1.0.0'/>
+    </artifacts>
+    <touchpoint id='org.eclipse.equinox.p2.native' version='1.0.0'/>
+    <touchpointData size='1'>
+      <instructions size='2'>
+        <instruction key='install'>
+          unzip(source:@artifact, target:${installFolder});
+        </instruction>
+        <instruction key='uninstall'>
+          cleanupzip(source:@artifact, target:${installFolder});
+        </instruction>
+      </instructions>
+    </touchpointData>
+  </unit>
+</units>
