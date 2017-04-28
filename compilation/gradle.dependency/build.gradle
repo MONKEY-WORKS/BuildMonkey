@@ -1,0 +1,21 @@
+
+apply plugin: "com.gradle.plugin-publish"
+
+version = '0.4.4'
+
+pluginBundle {
+    website = 'https://github.com/MONKEY-WORKS/BuildMonkey/wiki'
+    vcsUrl = 'https://github.com/MONKEY-WORKS/BuildMonkey'
+    description = 'Resolves dependencies from MANIFEST.MF files'
+    tags = ['OSGi', 'build', 'MANIFEST', 'dependencies']
+
+    plugins {
+        manifestDependencyPlugin {
+          id = 'de.monkeyworks.buildmonkey.ManifestDependencyPlugin'
+          displayName = 'Dependencies from manifest plugin'
+        }
+    }
+    mavenCoordinates {
+        groupId = "de.monkeyworks.buildmonkey"
+    }
+}

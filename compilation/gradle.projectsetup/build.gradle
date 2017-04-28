@@ -1,0 +1,27 @@
+apply plugin: "com.gradle.plugin-publish"
+
+pluginBundle {
+    website = 'https://github.com/MONKEY-WORKS/BuildMonkey/wiki'
+    vcsUrl = 'https://github.com/MONKEY-WORKS/BuildMonkey'
+
+    plugins {
+        projectSetupPlugin {
+            description = 'Setups projects to be build from OSGi manifest files'
+            tags = ['OSGi', 'build', 'MANIFEST']
+            id = 'de.monkeyworks.buildmonkey.ProjectSetupPlugin'
+            displayName = 'OSGi project setup plugin'
+        }
+    }
+    plugins {
+        fixDependencyPlugin {
+            description = 'Fixes + version in pom files before publications'
+            tags = ['publication', 'build', 'POM']
+            id = 'de.monkeyworks.buildmonkey.FixDependencyVersion'
+            displayName = 'Fix dependency version plugin'
+        }
+    }
+
+    mavenCoordinates {
+        groupId = "de.monkeyworks.buildmonkey"
+    }
+}

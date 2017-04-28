@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_LknQwP27Eeas0ZJv04FVKA">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_yoZ1YP27Eeas0ZJv04FVKA" featurename="commands" parentElementId="MonkeyExampleE4Application.application">
+    <elements xsi:type="commands:Command" xmi:id="_NBV4AP28Eeas0ZJv04FVKA" elementId="monkeyhandlerplugin.command.monkeycommand" commandName="Monkey Command"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_RdKjEP28Eeas0ZJv04FVKA" featurename="handlers" parentElementId="MonkeyExampleE4Application.application">
+    <elements xsi:type="commands:Handler" xmi:id="_T6m14P28Eeas0ZJv04FVKA" elementId="monkeyhandlerplugin.handler.0" contributionURI="bundleclass://MonkeyHandlerPlugin/de.monkeyworks.plugins.monkeyhandlerplugin.MonkeyHandler" command="_NBV4AP28Eeas0ZJv04FVKA"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_YDJYkP28Eeas0ZJv04FVKA" featurename="children" parentElementId="org.eclipse.ui.main.menu">
+    <elements xsi:type="menu:Menu" xmi:id="_gdrU4P28Eeas0ZJv04FVKA" elementId="monkeyhandlerplugin.menu.monkey" label="Monkey" iconURI="">
+      <children xsi:type="menu:HandledMenuItem" xmi:id="_vOLUwP28Eeas0ZJv04FVKA" elementId="monkeyhandlerplugin.handledmenuitem.0" iconURI="platform:/plugin/MonkeyHandlerPlugin/resources/icons/monkey.png" command="_NBV4AP28Eeas0ZJv04FVKA"/>
+    </elements>
+  </fragments>
+</fragment:ModelFragments>

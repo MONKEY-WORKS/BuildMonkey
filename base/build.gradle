@@ -1,0 +1,67 @@
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'java'
+
+version = '1.0'
+group = 'de.monkeyworks.buildmonkey'
+
+publishing {
+    publications {
+        mavenGroovy(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact groovydocJar
+            groupId "${group}"
+            artifactId 'base'
+            version project.version
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', 'Common tasks and classes for the BuildMonkey project')
+                root.appendNode('name', 'base')
+                root.appendNode('url', 'https://github.com/MONKEY-WORKS/BuildMonkey/tree/master/base')
+            }
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.groovy.srcDirs
+    classifier = 'sources'
+}
+
+
+task groovydocJar(type: Jar, dependsOn: groovydoc) {
+    classifier = 'groovydoc'
+    from javadoc.destinationDir
+    // options.encoding = 'UTF-8'
+}
+
+artifacts {
+    archives groovydocJar
+    archives sourcesJar
+}
+
+Properties properties = new Properties()
+File propFile = "${System.properties['user.home']}${File.separator}.gradle${File.separator}bintray.properties" as File
+if(propFile.exists()) {
+    properties.load(propFile.newDataInputStream())
+
+
+    // Use gradle bintrayUpload for uploading.
+    bintray {   
+        user = properties.getProperty("bintray.user")
+        key = properties.getProperty("bintray.apikey")
+        publications = ['mavenGroovy'] 
+        pkg {
+            repo = 'BuildMonkey'
+            name = 'base'
+            userOrg = 'michael-barth-monkey-works'
+            licenses = ['EPL-1.0']
+            vcsUrl = 'https://github.com/MONKEY-WORKS/BuildMonkey.git'
+            version {
+                name = '1.0'
+                desc = 'Common tasks and classes for the BuildMonkey project'
+                released  = new Date()
+            }
+        }
+    }
+}

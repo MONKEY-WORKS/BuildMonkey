@@ -1,0 +1,156 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        maven {url "https://plugins.gradle.org/m2/"}
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencies {
+        classpath "de.monkeyworks.buildmonkey:gradle.p2:+"
+        classpath "de.monkeyworks.buildmonkey:gradle.p2publish:+"
+        classpath "de.monkeyworks.buildmonkey:gradle.mavenize:+"
+        classpath "de.monkeyworks.buildmonkey:gradle.dependency:+"
+        classpath "de.monkeyworks.buildmonkey:gradle.projectsetup:+"
+    }
+}
+
+apply plugin: 'de.monkeyworks.buildmonkey.p2.P2MirrorPlugin'
+apply plugin: 'de.monkeyworks.buildmonkey.mavenizer.MavenizerPlugin'
+
+def buildUri = buildDir.toURI()
+def buildUrl = buildUri.toURL()
+
+eclipseMirror {
+    sliceStrict false
+    latestVersionOnly false
+    
+    target = "$buildDir/p2-repository"
+    targetDefinition = file("exampleE4App.target")
+    targetFeatureName = "feature-ExampleE4App"
+    targetFile = "targetExampleE4App.target"
+    updateURL "${buildUrl}p2-repository"
+}
+
+mavenize {
+    mavenizeTask {
+        targetDir = "$buildDir/m2-repository"
+        sourceP2Repository = "$buildDir/p2-repository"
+    }
+}  
+
+subprojects {
+
+    repositories {
+        maven {url uri("${buildUri}/m2-repository")}
+    }
+
+    apply plugin: 'java'
+
+    project.ext.resourcesPath = 'resources/'
+    
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+    
+    // Use UTF-8
+    compileJava.options.encoding = 'UTF-8'
+    tasks.withType(JavaCompile) {
+       options.encoding = 'UTF-8'
+    }
+
+    version = '1.0.0'
+
+    // plugin which resolves the dependencies from the manifest and the build.properties file
+    apply plugin: 'de.monkeyworks.buildmonkey.ManifestDependencyPlugin'
+
+    manifestDependencies {
+        mavenGroup = "buildmonkey"
+
+        addProjectPattern {
+          projectPattern = "Monkey(.*)"
+          projectGroup = "de.monkeyworks"
+        }
+    }
+
+    apply plugin: 'maven-publish'
+
+    publishing {
+        publications {
+            def isJavaPlugin = project.getPlugins().hasPlugin('java');
+
+            if (isJavaPlugin) {
+                mavenJava(MavenPublication) {
+                    // Don't remove, otherwise
+                    // pom file will be missing
+                    // transit dependencies definition
+                    from components.java
+
+                    // Replace every '+' version with the version resolved by gradle plugin de.monkeyworks.buildmonkey.dependency.ManifestDependencyPlugin
+                    apply plugin: 'de.monkeyworks.buildmonkey.FixDependencyVersion'
+
+                    configurations.archives.allArtifacts.forEach {
+                        def cls = it.classifier;
+                        if (cls != null && !cls.empty) {
+                            artifact(it.file) {
+                                classifier cls
+                            }
+                        }
+                    };
+                }
+            }
+        }
+    }
+
+    task install(dependsOn:'publishToMavenLocal') {
+        doLast {
+
+        }
+    }
+
+    jar {
+        if (project.file("${resourcesPath}").exists()) {
+                with copySpec {
+                    from "${projectDir}/${resourcesPath}"
+                    into "${resourcesPath}"
+                }  
+        }
+        if (project.file('OSGI-INF').exists()) {
+            with copySpec {
+                from "${projectDir}/OSGI-INF"
+                into 'OSGI-INF'
+            }       
+        }
+    
+        manifest {
+            // benutze das im Projekt vorliegende File, falls vorhanden:
+            def manif = "${projectDir}/META-INF/MANIFEST.MF"
+            if (new File(manif).exists()) {
+                from (manif) { 
+                    eachEntry { details ->
+                        if (details.key == 'Bundle-Version') {
+                            details.value = "1.0.0"
+                        }
+                    }
+                }
+            }
+        }
+        from file ('plugin.xml')
+    }
+    // add install task to basic build step
+    build.dependsOn install
+    assemble.dependsOn createTargetPlatform
+    assemble.dependsOn mavenizeP2Repository
+    assemble.dependsOn mirrorP2Repository
+    createTargetPlatform.dependsOn mirrorP2Repository
+    mavenizeP2Repository.dependsOn mirrorP2Repository
+}
+ 
+apply plugin: 'de.monkeyworks.buildmonkey.p2.P2DeployerPlugin'
+
+p2Deployment {
+    targetRepository = file("$buildDir/p2-repository")
+    featureId = "ExampleE4App"
+    featureLabel = "Example Feature"
+    version = "1.0.0"
+}
+

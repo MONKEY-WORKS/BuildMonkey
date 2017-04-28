@@ -1,0 +1,63 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+        classpath "com.gradle.publish:plugin-publish-plugin:0.9.7"
+        classpath "gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.13.1"
+    }
+}
+
+subprojects {
+
+    group = "de.monkeyworks.buildmonkey"
+    version = '0.4.1'
+
+    apply plugin: 'groovy'
+    apply plugin: 'maven-publish'
+    apply plugin: 'maven'
+    apply plugin: 'eclipse'
+
+    group = "de.monkeyworks.buildmonkey"
+
+
+    apply plugin: "com.github.hierynomus.license"
+
+    license {
+        header rootProject.file('LICENSE')
+        strictCheck true
+        skipExistingHeaders true
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencies {
+        compile gradleApi()
+        compile localGroovy()
+    }
+    build.dependsOn install
+
+
+    if(project.name != 'base') {
+        publishing {
+            publications {
+                mavenGroovy(MavenPublication) {
+                    groupId "${group}"
+                    version project.version
+                    from components.java
+                }
+            }
+        }
+    }
+}
+
+

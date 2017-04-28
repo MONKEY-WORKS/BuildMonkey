@@ -1,0 +1,13 @@
+rootProject.name = "buildMonkeySimpleExample"
+
+// Projects with default name and path behavior
+def projects = ['MonkeyPlugin']
+
+// Projects with uncommon path behavior
+// Use the following two lines as template
+// include ':<projectname>'
+// project ':<projectname>'.projectDir = new File(<rootDir>, <relative or absolute path to the project>)	
+	
+for(p in projects) {
+	include ':' + p
+}

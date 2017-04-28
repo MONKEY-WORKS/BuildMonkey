@@ -1,0 +1,201 @@
+buildscript {
+    repositories {
+        // Uncomment for local deployment of built plugins
+         mavenLocal()
+
+        // The BuildMonkey plugins are published here
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+
+        // Default repositories for all the maven dependencies of this world
+        mavenCentral()
+        jcenter()
+    }
+
+    // Get BuildMonkey plugins
+    dependencies {
+        classpath "de.monkeyworks.buildmonkey:gradle.p2:0.4"
+        classpath "de.monkeyworks.buildmonkey:gradle.p2publish:0.4.1"
+        classpath "de.monkeyworks.buildmonkey:gradle.mavenize:0.4"
+        classpath "de.monkeyworks.buildmonkey:gradle.dependency:0.4"
+        classpath "de.monkeyworks.buildmonkey:gradle.projectsetup:0.4"
+        classpath "de.monkeyworks.buildmonkey:mavenArtefacts:0.4.1"
+        classpath 'de.monkeyworks.buildmonkey:artifactoryupload:0.4'
+        classpath 'org.standardout:bnd-platform:1.4.0'
+    }
+}
+
+// First plugin collects all osgi bundles and their dependencies from different P2 repository and creates a new one with all plugins and features.
+apply plugin: 'de.monkeyworks.buildmonkey.p2.P2MirrorPlugin'
+
+// Create the URL of the build folder
+def buildUri = buildDir.toURI()
+def buildUrl = buildUri.toURL()
+
+// Configure mirroring plugin
+eclipseMirror {
+    // Both parameters on false means a lazy dependency resolving but matching the exact versions of the defined features
+    sliceStrict false
+    latestVersionOnly false
+    
+    // where to write the summarized repository into
+    target = "$buildDir/p2-repository"
+    // Eclipse compatible target platform with the features needed for the project
+    targetDefinition = file("helloBuildMonkey.target")
+    // Name of the feature referencing all features of the source target platform
+    targetFeatureName = "feature-HelloBuildMonkey"
+    // Name of the Eclipse compatile targer platform pointing to the created P2 repository
+    targetFile = "targetBuildMonkey.target"
+    // An URL to update the content with this mirroring action
+    updateURL "${buildUrl}p2-repository"
+}
+
+// Second plugin makes a maven repository from the P2 repository of the first step
+apply plugin: 'de.monkeyworks.buildmonkey.mavenizer.MavenizerPlugin'
+
+// Configure mavenize plugin
+mavenize {
+    mavenizeTask {
+        targetDir = "$buildDir/m2-repository"
+        sourceP2Repository = "$buildDir/p2-repository"
+    }
+} 
+
+repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+}
+
+
+// Process each sub project, build the eclipse plugins
+subprojects {
+
+    // Receive plugins from the built maven repository
+    repositories {
+        maven {url uri("${buildUri}/m2-repository")}
+
+    }
+
+    // Normal java project stuff
+    apply plugin: 'java'
+    version = '1.0.0'
+    project.ext.resourcesPath = 'resources/'
+    
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+    
+    // Use UTF-8
+    compileJava.options.encoding = 'UTF-8'
+    tasks.withType(JavaCompile) {
+       options.encoding = 'UTF-8'
+    }
+     
+    // plugin which resolves the dependencies from the manifest and the build.properties file
+    apply plugin: 'de.monkeyworks.buildmonkey.ManifestDependencyPlugin'
+
+    // Configure manifest dependency plugin
+    manifestDependencies {
+        // Name prefix for all maven plugins
+        mavenGroup = "buildmonkey"
+
+        // Patter to identify local projects
+        addProjectPattern {
+          projectPattern = "Monkey(\\..*)"
+          projectGroup = "de.monkeyworks"
+        }
+    }
+
+    // Use default plugin for publications on maven repositories
+    apply plugin: 'maven-publish'
+
+    publishing {
+        publications {
+            def isJavaPlugin = project.getPlugins().hasPlugin('java');
+
+            if (isJavaPlugin) {
+                mavenJava(MavenPublication) {
+                    // Don't remove, otherwise
+                    // pom file will be missing
+                    // transit dependencies definition
+                    from components.java
+
+                    // Replace every '+' version with the version resolved by gradle plugin de.monkeyworks.buildmonkey.dependency.ManifestDependencyPlugin
+                    apply plugin: 'de.monkeyworks.buildmonkey.FixDependencyVersion'
+
+                    configurations.archives.allArtifacts.forEach {
+                        def cls = it.classifier;
+                        if (cls != null && !cls.empty) {
+                            artifact(it.file) {
+                                classifier cls
+                            }
+                        }
+                    };
+                }
+            }
+        }
+    }
+
+    // Lets install to local maven repositor
+    task install(dependsOn:'publishToMavenLocal') {
+        doLast {
+            
+        }
+    }
+
+    // Make the crated jar file matching OSGi bundle and Eclipse plugin nature
+    jar {
+        if (project.file("${resourcesPath}").exists()) {
+                with copySpec {
+                    from "${projectDir}/${resourcesPath}"
+                    into "${resourcesPath}"
+                }  
+        }
+        if (project.file('OSGI-INF').exists()) {
+            with copySpec {
+                from "${projectDir}/OSGI-INF"
+                into 'OSGI-INF'
+            }       
+        }
+    
+        manifest {
+            // benutze das im Projekt vorliegende File, falls vorhanden:
+            def manif = "${projectDir}/META-INF/MANIFEST.MF"
+            if (new File(manif).exists()) {
+                from (manif) { 
+                    eachEntry { details ->
+                        if (details.key == 'Bundle-Version') {
+                            details.value = "1.0.0"
+                        }
+                    }
+                }
+            }
+        }
+        from file ('plugin.xml')
+    }
+
+    // add tasks to basic build step and create the sequence mirroP2Repository - mavenizeP2Repository/createtargetPlatform - assemble - install
+    build.dependsOn install
+    assemble.dependsOn createTargetPlatform
+    assemble.dependsOn mavenizeP2Repository
+    assemble.dependsOn mirrorP2Repository
+    createTargetPlatform.dependsOn mirrorP2Repository
+    mavenizeP2Repository.dependsOn mirrorP2Repository
+}
+ 
+
+// Last step publishes the crate Eclipse plugin to an own P2 repository
+apply plugin: 'de.monkeyworks.buildmonkey.p2.P2DeployerPlugin'
+
+// Configure publishing to a P2 repository
+p2Deployment {
+    // Repository, where the plugin is publsihed to
+    targetRepository = file("$buildDir/monkey-repository")
+    // Name of the feature
+    featureId = "MonkeyPlugin"
+    // Display name of the feature
+    featureLabel = "Monkey Plugin"
+    version = "1.0.0"
+}
+

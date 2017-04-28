@@ -1,0 +1,7 @@
+build
+.gradle
+.DS_Store
+bin
+
+.idea/
+examples/exampleApp/product/
