@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+   <implementation class="de.monkeyworks.buildmonkey.osgi.equinox.bridge.api.impl.MetadataRepositoryLoaderServiceImpl"/>
+   <service>
+      <provide interface="de.monkeyworks.buildmonkey.equinox.api.MetadataRepositoryLoaderService"/>
+   </service>
+</scr:component>

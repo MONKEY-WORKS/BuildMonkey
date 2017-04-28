@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-Version: 1.1.0.qualifier
+Bundle-Name: Bridging api for gradle product materialisation
+Bundle-ManifestVersion: 2
+Bundle-Description: Bla
+Bundle-SymbolicName: de.monkeyworks.buildmonkey.equinox.bridge.api
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-Vendor: %providerName
+Export-Package: de.monkeyworks.buildmonkey.equinox.api
+Bundle-ActivationPolicy: lazy

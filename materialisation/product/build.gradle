@@ -1,0 +1,65 @@
+buildscript {
+    repositories {
+        maven {
+            mavenLocal()
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "com.gradle.publish:plugin-publish-plugin:0.9.7"
+    }
+}
+
+apply plugin: 'groovy'
+apply plugin: 'maven-publish'
+apply plugin: 'maven'
+apply plugin: 'idea'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+configurations {
+    gradleRuntime
+}
+
+idea {
+    module {
+        scopes.RUNTIME.plus += [ configurations.gradleRuntime ]
+    }
+}
+
+dependencies {
+    gradleRuntime files("${rootDir}/gradle/wrapper/gradle-wrapper.jar")
+}
+
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+
+    compile "de.monkeyworks.buildmonkey:embedded.equinox:+"
+    compile "de.monkeyworks.buildmonkey:bridge.api:+"
+}
+
+apply plugin: "com.gradle.plugin-publish"
+
+pluginBundle {
+    website = 'https://github.com/MONKEY-WORKS/BuildMonkey/wiki'
+    vcsUrl = 'https://github.com/MONKEY-WORKS/BuildMonkey'
+    description = 'Publishs eclipse products as standalone applications'
+    tags = ['eclipse', 'rcp', 'product', 'publish', 'gradle']
+
+    plugins {
+        productPublishPlugin {
+            id = 'de.monkeyworks.buildmonkey.ProductPublishPlugin'
+            displayName = 'Product Publish plugin'
+        }
+    }
+
+    mavenCoordinates {
+        groupId = "de.monkeyworks.buildmonkey"
+    }
+
+}

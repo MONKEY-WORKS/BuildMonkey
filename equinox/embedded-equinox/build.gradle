@@ -1,0 +1,33 @@
+apply plugin: "java"
+
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    compile gradleApi()
+
+    compile 'org.eclipse.platform:org.eclipse.core.runtime:3.12.0'
+}
+
+task extractExternalBundles(type: Copy) {
+    List<File> artifacts = []
+    configurations.runtime.resolvedConfiguration.resolvedArtifacts.each { artifact ->
+        if (artifact.file.name.endsWith('.zip')) {
+            artifacts.add(artifact.file)
+        }
+    }
+
+    from {
+        artifacts.collect {
+            zipTree(it)
+        }
+    }
+    into "osgi"
+}
+assemble.dependsOn extractExternalBundles
+
+version = "1.0"
+group = "de.monkeyworks.buildmonkey"
