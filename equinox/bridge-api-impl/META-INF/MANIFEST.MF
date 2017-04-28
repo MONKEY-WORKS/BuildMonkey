@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Bundle-Version: 1.1.0.qualifier
+Bundle-Name: Bridging api for gradle product materialisation
+Bundle-ManifestVersion: 2
+Bundle-Description: Bla
+Bundle-SymbolicName: de.monkeyworks.buildmonkey.osgi.equinox.bridge.api.impl;singleton:=true
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Import-Package: org.eclipse.equinox.p2.core,
+ org.eclipse.equinox.p2.query
+Require-Bundle: org.eclipse.equinox.p2.metadata,
+ org.eclipse.equinox.p2.repository,
+ org.eclipse.equinox.p2.publisher,
+ org.eclipse.equinox.p2.publisher.eclipse,
+ org.eclipse.equinox.p2.director.app,
+ org.eclipse.equinox.app
+Service-Component: OSGI-INF/MetadataRepositoryLoaderServiceImpl.xml
+Bundle-Activator: de.monkeyworks.buildmonkey.osgi.equinox.bridge.api.impl.Activator
+Bundle-Vendor: %providerName
+Bundle-ActivationPolicy: lazy

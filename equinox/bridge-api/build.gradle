@@ -1,0 +1,15 @@
+apply plugin: 'java'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+jar {
+    manifest {
+        from 'META-INF/MANIFEST.MF'
+    }
+}
+
+version = "1.0"
+group = "de.monkeyworks.buildmonkey"

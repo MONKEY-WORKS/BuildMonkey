@@ -30,6 +30,8 @@ sharedRootDir = new File( projectTreeRootDir, 'materialisation' )
 
 include ':gradle.pde'
 project( ':gradle.pde' ).projectDir = new File( sharedRootDir, 'gradle.pde' )
+include ':product'
+project( ':product' ).projectDir = new File( sharedRootDir, 'product' )
 
 
 sharedRootDir = new File( projectTreeRootDir, 'repository' )
@@ -43,3 +45,13 @@ project( ':gradle.p2' ).projectDir = new File( sharedRootDir, 'gradle.p2' )
 include ':gradle.p2publish'
 project( ':gradle.p2publish' ).projectDir = new File( sharedRootDir, 'gradle.p2publish' )
 
+sharedRootDir = new File( projectTreeRootDir, 'equinox' )
+
+include ':bridge.api'
+project( ':bridge.api' ).projectDir = new File( sharedRootDir, 'bridge-api' )
+
+include ':bridge.api.impl'
+project( ':bridge.api.impl' ).projectDir = new File( sharedRootDir, 'bridge-api-impl' )
+
+include ':embedded.equinox'
+project( ':embedded.equinox' ).projectDir = new File( sharedRootDir, 'embedded-equinox' )

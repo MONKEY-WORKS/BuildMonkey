@@ -12,6 +12,12 @@ buildscript {
         classpath "de.monkeyworks.buildmonkey:gradle.mavenize:+"
         classpath "de.monkeyworks.buildmonkey:gradle.dependency:+"
         classpath "de.monkeyworks.buildmonkey:gradle.projectsetup:+"
+
+        classpath "de.monkeyworks.buildmonkey:gradle.p2publish:+"
+        classpath files("../../materialisation/product/build/libs/product-0.4.1.jar")
+
+        classpath "de.monkeyworks.buildmonkey:embedded.equinox:+"
+        classpath "de.monkeyworks.buildmonkey:bridge.api:+"
     }
 }
 
@@ -143,9 +149,9 @@ subprojects {
     }
     // add install task to basic build step
     build.dependsOn install
-    assemble.dependsOn createTargetPlatform
+    build.dependsOn createTargetPlatform
+    build.dependsOn mavenizeP2Repository
     assemble.dependsOn mavenizeP2Repository
-    assemble.dependsOn mirrorP2Repository
     createTargetPlatform.dependsOn mirrorP2Repository
     mavenizeP2Repository.dependsOn mirrorP2Repository
 }
@@ -159,3 +165,14 @@ p2Deployment {
     version = "1.0.0"
 }
 
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+
+apply plugin: 'de.monkeyworks.buildmonkey.ProductPublishPlugin'
+
+product {
+    productFile = "MonkeyExampleE4Application/MonkeyExcampleE4Application.product"
+}
