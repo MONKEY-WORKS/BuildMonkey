@@ -4,7 +4,8 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
 /**
- * Created by jake on 06/03/2017.
+ * Just an activator to retrieve the current osgi bundle context
+ * Created by Johannes Tandler on 06/03/2017.
  */
 public class Activator implements BundleActivator {
     private static BundleContext context;

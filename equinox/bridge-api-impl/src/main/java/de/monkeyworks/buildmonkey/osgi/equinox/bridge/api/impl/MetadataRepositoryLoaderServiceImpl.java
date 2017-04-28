@@ -30,9 +30,7 @@ import java.util.List;
  */
 public class MetadataRepositoryLoaderServiceImpl implements MetadataRepositoryLoaderService {
 
-    public MetadataRepositoryLoaderServiceImpl() {
-        System.out.println("§sdkflsdfjlsdkjflsdkjflakdfjlsdkjflskjd");
-    }
+    public MetadataRepositoryLoaderServiceImpl() {}
 
     @Override
     public void publishProduct(URI repositoryLocation, String productFilePath) {

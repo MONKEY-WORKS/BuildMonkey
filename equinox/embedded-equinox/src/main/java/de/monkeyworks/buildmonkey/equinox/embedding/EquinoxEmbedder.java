@@ -9,6 +9,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
+import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +21,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by jake on 06/03/2017.
+ *
+ *
+ *
+ * Created by Johannes Tandler on 06/03/2017.
  */
 public class EquinoxEmbedder {
 
@@ -37,6 +41,12 @@ public class EquinoxEmbedder {
         project.getDependencies().add("build", "de.monkeyworks.buildmonkey:bridge.api.impl:+");
     }
 
+    /**
+     * Bootstraps the eclipse instance and starts it
+     *
+     * @param installationLocation points to the location of the eclipse repository
+     * @throws IOException
+     */
     public void bootstrap(String installationLocation) throws IOException {
         if(eclipseContext != null) {
             return;
@@ -46,10 +56,12 @@ public class EquinoxEmbedder {
                     "Can not start Eclipse inside eclipse");
         }
 
+        // get framework directory
         File frameworkDir = new File(installationLocation);
 
         List<File> additionalBundles = new ArrayList<>();
 
+        // check resolved configurations to load additional bundles
         ResolvedConfiguration config = project.getConfigurations().getByName("build").getResolvedConfiguration();
         for(ResolvedArtifact artifact : config.getResolvedArtifacts()) {
             if(artifact.getName().equals("tycho-bundles-external")) {
@@ -63,6 +75,7 @@ public class EquinoxEmbedder {
 
         frameworkDir = new File(frameworkDir, "eclipse");
 
+        // create osgi configuration
         final Map<String, String> platformProperties = new LinkedHashMap<>();
         String frameworkLocation = frameworkDir.getAbsolutePath() + "/";
 
@@ -100,19 +113,33 @@ public class EquinoxEmbedder {
         }
 
         platformProperties.put("osgi.parentClassloader", "fwk");
+
+        // set initial properties
         EclipseStarter.setInitialProperties(platformProperties);
 
+        Logger logger = project.getLogger();
+
+        // start eclipse
         try {
+            logger.info("Starting Eclipse");
             EclipseStarter.startup(new String[0], null);
+            logger.info("Eclipse started");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        // get context
         eclipseContext = EclipseStarter.getSystemBundleContext();
+
+        // activate addiontal bundles
         activateBundlesInWorkingOrder();
 
-        for(Bundle bundle : eclipseContext.getBundles()) {
-            System.out.println(bundle.getSymbolicName() + " _ " + bundle.getState());
+
+        if(logger.isInfoEnabled()) {
+            logger.info("Eclipse Plugin States:");
+            for (Bundle bundle : eclipseContext.getBundles()) {
+                logger.info("\t" + bundle.getSymbolicName() + " : " + bundle.getState());
+            }
         }
     }
 
@@ -123,26 +150,21 @@ public class EquinoxEmbedder {
         tryActivateBundle("de.monkeyworks.buildmonkey.osgi.equinox.bridge.api.impl");
     }
 
+    /**
+     * Returns a given class from the eclipse side of life to somewhere else!
+     * @param serviceClass
+     * @param <T>
+     * @return
+     */
     public <T> T getService(Class<T> serviceClass) {
-        /*for(Bundle bundle : eclipseContext.getBundles()) {
-            ServiceReference<?>[] refs = bundle.getRegisteredServices();
-            if(refs == null)
-                continue;
-
-            for(ServiceReference<?> ref : refs) {
-                System.out.println(bundle.getSymbolicName() + " -> " + ref);
-                Object whatEver = eclipseContext.getService(ref);
-                if(whatEver != null)
-                    System.out.println(whatEver.getClass() + " -- " + serviceClass);
-                else
-                    System.out.println("NULL");
-            }
-        }*/
-
         ServiceReference<T> ref = eclipseContext.getServiceReference(serviceClass);
         return eclipseContext.getService(ref);
     }
 
+    /**
+     * Tries to activate a given bundle
+     * @param symbolicName name of the bundle to activate
+     */
     private void tryActivateBundle(String symbolicName) {
         for (Bundle bundle : eclipseContext.getBundles()) {
             if (symbolicName.equals(bundle.getSymbolicName())) {
@@ -154,7 +176,6 @@ public class EquinoxEmbedder {
             }
         }
     }
-
 
     private void addBundlesDir(StringBuilder bundles, File[] files, boolean absolute) {
         if (files != null) {
