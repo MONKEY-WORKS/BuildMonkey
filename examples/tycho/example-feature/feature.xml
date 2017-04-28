@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="example-feature"
-      label="%featureName"
+      label="Example Feature"
       version="0.1.0.qualifier"
-      provider-name="%providerName">
+      provider-name="Eclipse.org">
 
    <description>
-      %description
+      description
    </description>
 
    <copyright>
-      %copyright
+      copy right
    </copyright>
 
-   <license url="%licenseURL">
-      %license
+   <license url="http://u.r.l">
+      LiloLicense
    </license>
 
    <plugin

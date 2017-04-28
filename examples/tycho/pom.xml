@@ -28,10 +28,7 @@ Contributors:
 		<module>eclipse-repository</module>
 		<module>example-bundle</module>
 		<module>example-feature</module>
-		<module>example-feature-2</module>
 		<module>mars</module>
-		<module>root-files</module>
-		<module>root-files-windows</module>
 	</modules>
 
 	<build>
