@@ -39,8 +39,8 @@ dependencies {
     compile gradleApi()
     compile localGroovy()
 
-    compile "de.monkeyworks.buildmonkey:embedded.equinox:+"
-    compile "de.monkeyworks.buildmonkey:bridge.api:+"
+    compile project(":embedded.equinox")
+    compile project(":bridge.api")
 }
 
 apply plugin: "com.gradle.plugin-publish"
