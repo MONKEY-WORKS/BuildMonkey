@@ -65,10 +65,15 @@ subprojects {
 
     manifestDependencies {
         mavenGroup = "buildmonkey"
+        eclipseGroup = 'eclipse'
 
-        addProjectPattern {
-          projectPattern = "Monkey(.*)"
-          projectGroup = "de.monkeyworks"
+        dependencyHandling {
+            def ids = [:]
+            if(it.matches("Monkey(.*)")) {
+                ids['groupId'] = 'de.monkeyworks'
+                ids['version'] = project.version
+            }
+            return ids
         }
     }
 
@@ -122,7 +127,7 @@ subprojects {
         }
     
         manifest {
-            // benutze das im Projekt vorliegende File, falls vorhanden:
+            // use existing manifest, if it is there
             def manif = "${projectDir}/META-INF/MANIFEST.MF"
             if (new File(manif).exists()) {
                 from (manif) { 
