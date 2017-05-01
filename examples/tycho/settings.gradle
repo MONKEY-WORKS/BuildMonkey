@@ -1,0 +1,6 @@
+rootProject.name = 'tycho-example'
+
+include ":mars"
+include ":example-feature"
+include ":example-bundle"
+include ":eclipse-repository"

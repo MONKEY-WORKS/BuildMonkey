@@ -1,0 +1,28 @@
+apply plugin: 'de.monkeyworks.buildmonkey.p2.P2MirrorPlugin'
+apply plugin: 'de.monkeyworks.buildmonkey.mavenizer.MavenizerPlugin'
+
+def buildUri = buildDir.toURI()
+def buildUrl = buildUri.toURL()
+
+eclipseMirror {
+    sliceStrict false
+    latestVersionOnly false
+
+    target = "$buildDir/p2-repository"
+    targetDefinition = file("mars.target")
+    updateURL "${buildUrl}p2-repository"
+}
+
+mavenize {
+    mavenizeTask {
+        targetDir = "$buildDir/m2-repository"
+        sourceP2Repository = "$buildDir/p2-repository"
+    }
+}
+
+build.dependsOn mavenizeP2Repository
+assemble.dependsOn mavenizeP2Repository
+assemble.dependsOn mirrorP2Repository
+afterEvaluate {
+    mavenizeP2Repository_1.dependsOn mirrorP2Repository
+}

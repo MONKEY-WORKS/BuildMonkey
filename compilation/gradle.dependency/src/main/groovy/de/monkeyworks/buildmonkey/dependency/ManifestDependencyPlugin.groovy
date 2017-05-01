@@ -163,7 +163,7 @@ class ManifestDependencyPlugin implements Plugin<Project> {
         def evaluationStrategy = {
             def parsedXML = new XmlSlurper().parse(it)
             def extractFromXML = { String nodeName, String attribute ->
-                return parsedXML.'**'.findAll { node -> node.name() == nodeName }.collect { it["@$attribute"] }
+                return parsedXML.'**'.findAll { node -> node.name() == nodeName }.collect { it["@$attribute"].toString() }
             }
             return extractFromXML("plugin", "id") + extractFromXML("import", "plugin") + extractFromXML("include", "id")
         }

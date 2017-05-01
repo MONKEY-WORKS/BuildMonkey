@@ -15,6 +15,9 @@ public interface MetadataRepositoryLoaderService {
      * @param repositoryLocation location of the p2 repository
      * @param productFile location of a product definition to publish
      */
-    void publishProduct(URI repositoryLocation, String productFile);
+    String publishProductMetaData(String buildPath, URI repositoryLocation, String productFile);
 
+    void materialiseProduct(String buildPath, String productId);
+
+    String getProductID(String productFilePath);
 }

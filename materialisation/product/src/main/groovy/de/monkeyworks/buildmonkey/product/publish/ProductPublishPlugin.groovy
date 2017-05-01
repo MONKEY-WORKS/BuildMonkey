@@ -7,6 +7,7 @@ import org.gradle.api.Project
 
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
 
 /**
  * Created by Johannes Tandler on 06/03/2017.
@@ -40,14 +41,29 @@ class ProductPublishPlugin implements Plugin<Project> {
 
             embedder.bootstrap(targetDir.toAbsolutePath().toString())
 
-
-            MetadataRepositoryLoaderService service = embedder.getService(MetadataRepositoryLoaderService.class)
-            URI metaRepolocation = project.buildDir.toPath().resolve("merge-repository").toUri()
-
-
             ProductExtension extension = project.product
 
-            service.publishProduct(metaRepolocation, extension.productFile)
+
+            MetadataRepositoryLoaderService service = embedder.getService(MetadataRepositoryLoaderService.class)
+            URI metaRepolocation = Paths.get(extension.repository).toUri()
+            println(metaRepolocation)
+
+
+            String productID = service.publishProductMetaData(project.buildDir.toString(), metaRepolocation, extension.productFile)
+            if(extension.productID == null)
+                extension.productID = productID
+        }
+
+        task = project.task("materialise-product")
+        task.description = "materialises a product"
+        task.doLast {
+            MetadataRepositoryLoaderService service = embedder.getService(MetadataRepositoryLoaderService.class)
+            ProductExtension extension = project.product
+            if(extension.productID == null) {
+                extension.productID = service.getProductID(extension.productFile)
+            }
+
+            service.materialiseProduct(project.buildDir.toString(), extension.productID)
         }
     }
 

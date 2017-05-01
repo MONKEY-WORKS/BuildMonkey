@@ -107,7 +107,7 @@ public class P2DeployerPlugin implements Plugin<Project> {
                     def mversion = "${it.version}"
                     // check if feature or plugin
                     def targetDir = pluginsDir
-                    if(it.baseName.endsWith("feature")) {
+                    if(new File(subProject.projectDir, "feature.xml").exists()) {
                         targetDir = featureDir
 
                         def jarFile = new JarFile(it.archivePath)

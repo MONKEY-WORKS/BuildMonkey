@@ -13,6 +13,8 @@ class ProductExtension {
 
     String executableFeature
 
+    String productID
+
     // project
     final Project project
 

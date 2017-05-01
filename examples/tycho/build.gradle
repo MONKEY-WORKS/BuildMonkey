@@ -1,0 +1,90 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        maven {url "https://plugins.gradle.org/m2/"}
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencies {
+        classpath "de.monkeyworks.buildmonkey:gradle.p2:+"
+        classpath "de.monkeyworks.buildmonkey:gradle.p2publish:+"
+        classpath "de.monkeyworks.buildmonkey:gradle.mavenize:+"
+        classpath "de.monkeyworks.buildmonkey:gradle.dependency:+"
+        classpath "de.monkeyworks.buildmonkey:gradle.projectsetup:+"
+
+        classpath "de.monkeyworks.buildmonkey:gradle.p2publish:+"
+        classpath files("../../materialisation/product/build/libs/product-0.4.1.jar")
+
+        classpath "de.monkeyworks.buildmonkey:embedded.equinox:+"
+        classpath "de.monkeyworks.buildmonkey:bridge.api:+"
+    }
+}
+
+subprojects {
+
+    if(!it.name.equals(":mars")) {
+        apply plugin: 'java'
+
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+
+        // Use UTF-8
+        tasks.withType(JavaCompile) {
+            options.encoding = 'UTF-8'
+        }
+
+
+        repositories {
+            mavenLocal()
+            maven {url uri("${rootProject.projectDir}/mars/build/m2-repository")}
+            mavenCentral()
+        }
+
+        version = '1.0.0'
+
+        sourceSets.main.java.srcDir 'src'
+
+        // plugin which resolves the dependencies from the manifest and the build.properties file
+        apply plugin: 'de.monkeyworks.buildmonkey.ManifestDependencyPlugin'
+
+        jar {
+            manifest {
+                // use existing manifest, if it is there
+                def manif = "${projectDir}/META-INF/MANIFEST.MF"
+                if (new File(manif).exists()) {
+                    from (manif) {
+                        eachEntry { details ->
+                            if (details.key == 'Bundle-Version') {
+                                details.value = "1.0.0"
+                            }
+                        }
+                    }
+                }
+            }
+            from file ('plugin.xml')
+        }
+    }
+
+
+    manifestDependencies {
+        mavenGroup = "buildmonkey"
+        eclipseGroup = 'eclipse'
+
+        dependencyHandling {
+            def ids = [:]
+            if(it.matches("example-(.*)")) {
+                ids['groupId'] = 'de.monkeyworks'
+                ids['version'] = project.version
+            }
+            return ids
+        }
+    }
+}
+
+apply plugin: 'de.monkeyworks.buildmonkey.p2.P2DeployerPlugin'
+
+p2Deployment {
+    targetRepository = file("p2-repo")
+    version = "1.0.0"
+}

@@ -1,0 +1,8 @@
+
+apply plugin: 'de.monkeyworks.buildmonkey.ProductPublishPlugin'
+
+product {
+    productFile = "${projectDir}/example.product"
+    repository = "${rootProject.projectDir.getAbsolutePath()}/p2-repo"
+}
+

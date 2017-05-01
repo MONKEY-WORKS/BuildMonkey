@@ -21,6 +21,7 @@ import org.osgi.framework.ServiceReference;
 
 import java.io.File;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ public class MetadataRepositoryLoaderServiceImpl implements MetadataRepositoryLo
     public MetadataRepositoryLoaderServiceImpl() {}
 
     @Override
-    public void publishProduct(URI repositoryLocation, String productFilePath) {
+    public String publishProductMetaData(String buildPath, URI repositoryLocation, String productFilePath) {
 
         BundleContext ctx = Activator.getContext();
         ServiceReference<IProvisioningAgentProvider> managerRef = ctx.getServiceReference(IProvisioningAgentProvider.class);
@@ -41,7 +42,7 @@ public class MetadataRepositoryLoaderServiceImpl implements MetadataRepositoryLo
 
         IProvisioningAgent agent = null;
         try {
-            agent = agentProvider.createAgent(Paths.get("/Users/jake/code/hackathon/BuildMonkey/examples/exampleApp/build/equinox/p2").toUri());
+            agent = agentProvider.createAgent(Paths.get(buildPath,"equinox", "p2").toUri());
         } catch (ProvisionException e) {
             e.printStackTrace();
         }
@@ -73,27 +74,48 @@ public class MetadataRepositoryLoaderServiceImpl implements MetadataRepositoryLo
             e.printStackTrace();
         }
 
-
+        // PUBLISH product meta data
         Publisher publisher = new Publisher(publisherInfo);
-        String exeFeaturePath =  "/Users/jake/code/hackathon/BuildMonkey/examples/exampleApp/build/merge-repository/features/org.eclipse.equinox.executable_3.6.300.v20161122-1740";
+        String exeFeaturePath =  "/Users/jake/code/hackathon/BuildMonkey/examples/exampleApp/build/p2-repository/features/org.eclipse.equinox.executable_3.6.300.v20161122-1740";
 
-
-        ProductAction action = new ProductAction(null, productFile, "tooling", new File(exeFeaturePath));
+        ProductAction action = new ProductAction(null, productFile, "tooling", null);
         IPublisherAction[] actions = new IPublisherAction[] { action };
 
         IStatus result = publisher.publish(actions, null);
+
+
+        // materialise product
         System.out.println(result);
         System.out.println("-------");
 
+        return productFile.getId();
+    }
+
+    @Override
+    public String getProductID(String productFilePath) {
+        ProductFile productFile = null;
+        try {
+            productFile = new ProductFile(Paths.get(productFilePath).toAbsolutePath().toFile().toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return productFile.getId();
+    }
+
+
+    @Override
+    public void materialiseProduct(String buildPath, String productId) {
+
         List<String> arguments = new ArrayList<>();
         arguments.add("-metadataRepository");
-        arguments.add(repositoryLocation.toString());
+        arguments.add("file:/Users/jake/code/playground/org.eclipse.tycho-demo/itp04-rcp/eclipse-repository/target/repository,file:/Users/jake/code/playground/org.eclipse.tycho-demo/itp04-rcp/root-files/target");
         arguments.add("-artifactRepository");
-        arguments.add(repositoryLocation.toString());
+        arguments.add("file:/Users/jake/code/playground/org.eclipse.tycho-demo/itp04-rcp/eclipse-repository/target/repository,file:/Users/jake/code/playground/org.eclipse.tycho-demo/itp04-rcp/root-files/target");
         arguments.add("-installIU");
-        arguments.add(productFile.getId());
+        arguments.add("example.product.id");
         arguments.add("-destination");
-        arguments.add("/Users/jake/code/hackathon/BuildMonkey/examples/exampleApp/build/product/Eclipse.app");
+        arguments.add("/Users/jake/code/hackathon/BuildMonkey/examples/exampleApp/build/product/Eclipse2.app");
         arguments.add("-profile");
         arguments.add("DefaultProfile");
         arguments.add("-profileProperties");
@@ -107,5 +129,6 @@ public class MetadataRepositoryLoaderServiceImpl implements MetadataRepositoryLo
         arguments.add("x86_64");
 
         new DirectorApplication().run(arguments.toArray(new String[arguments.size()]));
+
     }
 }
