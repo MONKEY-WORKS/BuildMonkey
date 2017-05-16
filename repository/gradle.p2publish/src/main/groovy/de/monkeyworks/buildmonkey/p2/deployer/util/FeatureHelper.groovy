@@ -20,20 +20,34 @@ import java.util.zip.ZipOutputStream
  */
 class FeatureHelper {
 
-    static void createFeatureXml(String featureId, String label, String version, String provider, Set<Jar> projects, OutputStream target) {
+    static void createFeatureXml(String featureId, String label, String version, String provider, boolean isSource, Set<Jar> projects, OutputStream target) {
         Writer w = new OutputStreamWriter(target, 'UTF-8')
-        createFeatureXml(featureId, label, version, provider, projects, w)
+        createFeatureXml(featureId, label, version, provider, isSource, projects, w)
     }
 
-    static void createFeatureXml(String featureId, String label, String version, String provider, Set<Jar> projects, Writer target) {
+    static void createFeatureXml(String featureId, String label, String version, String provider, boolean isSource, Set<Jar> projects, Writer target) {
         def xml = new groovy.xml.MarkupBuilder(target)
         xml.setDoubleQuotes(true)
         xml.mkp.xmlDeclaration(version:'1.0', encoding: 'UTF-8')
 
-        xml.feature(id: featureId, label: label, version: version, 'provider-name': provider) {
+        def classifier = ""
+
+        if(isSource) {
+            classifier = ".source"
+        }
+
+        def feature = featureId + classifier
+
+        xml.feature(id: feature, label: label, version: version, 'provider-name': provider) {
+            if(isSource) {
+                includes(
+                    id: featureId,
+                    version: version
+                )
+            }
             for (Jar project : projects) {
                 plugin(
-                    id: project.baseName,
+                    id: "${project.baseName}${classifier}",
                     'download-size': 0,
                     'install-size': 0,
                     version: project.version,
@@ -43,7 +57,7 @@ class FeatureHelper {
         }
     }
 
-    static void createJar(String featureId, String label, String version, String provider, Set<Jar> projects, File jarFile) {
+    static void createJar(String featureId, String label, String version, String provider, boolean isSource,  Set<Jar> projects, File jarFile) {
         File target = jarFile
         target.parentFile.mkdirs()
 
@@ -53,7 +67,7 @@ class FeatureHelper {
         target.withOutputStream {
             ZipOutputStream zipStream = new ZipOutputStream(it)
             zipStream.putNextEntry(new ZipEntry('feature.xml'))
-            createFeatureXml(featureId, label, version, provider, projects, zipStream)
+            createFeatureXml(featureId, label, version, provider, isSource, projects, zipStream)
             zipStream.closeEntry()
             zipStream.close()
         }

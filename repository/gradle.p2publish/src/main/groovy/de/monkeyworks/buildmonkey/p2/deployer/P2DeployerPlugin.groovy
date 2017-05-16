@@ -57,7 +57,10 @@ public class P2DeployerPlugin implements Plugin<Project> {
 
             // deploy source repository
             if(sourceDir == null) {
-                def jarTasks = doCopyArtifacts(config)
+                def tasks = doCopyArtifacts(config)
+
+                def jarTasks = tasks[0]
+                def sourceTasks = tasks[1]
 
                 if (config.generateFeature) {
                     // create feature
@@ -65,7 +68,16 @@ public class P2DeployerPlugin implements Plugin<Project> {
                     FeatureHelper.createJar(config.featureId,
                             config.featureLabel,
                             config.version, "provider",
+                            false,
                             jarTasks,
+                            featureJar.toFile())
+
+                    featureJar = config.targetRepository.toPath().resolve("features/${config.featureId}.source_${config.version}.jar")
+                    FeatureHelper.createJar(config.featureId,
+                            config.featureLabel,
+                            config.version, "provider",
+                            true,
+                            sourceTasks,
                             featureJar.toFile())
                 }
 
@@ -88,6 +100,11 @@ public class P2DeployerPlugin implements Plugin<Project> {
 
         // collect all deployed artifacts
         Set<Jar> jarTasks = new HashSet<>()
+        Set<Jar> sourceTasks = new HashSet<>()
+
+        Set<Jar>[] tasks = new Set<Jar>[2]
+        tasks[0] = jarTasks
+        tasks[1] = sourceTasks
 
         project.subprojects.each { subProject ->
             subProject.tasks.each {
@@ -101,7 +118,12 @@ public class P2DeployerPlugin implements Plugin<Project> {
                     if(it.classifier.length()>0) {
                         if(it.classifier == "sources") {
                             classifier = ".source"
+                            // collect source artifact for feature generation
+                            sourceTasks.add(it)
                         }
+                    } else {
+                        // collect artifact for feature generation
+                        jarTasks.add(it)
                     }
 
                     def mversion = "${it.version}"
@@ -129,12 +151,10 @@ public class P2DeployerPlugin implements Plugin<Project> {
                     // copy file
                     Files.copy(file.toPath(), targetDir.toPath().resolve(targetFileName), StandardCopyOption.REPLACE_EXISTING)
 
-                    // collect artifact for feature generation
-                    jarTasks.add(it)
                 }
             }
         }
-        return jarTasks
+        return tasks
     }
 
     private void doBuildP2Repository(EclipseConfiguration eclipseHome, String sourceDir, URI targetURI, boolean publishArtifacts) {
