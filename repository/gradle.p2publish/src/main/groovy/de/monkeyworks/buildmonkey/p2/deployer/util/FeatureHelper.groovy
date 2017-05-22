@@ -42,7 +42,7 @@ class FeatureHelper {
             if(isSource) {
                 includes(
                     id: featureId,
-                    version: version
+                    version: '0.0.0'
                 )
             }
             for (Jar project : projects) {
@@ -50,7 +50,7 @@ class FeatureHelper {
                     id: "${project.baseName}${classifier}",
                     'download-size': 0,
                     'install-size': 0,
-                    version: project.version,
+                    version: '0.0.0',
                     unpack: false
                 )
             }
