@@ -259,7 +259,7 @@ class TestDefinitionPlugin implements Plugin<Project> {
 
         // install bundles
         project.logger.info("Convert Eclipse target platform '${config.nonMavenizedTargetPlatformDir}' to Maven repository '${config.mavenizedTargetPlatformDir}'")
-        def deployer = new BundleMavenDeployer(project.ant, Config.mavenizedEclipsePluginGroupName, project.logger)
+        def deployer = new BundleMavenDeployer(project.ant, project.pluginTestBuild.p2Group, project.logger)
         deployer.deploy(config.nonMavenizedTargetPlatformDir, config.mavenizedTargetPlatformDir)
     }
 

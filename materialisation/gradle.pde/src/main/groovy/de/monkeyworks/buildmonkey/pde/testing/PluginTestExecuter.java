@@ -144,7 +144,7 @@ public final class PluginTestExecuter implements TestExecuter {
         jvmArgs.add("-XX:MaxPermSize=256m");
         jvmArgs.add("-Xms40m");
         jvmArgs.add("-Xmx1024m");
-        
+
         if(getExtension(testTask).isDebug()) {
             jvmArgs.add("-Xdebug");
             jvmArgs.add("-Xrunjdwp:transport=dt_socket,address=" + getExtension(testTask).getDebugPort() + ",server=y");
@@ -153,6 +153,9 @@ public final class PluginTestExecuter implements TestExecuter {
         if (Config.getOs().equals("macosx")) {
             jvmArgs.add("-XstartOnFirstThread");
         }
+
+        jvmArgs.add("-Dosgi.framework.extensions=org.eclipse.fx.osgi");
+
         javaExecHandleBuilder.setJvmArgs(jvmArgs);
         javaExecHandleBuilder.setWorkingDir(this.project.getBuildDir());
 

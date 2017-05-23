@@ -180,6 +180,7 @@ class PluginTestPlugin implements Plugin<Project> {
 
         // convert (pdetest/additions subfolder) to a mini P2 update site
         project.logger.info("Create additional repository in ${additionalPluginsDir.path}")
+        println("Create additional repository in ${additionalPluginsDir.path}")
         project.exec {
             commandLine("java", 
                     '-cp', project.rootProject.buildDir.toPath().resolve("eclipse/eclipse/plugins/org.eclipse.equinox.launcher_${launcherVersion}.jar").toFile(),
@@ -193,6 +194,7 @@ class PluginTestPlugin implements Plugin<Project> {
 
         // take the mini P2 update sites from the build folder and install it into the test Eclipse distribution
         project.logger.info("Install additional repository ${additionalPluginsDir.path} with ${bundles} into ${testDistributionDir}")
+        println("Install additional repository ${additionalPluginsDir.path} with ${bundles} into ${testDistributionDir}")
         project.exec {
             commandLine("java",
                     '-cp', project.rootProject.buildDir.toPath().resolve("eclipse/eclipse/plugins/org.eclipse.equinox.launcher_${launcherVersion}.jar").toFile(),
