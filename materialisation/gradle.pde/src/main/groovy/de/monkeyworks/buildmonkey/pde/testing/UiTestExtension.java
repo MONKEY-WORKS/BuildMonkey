@@ -19,15 +19,17 @@ import javax.inject.Inject;
 import java.io.File;
 import java.util.List;
 
-public class PluginTestExtension {
+public class UiTestExtension {
 
     private String fragmentHost;
 
     /**
      * Application launched in Eclipse.
-     * {@code org.eclipse.pde.junit.runtime.coretestapplication} can be used to run non-UI tests.
+     * {@code org.eclipse.swtbot.eclipse.core.swtbottestapplication} can be used to runUI tests with swt bot.
      */
-    private String applicationName = "org.eclipse.pde.junit.runtime.uitestapplication";
+    private String applicationName = "org.eclipse.swtbot.eclipse.core.swtbottestapplication";
+
+    private String testClass;
 
     private File optionsFile;
 
@@ -39,8 +41,6 @@ public class PluginTestExtension {
     private int debugPort = 8998;
 
     private long testTimeoutSeconds = 60 * 60L;
-
-    private String launcherVersion = "1.3.200.v20160318-1642";
 
     private List<String> projectPattern;
 
@@ -106,14 +106,6 @@ public class PluginTestExtension {
         this.debugPort = debugPort;
     }
 
-    public String getLauncherVersion() {
-        return this.launcherVersion;
-    }
-
-    public void setLauncherVersion(String version) {
-        this.launcherVersion = version;
-    }
-
     public List<String> getProjectPattern() {
         return this.projectPattern;
     }
@@ -144,5 +136,13 @@ public class PluginTestExtension {
 
     public void setProduct(String product) {
         this.product = product;
+    }
+
+    public String getTestClass() {
+        return testClass;
+    }
+
+    public void setTestClass(String testClass) {
+        this.testClass = testClass;
     }
 }

@@ -20,11 +20,6 @@ import de.monkeyworks.buildmonkey.pde.tools.DownloadEclipseSdkTask
 import de.monkeyworks.buildmonkey.pde.utils.FileSemaphore
 
 
-class BundlePattern {
-    String projectPattern
-    String projectGroup
-}
-
 /**
  *  Extension class providing top-level content of the DSL definition for the plug-in.
  */
@@ -35,7 +30,6 @@ class PluginTestBuild {
     def launcherVersion
 
     def targetDefinition
-
     def mavenGroup
     def p2Group
 

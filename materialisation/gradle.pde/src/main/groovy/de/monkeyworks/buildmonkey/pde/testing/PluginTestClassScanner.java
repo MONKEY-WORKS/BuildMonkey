@@ -13,6 +13,7 @@ package de.monkeyworks.buildmonkey.pde.testing;
 
 import java.io.File;
 
+import groovy.lang.Closure;
 import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.JavaClass;
 import org.gradle.api.file.EmptyFileVisitor;
@@ -26,10 +27,12 @@ public final class PluginTestClassScanner implements Runnable {
 
     private final FileTree candidateClassFiles;
     private final TestClassProcessor testClassProcessor;
+    private final Closure testClassClosure;
 
-    public PluginTestClassScanner(FileTree candidateClassFiles, TestClassProcessor testClassProcessor) {
+    public PluginTestClassScanner(FileTree candidateClassFiles, TestClassProcessor testClassProcessor, Closure testClassClosure) {
         this.candidateClassFiles = candidateClassFiles;
         this.testClassProcessor = testClassProcessor;
+        this.testClassClosure = testClassClosure;
     }
 
     @Override
@@ -57,7 +60,8 @@ public final class PluginTestClassScanner implements Runnable {
 
         private boolean isValidTestClassFile(final File file) {
             try {
-                return isTopLevelClass(file) && isConcreteClass(file);
+                boolean closureMatching = (testClassClosure != null && (Boolean)testClassClosure.call(file));
+                return (closureMatching || isTopLevelClass(file)) && isConcreteClass(file);
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;

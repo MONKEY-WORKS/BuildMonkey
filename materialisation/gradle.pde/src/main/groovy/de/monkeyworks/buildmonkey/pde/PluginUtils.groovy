@@ -65,6 +65,18 @@ public class PluginUtils {
         addFeatureJarInput(resources, project)
     }
 
+    static String findLauncherVersion(def targetDir) {
+
+        def equinoxLaunchers = new FileNameFinder().getFileNames(targetDir.toAbsolutePath().toFile().toString(), 'org.eclipse.equinox.launcher_*.jar')
+        assert equinoxLaunchers.size() > 0
+
+        String tmp = equinoxLaunchers.get(0)
+        tmp = tmp.substring(tmp.indexOf("org.eclipse.equinox.launcher_") + ("org.eclipse.equinox.launcher_").length())
+        tmp = tmp.substring(0, tmp.indexOf(".jar"))
+
+        return tmp
+    }
+
     private static Properties readBuildPropertiesFile(Project project) {
         def buildProperties = new Properties()
         def fis = new FileInputStream(project.file('build.properties'))

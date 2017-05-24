@@ -65,14 +65,14 @@ public final class PluginTestListener implements ITestRunListener2 {
 
     @Override
     public synchronized void testRunStarted(int testCount) {
-        System.out.println("Starting test suite " + this.suiteName + " with " + testCount + " tests.");
+        System.out.println("### Starting test suite " + this.suiteName + " with " + testCount + " tests.");
         this.currentTestSuite = new DefaultTestSuiteDescriptor("root", this.suiteName);
         this.testResultProcessor.started(this.currentTestSuite, new TestStartEvent(System.currentTimeMillis()));
     }
 
     @Override
     public synchronized void testRunEnded(long elapsedTime) {
-         System.out.println("Test Run Ended   - " + ((numberOfTestsFailed > 0 || numberOfTestsWithError > 0) ? "FAILED" : "PASSED") +
+         System.out.println("### Test Run Ended   - " + ((numberOfTestsFailed > 0 || numberOfTestsWithError > 0) ? "FAILED" : "PASSED") +
          " - Total: " + numberOfTests
          + " (Errors: " + numberOfTestsWithError
          + ", Failed: " + numberOfTestsFailed
@@ -103,7 +103,7 @@ public final class PluginTestListener implements ITestRunListener2 {
     @Override
     public synchronized void testStarted(String testId, String testName) {
         // TODO need idGenerator
-        System.out.println("  Test - " + testName + " started.");
+        System.out.println("###   Test - " + testName + " started.");
         numberOfTests++;
 
         String testClass = testName;
@@ -143,7 +143,7 @@ public final class PluginTestListener implements ITestRunListener2 {
             default: break;
         }
 
-        System.out.println("  Test - " + testName + " ended wit result " + this.currentResult);
+        System.out.println("###   Test - " + testName + " ended wit result " + this.currentResult);
         this.testResultProcessor.completed(this.currentTestMethod.getId(), new TestCompleteEvent(System.currentTimeMillis(), this.currentResult));
         this.testResultProcessor.completed(this.currentTestClass.getId(), new TestCompleteEvent(System.currentTimeMillis()));
     }
@@ -151,10 +151,10 @@ public final class PluginTestListener implements ITestRunListener2 {
     @Override
     public synchronized void testFailed(int status, String testId, String testName, String trace, String expected, String actual) {
         String statusMessage = String.valueOf(status);
-        System.out.println("  Test - " + testName + " - id: " + this.currentTestClass.getId() + " - status: " + statusMessage);
-        System.out.println("    trace: " + trace);
-        System.out.println("    expected: " + expected);
-        System.out.println("    actual  : " + actual);
+        System.out.println("###   Test - " + testName + " - id: " + this.currentTestClass.getId() + " - status: " + statusMessage);
+        System.out.println("        trace: " + trace);
+        System.out.println("        expected: " + expected);
+        System.out.println("        actual  : " + actual);
         if (status == ITestRunListener2.STATUS_OK) {
             statusMessage = "OK";
             this.currentResult = org.gradle.api.tasks.testing.TestResult.ResultType.SUCCESS;
@@ -171,10 +171,10 @@ public final class PluginTestListener implements ITestRunListener2 {
         }
 
         if (this.currentTestMethod == null) {
-            System.out.println("Test failure without current test method: " + testName + " - id: " + this.currentTestClass.getId() + " - status: " + statusMessage);
-            System.out.println("    trace: " + trace);
-            System.out.println("    expected: " + expected);
-            System.out.println("    actual  : " + actual);
+            System.out.println("### Test failure without current test method: " + testName + " - id: " + this.currentTestClass.getId() + " - status: " + statusMessage);
+            System.out.println("        trace: " + trace);
+            System.out.println("        expected: " + expected);
+            System.out.println("        actual  : " + actual);
             return;
         }
 

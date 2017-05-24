@@ -16,13 +16,13 @@ dependencies {
 }
 
 apply plugin: "com.gradle.plugin-publish"
-version = '0.4.4'
+version = '0.4.6'
 
 pluginBundle {
     website = 'https://github.com/MONKEY-WORKS/BuildMonkey/wiki'
     vcsUrl = 'https://github.com/MONKEY-WORKS/BuildMonkey'
     description = 'Plugins for materialize eclipse rcp applications and execution plugins based tests'
-    tags = ['OSGi', 'PDE', 'eclipse']
+    tags = ['OSGi', 'PDE', 'eclipse', 'swtbot']
 
     plugins {
         pluginTestPlugin {
@@ -33,6 +33,15 @@ pluginBundle {
         testDefinitionPlugin {
           id = 'de.monkeyworks.buildmonkey.pde.TestDefinitionPlugin'
           displayName = 'Defining OSGi plugin tests'
+        }
+        uiTestPlugin {
+            id = 'de.monkeyworks.buildmonkey.pde.UiTestPlugin'
+            displayName = 'Executing swtbot tests'
+        }
+
+        uiTestDefinitionPlugin {
+            id = 'de.monkeyworks.buildmonkey.pde.UITestDefinitionPlugin'
+            displayName = 'Defining SWTBOT tests'
         }
     }
     mavenCoordinates {
