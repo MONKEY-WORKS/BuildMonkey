@@ -86,6 +86,66 @@ public final class PluginTestExecuter implements TestExecuter {
         File equinoxLauncherFile = getEquinoxLauncherFile(testEclipseDir);
         LOGGER.info("equinox launcher file {}", equinoxLauncherFile);
 
+        PluginTestExtension extension = getExtension(testTask);
+        final JavaExecAction javaExecHandleBuilder;
+
+        if(extension.getApplicationName().endsWith("coretestapplication")) {
+            javaExecHandleBuilder = getPluginTestJavaExecAction(testTask, pluginTestPort, configIniFile, equinoxLauncherFile);
+        }
+        else if(extension.getApplicationName().endsWith("swtbottestapplication")) {
+            javaExecHandleBuilder = getSWTBOTTestJavaExecAction(testTask, pluginTestPort, configIniFile, equinoxLauncherFile);
+        }
+        else {
+            throw new GradleException("Unknown application type " + extension.getApplicationName());
+        }
+
+        final CountDownLatch latch = new CountDownLatch(1);
+        Future<?> eclipseJob = threadPool.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ExecResult execResult = javaExecHandleBuilder.execute();
+                    execResult.assertNormalExitValue();
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+                finally {
+                    latch.countDown();
+                }
+            }
+        });
+        // TODO
+        final String suiteName = this.project.getName();
+        Future<?> testCollectorJob = threadPool.submit(new Runnable() {
+            @Override
+            public void run() {
+                PluginTestListener pluginTestListener = new PluginTestListener(testResultProcessor, suiteName, this);
+                new PluginTestRunnerClient().startListening(new ITestRunListener2[] { pluginTestListener }, pluginTestPort);
+                LOGGER.info("Listening on port " + pluginTestPort + " for test suite " + suiteName + " results ...");
+                synchronized (this) {
+                    try {
+                        wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        throw new RuntimeException(e);
+                    } finally {
+                        latch.countDown();
+                    }
+                }
+            }
+        });
+        try {
+            latch.await(getExtension(testTask).getTestTimeoutSeconds(), TimeUnit.SECONDS);
+            // short chance to do cleanup
+            eclipseJob.get(15, TimeUnit.SECONDS);
+            testCollectorJob.get(15, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            throw new GradleException("Test execution failed", e);
+        }
+    }
+
+    private JavaExecAction getPluginTestJavaExecAction(Test testTask, int pluginTestPort, File configIniFile, File equinoxLauncherFile) {
         final JavaExecAction javaExecHandleBuilder = new DefaultJavaExecAction(getFileResolver(testTask));
         javaExecHandleBuilder.setClasspath(this.project.files(equinoxLauncherFile));
         javaExecHandleBuilder.setMain("org.eclipse.equinox.launcher.Main");
@@ -154,55 +214,85 @@ public final class PluginTestExecuter implements TestExecuter {
             jvmArgs.add("-XstartOnFirstThread");
         }
 
+        javaExecHandleBuilder.setJvmArgs(jvmArgs);
+        javaExecHandleBuilder.setWorkingDir(this.project.getBuildDir());
+        return javaExecHandleBuilder;
+    }
+
+    private JavaExecAction getSWTBOTTestJavaExecAction(Test testTask, int pluginTestPort, File configIniFile, File equinoxLauncherFile) {
+        final JavaExecAction javaExecHandleBuilder = new DefaultJavaExecAction(getFileResolver(testTask));
+        javaExecHandleBuilder.setClasspath(this.project.files(equinoxLauncherFile));
+        javaExecHandleBuilder.setMain("org.eclipse.equinox.launcher.Main");
+        List<String> programArgs = new ArrayList<String>();
+
+        programArgs.add("-application");
+        programArgs.add(getExtension(testTask).getApplicationName());
+
+
+        programArgs.add("-os");
+        programArgs.add(Config.getOs());
+        programArgs.add("-ws");
+        programArgs.add(Config.getWs());
+        programArgs.add("-arch");
+        programArgs.add(Config.getArch());
+
+        if (getExtension(testTask).isConsoleLog()) {
+            programArgs.add("-consoleLog");
+        }
+        File optionsFile = getExtension(testTask).getOptionsFile();
+        if (optionsFile != null) {
+            programArgs.add("-debug");
+            programArgs.add(optionsFile.getAbsolutePath());
+        }
+
+        programArgs.add("-version");
+        programArgs.add("4");
+        programArgs.add("-port");
+        programArgs.add(Integer.toString(pluginTestPort));
+        programArgs.add("-testLoaderClass");
+        programArgs.add("org.eclipse.jdt.internal.junit4.runner.JUnit4TestLoader");
+        programArgs.add("-loaderpluginname");
+        programArgs.add("org.eclipse.jdt.junit4.runtime");
+
+
+        programArgs.add("-product");
+        programArgs.add(getExtension(testTask).getProduct());
+        programArgs.add("-testApplication");
+        programArgs.add(getExtension(testTask).getApplication());
+
+        programArgs.add("-classNames");
+        for (String clzName : collectTestNames(testTask)) {
+            programArgs.add(clzName);
+        }
+        programArgs.add("-data");
+        programArgs.add(config.getWorkspace().getAbsolutePath());
+        programArgs.add("-testPluginName");
+        programArgs.add(this.project.getName());
+
+        javaExecHandleBuilder.setArgs(programArgs);
+        javaExecHandleBuilder.setSystemProperties(testTask.getSystemProperties());
+        javaExecHandleBuilder.setEnvironment(testTask.getEnvironment());
+
+        // TODO this should be specified when creating the task (to allow override in build script)
+        List<String> jvmArgs = new ArrayList<String>();
+        jvmArgs.add("-XX:MaxPermSize=256m");
+        jvmArgs.add("-Xms40m");
+        jvmArgs.add("-Xmx1024m");
+
+        if(getExtension(testTask).isDebug()) {
+            jvmArgs.add("-Xdebug");
+            jvmArgs.add("-Xrunjdwp:transport=dt_socket,address=" + getExtension(testTask).getDebugPort() + ",server=y");
+        }
+
+        if (Config.getOs().equals("macosx")) {
+            jvmArgs.add("-XstartOnFirstThread");
+        }
+
         jvmArgs.add("-Dosgi.framework.extensions=org.eclipse.fx.osgi");
 
         javaExecHandleBuilder.setJvmArgs(jvmArgs);
         javaExecHandleBuilder.setWorkingDir(this.project.getBuildDir());
-
-        final CountDownLatch latch = new CountDownLatch(1);
-        Future<?> eclipseJob = threadPool.submit(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    ExecResult execResult = javaExecHandleBuilder.execute();
-                    execResult.assertNormalExitValue();
-                }
-                catch (Exception e) {
-                    e.printStackTrace();
-                }
-                finally {
-                    latch.countDown();
-                }
-            }
-        });
-        // TODO
-        final String suiteName = this.project.getName();
-        Future<?> testCollectorJob = threadPool.submit(new Runnable() {
-            @Override
-            public void run() {
-                PluginTestListener pluginTestListener = new PluginTestListener(testResultProcessor, suiteName, this);
-                new PluginTestRunnerClient().startListening(new ITestRunListener2[] { pluginTestListener }, pluginTestPort);
-                LOGGER.info("Listening on port " + pluginTestPort + " for test suite " + suiteName + " results ...");
-                synchronized (this) {
-                    try {
-                        wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                        throw new RuntimeException(e);
-                    } finally {
-                        latch.countDown();
-                    }
-                }
-            }
-        });
-        try {
-            latch.await(getExtension(testTask).getTestTimeoutSeconds(), TimeUnit.SECONDS);
-            // short chance to do cleanup
-            eclipseJob.get(15, TimeUnit.SECONDS);
-            testCollectorJob.get(15, TimeUnit.SECONDS);
-        } catch (Exception e) {
-            throw new GradleException("Test execution failed", e);
-        }
+        return javaExecHandleBuilder;
     }
 
     private File getEquinoxLauncherFile(File testEclipseDir) {
@@ -227,13 +317,18 @@ public final class PluginTestExecuter implements TestExecuter {
             TestFrameworkDetector testFrameworkDetector = testTask.getTestFramework().getDetector();
             testFrameworkDetector.setTestClassesDirectory(testTask.getTestClassesDir());
             testFrameworkDetector.setTestClasspath(testTask.getClasspath().getFiles());
-            detector = new PluginTestClassScanner(testClassFiles, processor);
+            detector = new PluginTestClassScanner(testClassFiles, processor, this.getExtension(testTask).getTestClassClosure());
         } else {
-            detector = new PluginTestClassScanner(testClassFiles, processor);
+            detector = new PluginTestClassScanner(testClassFiles, processor, this.getExtension(testTask).getTestClassClosure());
         }
 
         new TestMainAction(detector, processor, new NoOpTestResultProcessor(), new TrueTimeProvider(), testTask.toString(), testTask.getPath(), String.format("Gradle Eclipse Test Run %s", testTask.getPath())).run();
         LOGGER.info("collected test class names: {}", processor.classNames);
+        System.out.println("collected test class names: ");
+        for(String name : processor.classNames) {
+            System.out.print("   ");
+            System.out.println(name);
+        }
         return processor.classNames;
     }
 

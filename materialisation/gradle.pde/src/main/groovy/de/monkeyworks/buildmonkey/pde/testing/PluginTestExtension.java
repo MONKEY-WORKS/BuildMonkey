@@ -11,7 +11,9 @@
 
 package de.monkeyworks.buildmonkey.pde.testing;
 
+import groovy.lang.Closure;
 import org.gradle.api.internal.file.FileResolver;
+import org.gradle.internal.impldep.com.amazonaws.services.kms.model.UnsupportedOperationException;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -42,10 +44,11 @@ public class PluginTestExtension {
 
     private List<String> projectPattern;
 
-    @Inject
-    public FileResolver getFileResolver() {
-        throw new UnsupportedOperationException();
-    }
+    private Closure testClassClosure;
+
+    private String application;
+
+    private String product;
 
     public String getApplicationName() {
         return this.applicationName;
@@ -117,5 +120,29 @@ public class PluginTestExtension {
 
     public void setProjectPattern(List<String> pattern) {
         this.projectPattern = pattern;
+    }
+
+    public Closure getTestClassClosure() {
+        return testClassClosure;
+    }
+
+    public void isTestClass(Closure testClassClosure) {
+        this.testClassClosure = testClassClosure;
+    }
+
+    public String getApplication() {
+        return application;
+    }
+
+    public void setApplication(String application) {
+        this.application = application;
+    }
+
+    public String getProduct() {
+        return product;
+    }
+
+    public void setProduct(String product) {
+        this.product = product;
     }
 }
