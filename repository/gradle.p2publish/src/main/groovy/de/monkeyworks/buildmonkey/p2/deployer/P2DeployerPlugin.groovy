@@ -95,6 +95,9 @@ public class P2DeployerPlugin implements Plugin<Project> {
                 if(it instanceof Jar) {
 
                     def file = new File(it.destinationDir, it.archiveName)
+                    if(!file.exists()) {
+                        return
+                    }
 
                     def classifier = ""
                     // fix source classifier
