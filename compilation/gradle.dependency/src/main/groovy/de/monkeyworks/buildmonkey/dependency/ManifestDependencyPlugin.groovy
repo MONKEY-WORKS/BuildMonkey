@@ -214,7 +214,7 @@ class ManifestDependencyPlugin implements Plugin<Project> {
         def groupID = ''
         def artifactId = name
 
-        // at first, call the configured function, if group ID is set take over artifact id and version alos from there if given
+        // at first, call the configured function, if group ID is set take over artifact id and version also from there if given
         def ids = manifestDependencies.dependencyClosure(name)
 
         boolean match = false
