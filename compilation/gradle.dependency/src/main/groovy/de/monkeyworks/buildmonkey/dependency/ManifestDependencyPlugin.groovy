@@ -189,6 +189,9 @@ class ManifestDependencyPlugin implements Plugin<Project> {
     void setProjectDependencies(Configuration config, String dependency) {
         String name = dependency.contains(';') ? dependency.split(';')[0] : dependency
         name = name.trim()
+        def version = parseVersion(dependency)
+        if(!version)
+            version = '+'
 
         final Project rootProject = project.rootProject
 
@@ -210,7 +213,6 @@ class ManifestDependencyPlugin implements Plugin<Project> {
         // The default values
         def groupID = ''
         def artifactId = name
-        def version = '+'
 
         // at first, call the configured function, if group ID is set take over artifact id and version alos from there if given
         def ids = manifestDependencies.dependencyClosure(name)
@@ -304,5 +306,23 @@ class ManifestDependencyPlugin implements Plugin<Project> {
             throw new IllegalArgumentException("Detected not supported OperatingSystem ${os.getDisplayName()}")
         }
         return "org.eclipse.swt.${osString}.x86_64" 
+    }
+
+    private String parseVersion(String depBundlesString) {
+        if(!depBundlesString.contains(';'))
+            return null
+
+        List elements = depBundlesString.split(';')
+        for(String element in elements) {
+            if (element.startsWith("bundle-version")) {
+                String s = element.substring(element.indexOf('=') + 1)
+                if(s.startsWith('"'))
+                    s = s.substring(1)
+                if(s.endsWith('"'))
+                    s = s.substring(0, s.length() - 1)
+                return s
+            }
+        }
+        return null
     }
 }
