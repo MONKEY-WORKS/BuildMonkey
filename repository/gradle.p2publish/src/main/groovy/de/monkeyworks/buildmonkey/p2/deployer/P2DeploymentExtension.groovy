@@ -31,6 +31,10 @@ class P2DeploymentExtension {
 
     boolean generateFeature
 
+    String qualifier
+
+    boolean generateQualifier
+
     String sourceRepository
 
     // default constructor

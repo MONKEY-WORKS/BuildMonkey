@@ -76,7 +76,6 @@ class ArtifactoryUploadPlugin implements Plugin<Project> {
 
         addTaskToExtractTooling(project)
         addTasksForUploadJobs(project)
-        //addTaskToClearRepositoryPath(project)
     }
 
     static def getUploadTool() {
@@ -140,6 +139,8 @@ class ArtifactoryUploadPlugin implements Plugin<Project> {
         def name = TASK_NAME_UPLOAD
 
         project.tasks.create("$name")
+
+
 
         project.afterEvaluate {
             ArtifactoryUploadsExtension uploads = project.artifactoryUploads
