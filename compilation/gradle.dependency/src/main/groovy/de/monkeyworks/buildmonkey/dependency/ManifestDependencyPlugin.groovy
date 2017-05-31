@@ -180,7 +180,8 @@ class ManifestDependencyPlugin implements Plugin<Project> {
         def file = project.file(path)
         return (file.exists()) ? file.withInputStream(evaluationStrategy) : []
     }
-        /**
+
+    /**
      * Checks given dependency for special handling and sets the resulting dependency as maven artefact.
      *
      * @param config Configuration of the dependency. can be compile or testCompile.
@@ -313,16 +314,23 @@ class ManifestDependencyPlugin implements Plugin<Project> {
             return null
 
         List elements = depBundlesString.split(';')
+
+        String version = null
         for(String element in elements) {
             if (element.startsWith("bundle-version")) {
-                String s = element.substring(element.indexOf('=') + 1)
-                if(s.startsWith('"'))
-                    s = s.substring(1)
-                if(s.endsWith('"'))
-                    s = s.substring(0, s.length() - 1)
-                return s
+                version = element.substring(element.indexOf('=') + 1)
+                if(version.startsWith('"'))
+                    version = version.substring(1)
+                if(version.endsWith('"'))
+                    version = version.substring(0, version.length() - 1)
+                break
             }
         }
-        return null
+
+        if(!version || version.contains(",")) {
+            return version
+        }
+
+        return "[${version}, )"
     }
 }
