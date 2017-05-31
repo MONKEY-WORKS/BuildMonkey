@@ -47,7 +47,19 @@ public class P2DeployerPlugin implements Plugin<Project> {
         }
 
         // create bundle task
-        project.task(taskName, dependsOn: project.subprojects.jar).doFirst {
+        def bundleTask = project.task(taskName)
+
+        List<Task> tmp = project.subprojects.collectMany { it ->
+            return it.tasks.withType(Jar).toList()
+        }
+        tmp.removeIf { it -> it == null}
+
+        if (tmp != null && tmp.size() > 0) {
+            bundleTask.dependsOn(tmp.toArray())
+        }
+
+
+        bundleTask.doLast {
 
             P2DeploymentExtension config = project.p2Deployment
 
@@ -86,6 +98,7 @@ public class P2DeployerPlugin implements Plugin<Project> {
                 doBuildP2Repository(eclipseHome, sourceDir, repoDirUri, true)
             }
         }
+
     }
 
     private Set<Jar> doCopyArtifacts(P2DeploymentExtension config) {
@@ -112,6 +125,9 @@ public class P2DeployerPlugin implements Plugin<Project> {
                 if(it instanceof Jar) {
 
                     def file = new File(it.destinationDir, it.archiveName)
+                    if(!file.exists()) {
+                        return
+                    }
 
                     def classifier = ""
                     // fix source classifier
@@ -126,13 +142,13 @@ public class P2DeployerPlugin implements Plugin<Project> {
                         jarTasks.add(it)
                     }
 
-                    def mversion = "${it.version}"
+                    def mversion
                     // check if feature or plugin
                     def targetDir = pluginsDir
-                    if(it.baseName.endsWith("feature")) {
-                        targetDir = featureDir
+                    def jarFile = new JarFile(it.archivePath)
 
-                        def jarFile = new JarFile(it.archivePath)
+                    if(jarFile.getJarEntry("feature.xml") != null) {
+                        targetDir = featureDir
                         def featurexmlStream = jarFile.getInputStream(jarFile.getJarEntry("feature.xml"))
 
                         def parsedXML = new XmlSlurper().parse(featurexmlStream)
@@ -142,6 +158,7 @@ public class P2DeployerPlugin implements Plugin<Project> {
                     } else {
                         mversion = it.manifest.effectiveManifest.attributes.get('Bundle-Version')
                     }
+                    jarFile.close()
 
 
                     // setup new file name
