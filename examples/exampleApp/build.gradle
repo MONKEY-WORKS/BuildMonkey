@@ -1,21 +1,17 @@
 buildscript {
     repositories {
-        //mavenLocal()
+        mavenLocal()
         maven {url "https://plugins.gradle.org/m2/"}
         mavenCentral()
         jcenter()
     }
 
     dependencies {
-        classpath "de.monkeyworks.buildmonkey:gradle.p2:0.4"
-        classpath "de.monkeyworks.buildmonkey:gradle.p2publish:0.4.4"
-        classpath "de.monkeyworks.buildmonkey:gradle.mavenize:0.4"
-        classpath "de.monkeyworks.buildmonkey:gradle.dependency:0.4.6"
-        classpath "de.monkeyworks.buildmonkey:gradle.projectsetup:0.4.2"
-        classpath files("../../materialisation/product/build/libs/product-0.4.1.jar")
-
-        classpath "de.monkeyworks.buildmonkey:embedded.equinox:+"
-        classpath "de.monkeyworks.buildmonkey:bridge.api:+"
+        classpath "de.monkeyworks.buildmonkey:gradle.p2:+"
+        classpath "de.monkeyworks.buildmonkey:gradle.p2publish:+"
+        classpath "de.monkeyworks.buildmonkey:gradle.mavenize:+"
+        classpath "de.monkeyworks.buildmonkey:gradle.dependency:+"
+        classpath "de.monkeyworks.buildmonkey:gradle.projectsetup:+"
     }
 }
 
