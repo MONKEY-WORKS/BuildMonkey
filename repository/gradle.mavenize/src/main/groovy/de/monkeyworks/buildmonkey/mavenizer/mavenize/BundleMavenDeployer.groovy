@@ -138,7 +138,9 @@ final class BundleMavenDeployer {
                         return false
                     }
                     pom.dependencyBundles.each { reqBundle ->
-                        def resolvedVersions = artifacts[reqBundle.name.trim()]
+                        def resolvedVersions = []
+                        resolvedVersions.addAll(artifacts[reqBundle.name.trim()])
+
                         if (resolvedVersions.size() == 1)
                             reqBundle.version = resolvedVersions[0].version
                         else if (!resolvedVersions.find { it -> it.version == reqBundle.version.trim() }) {
