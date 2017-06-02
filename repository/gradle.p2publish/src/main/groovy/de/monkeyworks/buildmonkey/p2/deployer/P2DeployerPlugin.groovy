@@ -55,8 +55,8 @@ public class P2DeployerPlugin implements Plugin<Project> {
 
         List<Task> copyArtefactsTasks = new ArrayList<Task>()
 
-        List<Jar> sourceTasks = new ArrayList<>()
-        List<Jar> bundleTasks = new ArrayList<>()
+        Set<Jar> sourceTasks = new HashSet<>()
+        Set<Jar> bundleTasks = new HashSet<>()
 
         def cleanTask = project.tasks.create("cleanP2", Delete)
         cleanTask.doFirst {
@@ -65,16 +65,21 @@ public class P2DeployerPlugin implements Plugin<Project> {
 
 
         project.subprojects.forEach { childProject ->
-            List<Jar> jarTasks = childProject.tasks.withType(Jar).toList()
+            if(!childProject.name)
+                return
 
+            List<Jar> jarTasks = childProject.tasks.withType(Jar).toList()
             if (jarTasks.size() > 0) {
-                sourceTasks.addAll(jarTasks.collect { it.classifier == "sources" })
-                bundleTasks.addAll(jarTasks.collect { it.classifier != "sources" })
+                sourceTasks.addAll(jarTasks.collect { if(it && it.classifier == "sources") it })
+                bundleTasks.addAll(jarTasks.collect { if(it && it.classifier != "sources") it })
 
                 Collection<Task> t = createCopyArtefactTask(jarTasks)
                 copyArtefactsTasks.addAll(t)
             }
         }
+
+        sourceTasks.removeIf { it -> it == null}
+        bundleTasks.removeIf { it -> it == null}
 
         copyArtefactsTasks.forEach {
             it.dependsOn cleanTask
@@ -83,7 +88,6 @@ public class P2DeployerPlugin implements Plugin<Project> {
         if (copyArtefactsTasks.size() > 0) {
             bundleTask.dependsOn(copyArtefactsTasks.toArray())
         }
-
 
         bundleTask.doLast {
 
@@ -97,6 +101,8 @@ public class P2DeployerPlugin implements Plugin<Project> {
             if(sourceDir == null) {
 
                 if (config.generateFeature) {
+                    if(!config.version || config.version == "unspecified")
+                        config.version = "0.0.0"
                     // create feature
                     def featureJar = config.targetRepository.toPath().resolve("features/${config.featureId}_${config.version}.jar")
                     FeatureHelper.createJar(config.featureId,
@@ -133,6 +139,7 @@ public class P2DeployerPlugin implements Plugin<Project> {
         jarTasks.forEach { task ->
             def sourceBundle = task.classifier == "sources"
 
+            println(task.project.name)
             def isFeature = new File(task.project.getProjectDir(), "feature.xml").exists()
 
             def mversion
