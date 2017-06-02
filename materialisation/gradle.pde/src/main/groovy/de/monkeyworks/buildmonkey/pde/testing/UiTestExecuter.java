@@ -14,6 +14,7 @@ package de.monkeyworks.buildmonkey.pde.testing;
 import de.monkeyworks.buildmonkey.pde.Config;
 
 import de.monkeyworks.buildmonkey.pde.UiTestPlugin;
+import de.monkeyworks.buildmonkey.pde.tools.FileHelper;
 import groovy.util.FileNameFinder;
 import org.eclipse.jdt.internal.junit.model.ITestRunListener2;
 import org.gradle.api.GradleException;
@@ -75,7 +76,7 @@ public final class UiTestExecuter implements TestExecuter {
         ExecutorService threadPool = Executors.newFixedThreadPool(2);
         File runDir = new File(testTask.getProject().getBuildDir(), testTask.getName());
 
-        File testEclipseDir = new File(this.project.property("buildDir") + "/uiTest/application");
+        File testEclipseDir = FileHelper.findSubFolder(new File(this.project.property("buildDir") + "/uiTest/application"), "plugins").getParentFile();
 
         // File configIniFile = getInputs().getFiles().getSingleFile();
         File configIniFile = new File(testEclipseDir, "configuration/config.ini");
@@ -141,8 +142,8 @@ public final class UiTestExecuter implements TestExecuter {
         try {
             latch.await(getExtension(testTask).getTestTimeoutSeconds(), TimeUnit.SECONDS);
             // short chance to do cleanup
-            eclipseJob.get(15, TimeUnit.SECONDS);
-            testCollectorJob.get(15, TimeUnit.SECONDS);
+            eclipseJob.get(60, TimeUnit.SECONDS);
+            testCollectorJob.get(60, TimeUnit.SECONDS);
         } catch (Exception e) {
             throw new GradleException("Test execution failed", e);
         }

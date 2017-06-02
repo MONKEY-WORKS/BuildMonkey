@@ -7,12 +7,12 @@ repositories {
 dependencies {
     compile gradleApi()
     compile localGroovy()
-    compile 'de.monkeyworks.buildmonkey:base:1.0'
+    compile 'de.monkeyworks.buildmonkey:base:1.0.1'
 }
 
 
 apply plugin: "com.gradle.plugin-publish"
-version = "0.4.6"
+version = "0.4.7"
 pluginBundle {
     website = 'https://github.com/MONKEY-WORKS/BuildMonkey/wiki'
     vcsUrl = 'https://github.com/MONKEY-WORKS/BuildMonkey'

@@ -12,6 +12,7 @@
 package de.monkeyworks.buildmonkey.pde
 
 import de.monkeyworks.buildmonkey.pde.testing.UiTestExtension
+import de.monkeyworks.buildmonkey.pde.tools.FileHelper
 import groovy.xml.MarkupBuilder
 
 import org.gradle.api.Plugin
@@ -125,7 +126,7 @@ class UiTestPlugin implements Plugin<Project> {
             systemProperty('eclipse.p2.data.area','@config.dir/../p2')
 
             // set the task outputs
-            def testDistributionDir = project.file("$project.buildDir/uiTest/application")
+            def testDistributionDir = project.file("$project.buildDir/uiTest/application/")
             def additionalPluginsDir = project.file("$project.buildDir/uiTest/additions")
             outputs.dir testDistributionDir
             outputs.dir additionalPluginsDir
@@ -179,7 +180,8 @@ class UiTestPlugin implements Plugin<Project> {
 
     static void installDependenciesIntoTargetPlatform(Project project, Config config, File additionalPluginsDir, File testDistributionDir) {
         def bundles = prepareUpdateSite(project, additionalPluginsDir)
-        def plugins = project.rootProject.buildDir.toPath().resolve("eclipse/eclipse/plugins").toAbsolutePath().toFile()
+        def plugins = FileHelper.findSubFolder(project.rootProject.buildDir.toPath().resolve("eclipse").toAbsolutePath().toFile(), 'plugins')
+
         def equinoxLaunchers = new FileNameFinder().getFileNames(plugins.toString(), 'org.eclipse.equinox.launcher_*.jar')
         assert equinoxLaunchers.size() > 0
 
@@ -198,25 +200,19 @@ class UiTestPlugin implements Plugin<Project> {
                     "-nosplash")
         }
 
-        // take the mini P2 update sites from the build folder and install it into the test Eclipse distribution
-        project.logger.info("Install additional repository ${additionalPluginsDir.path} with ${bundles} into ${testDistributionDir}")
-        println("Install additional repository ${additionalPluginsDir.path} with ${bundles} into ${testDistributionDir}")
+        // take the mini P2 update sites from the build folder and install it into the test application distribution
+        def appFolder  = FileHelper.findSubFolder(testDistributionDir, 'plugins').parentFile
+        project.logger.info("Install additional repository ${additionalPluginsDir.path} with ${bundles} into ${appFolder}")
+        println("Install additional repository ${additionalPluginsDir.path} with ${bundles} into ${appFolder}")
         project.exec {
             commandLine("java",
                     '-cp', equinoxLaunchers.get(0),
                     'org.eclipse.core.launcher.Main',
                     '-application', 'org.eclipse.equinox.p2.director',
-//                    '-metadataRepository', "file:${project.rootProject.buildDir}/eclipse/eclipse/p2/org.eclipse.equinox.p2.engine/profileRegistry/SDKProfile.profile",
                     '-artifactRepository', "file:${testDistributionDir.path},${repo}",
                     '-repository', "file:${additionalPluginsDir.path}",
                     '-installIU', bundles,
-                    '-destination', testDistributionDir,
-//                    '-profile', 'PluginProfile',
-//                    '-p2.os', Config.os,
-//                    '-p2.ws', Config.ws,
-//                    '-p2.arch', Config.arch,
-//                    '-roaming',
-//                    '-nosplash',
+                    '-destination', appFolder,
                     '-consolelog')
         }
     }

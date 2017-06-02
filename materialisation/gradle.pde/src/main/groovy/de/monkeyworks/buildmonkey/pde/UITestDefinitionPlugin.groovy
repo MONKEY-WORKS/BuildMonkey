@@ -13,6 +13,7 @@ package de.monkeyworks.buildmonkey.pde
 
 import de.monkeyworks.buildmonkey.pde.tools.DownloadApplicationTask
 import de.monkeyworks.buildmonkey.pde.tools.DownloadEclipseSdkTask
+import de.monkeyworks.buildmonkey.pde.tools.FileHelper
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.internal.os.OperatingSystem
@@ -116,7 +117,7 @@ class UITestDefinitionPlugin implements Plugin<Project> {
         def arch = System.getProperty("os.arch").contains("64") ? "x86_64" : ""
         def version = project.uiTestBuild.getEclipseVersion()
         if (os.windows) {
-            return "eclipse-SDK-${version}-windows-${config.getWs()}-${arch}.zip"
+            return "eclipse-SDK-${version}-${config.getWs()}-${arch}.zip"
         } else if (os.macOsX) {
             return "eclipse-SDK-${version}-macosx-${config.getWs()}-${arch}.tar.gz"
         } else if (os.linux) {
@@ -174,7 +175,7 @@ class UITestDefinitionPlugin implements Plugin<Project> {
     static void installTargetPlatform(Project project, Config config) {
 
         def repo = project.uiTestBuild.getSwtbotRepository()
-        def plugins = project.rootProject.buildDir.toPath().resolve("eclipse/eclipse//plugins").toAbsolutePath().toFile()
+        def plugins = FileHelper.findSubFolder(project.rootProject.buildDir.toPath().resolve("eclipse").toAbsolutePath().toFile(), 'plugins')
 
         def equinoxLaunchers = new FileNameFinder().getFileNames(plugins.toString(), 'org.eclipse.equinox.launcher_*.jar')
         assert equinoxLaunchers.size() > 0
@@ -189,8 +190,10 @@ class UITestDefinitionPlugin implements Plugin<Project> {
             }
         }
 
+        def appFolder = FileHelper.findSubFolder(project.rootProject.buildDir.toPath().resolve("application").toAbsolutePath().toFile(), 'plugins').parentFile
+
         // convert (pdetest/additions subfolder) to a mini P2 update site
-        project.logger.info("Install swtbot in ${}")
+        project.logger.info("Install swtbot in ${appFolder}")
         project.exec {
             commandLine("java",
                     '-cp', equinoxLaunchers.get(0),
@@ -198,7 +201,7 @@ class UITestDefinitionPlugin implements Plugin<Project> {
                     "-application", "org.eclipse.equinox.p2.director",
                     '-repository', updateSites.join(','),
                     '-installIU', features.join(','),
-                    "-destination", project.rootProject.buildDir.toPath().resolve("application/application").toAbsolutePath().toFile(),
+                    "-destination", appFolder,
                     "-consolelog")
         }
     }
