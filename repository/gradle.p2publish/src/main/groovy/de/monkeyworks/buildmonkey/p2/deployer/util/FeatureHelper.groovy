@@ -46,6 +46,9 @@ class FeatureHelper {
                 )
             }
             for (Jar project : projects) {
+                if(!project.baseName || project.baseName == "null") {
+                    continue
+                }
                 plugin(
                     id: "${project.baseName}${classifier}",
                     'download-size': 0,

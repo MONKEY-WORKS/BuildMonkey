@@ -8,6 +8,8 @@
 package de.monkeyworks.buildmonkey.p2.deployer
 
 import de.monkeyworks.buildmonkey.p2.deployer.util.FeatureHelper
+import groovy.xml.StreamingMarkupBuilder
+import groovy.xml.XmlUtil
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
@@ -43,7 +45,7 @@ public class P2DeployerPlugin implements Plugin<Project> {
         DownloadHelper.addTaskDownloadEclipseSdk(project)
 
         // create project extension if it doesn't exist yet
-        if(project.extensions.findByName(extensionName) == null) {
+        if (project.extensions.findByName(extensionName) == null) {
             project.extensions.create(extensionName, P2DeploymentExtension, project)
 
             project.p2Deployment.qualifier = ".v" + new Date().format('yyyyMMddHHmm')
@@ -65,21 +67,21 @@ public class P2DeployerPlugin implements Plugin<Project> {
 
 
         project.subprojects.forEach { childProject ->
-            if(!childProject.name)
+            if (!childProject.name)
                 return
 
             List<Jar> jarTasks = childProject.tasks.withType(Jar).toList()
             if (jarTasks.size() > 0) {
-                sourceTasks.addAll(jarTasks.collect { if(it && it.classifier == "sources") it })
-                bundleTasks.addAll(jarTasks.collect { if(it && it.classifier != "sources") it })
+                sourceTasks.addAll(jarTasks.collect { if (it && it.classifier == "sources") it })
+                bundleTasks.addAll(jarTasks.collect { if (it && it.classifier != "sources") it })
 
                 Collection<Task> t = createCopyArtefactTask(jarTasks)
                 copyArtefactsTasks.addAll(t)
             }
         }
 
-        sourceTasks.removeIf { it -> it == null}
-        bundleTasks.removeIf { it -> it == null}
+        sourceTasks.removeIf { it -> it == null }
+        bundleTasks.removeIf { it -> it == null }
 
         copyArtefactsTasks.forEach {
             it.dependsOn cleanTask
@@ -98,27 +100,36 @@ public class P2DeployerPlugin implements Plugin<Project> {
             def sourceDir = config.sourceRepository
 
             // deploy source repository
-            if(sourceDir == null) {
+            if (sourceDir == null) {
 
                 if (config.generateFeature) {
-                    if(!config.version || config.version == "unspecified")
-                        config.version = "0.0.0"
+                    def version = config.version
+                    println(version)
+                    if (!version || version == "unspecified")
+                        version = "0.0.0"
+
+                    if (config.qualifier) {
+                        version += config.qualifier
+                    }
+
                     // create feature
-                    def featureJar = config.targetRepository.toPath().resolve("features/${config.featureId}_${config.version}.jar")
+                    def featureJar = config.targetRepository.toPath().resolve("features/${config.featureId}_${version}.jar")
                     FeatureHelper.createJar(config.featureId,
                             config.featureLabel,
-                            config.version, "provider",
+                            version, "provider",
                             false,
                             bundleTasks,
                             featureJar.toFile())
 
-                    featureJar = config.targetRepository.toPath().resolve("features/${config.featureId}.source_${config.version}.jar")
-                    FeatureHelper.createJar(config.featureId,
-                            config.featureLabel,
-                            config.version, "provider",
-                            true,
-                            sourceTasks,
-                            featureJar.toFile())
+                    if (sourceTasks.size() > 0) {
+                        featureJar = config.targetRepository.toPath().resolve("features/${config.featureId}.source_${version}.jar")
+                        FeatureHelper.createJar(config.featureId,
+                                config.featureLabel + " - Sources",
+                                version, "provider",
+                                true,
+                                sourceTasks,
+                                featureJar.toFile())
+                    }
                 }
 
                 doBuildP2Repository(eclipseHome, config.targetRepository.getAbsolutePath(), repoDirUri, false)
@@ -133,77 +144,132 @@ public class P2DeployerPlugin implements Plugin<Project> {
 
         P2DeploymentExtension config = project.p2Deployment
 
-
         Set<Task> createdTasks = new HashSet<>()
 
         jarTasks.forEach { task ->
-            def sourceBundle = task.classifier == "sources"
-
-            println(task.project.name)
             def isFeature = new File(task.project.getProjectDir(), "feature.xml").exists()
 
-            def mversion
-            if(isFeature) {
-                def featurexmlStream
+            Task newTask
+            if (isFeature) {
+                newTask = createFeatureTask(config, task)
+            } else {
+                newTask = createBundleTask(config, task)
+            }
 
-                if(!task.archivePath.exists()) {
+            createdTasks.add(newTask)
+
+        }
+
+        return createdTasks
+    }
+
+    Task createBundleTask(P2DeploymentExtension config, Jar task) {
+
+        def classifier = task.classifier.contains("source") ? ".source" : ""
+
+        Jar deployTask = task.project.tasks.create("p2" + task.name.capitalize(), Jar)
+        deployTask.configure {
+            with task.rootSpec
+        }
+        deployTask.dependsOn(task)
+
+        deployTask.doFirst {
+
+            def pluginsDir = new File(config.targetRepository, "plugins")
+            if (!pluginsDir.exists())
+                pluginsDir.mkdirs()
+
+            String finalVersion = config.version
+            finalVersion = finalVersion.replaceAll(".qualifier", "")
+
+            if(!finalVersion || finalVersion == "unspecified") {
+                finalVersion = task.manifest.effectiveManifest.attributes.get('Bundle-Version')
+            }
+            if (config.qualifier ) {
+                finalVersion += config.qualifier
+            }
+
+            manifest {
+                attributes(task.manifest.effectiveManifest.getAttributes())
+                getAttributes().put('Bundle-Version', finalVersion)
+            }
+            destinationDir = pluginsDir
+            archiveName = "${task.project.name}${classifier}_${finalVersion}.jar"
+        }
+        return deployTask
+    }
+
+    Task createFeatureTask(P2DeploymentExtension config, Jar task) {
+
+        task.project.tasks.create("cleanCreateP2FeatureXML", Delete) {
+            delete "${task.project.buildDir}/p2-tmp/feature.xml"
+        }
+
+        String finalVersion
+
+        def parsedXML
+        def featurexmlStream
+
+        Task p2FeatureCreation = task.project.tasks.create("createP2FeatureXML") {
+            doFirst {
+
+                finalVersion = config.version
+
+                if (!task.archivePath.exists()) {
                     featurexmlStream = new File(task.project.getProjectDir(), "feature.xml").newInputStream()
                 } else {
                     JarFile jarFile = new JarFile(task.archivePath)
                     featurexmlStream = jarFile.getInputStream(jarFile.getEntry("feature.xml"))
                 }
 
-                def parsedXML = new XmlSlurper().parse(featurexmlStream)
-                mversion = parsedXML['@version'].toString()
+                parsedXML = new XmlSlurper().parse(featurexmlStream)
                 featurexmlStream.close()
-            } else {
-                mversion = task.manifest.effectiveManifest.attributes.get('Bundle-Version')
-            }
 
-            def classifier = sourceBundle ? ".sources" : ""
-
-            if(mversion.endsWith(".qualifier")) {
-                mversion = mversion.replace(".qualifier", "")
-            }
-
-            Task deployTask = task.project.tasks.create("p2" + task.name.capitalize(), Jar)
-            deployTask.dependsOn(task)
-
-            deployTask.configure {
-                with task.rootSpec
-            }
-
-            deployTask.doFirst {
-
-                def pluginsDir = new File(config.targetRepository, "plugins")
-                def featureDir = new File(config.targetRepository, "features")
-                def destination = isFeature ? featureDir : pluginsDir
-
-                if(!pluginsDir.exists())
-                    pluginsDir.mkdirs()
-
-                if(!featureDir.exists())
-                    featureDir.mkdirs()
-
-
-
-                if(config.generateQualifier) {
-                    mversion += config.qualifier
+                if(!finalVersion || finalVersion == "unspecified") {
+                    finalVersion = parsedXML['@version'].toString()
                 }
 
-                manifest {
-                    attributes(task.manifest.effectiveManifest.getAttributes())
-                    getAttributes().put('Bundle-Version', mversion)
-                }
-                destinationDir = destination
-                archiveName = "${task.project.name}${classifier}_${mversion}.jar"
+                finalVersion = finalVersion.replace(".qualifier", "")
             }
+            doLast {
+                File tmpDir = new File(task.project.buildDir, "p2-tmp")
+                if(!tmpDir.exists())
+                    tmpDir.mkdirs()
 
-            createdTasks.add(deployTask)
+                File modifiedFile = new File(tmpDir, "feature.xml")
+                if (modifiedFile.exists())
+                    modifiedFile.delete()
 
+                if (config.qualifier ) {
+                    finalVersion += config.qualifier
+                }
+
+                parsedXML['@version'] = finalVersion
+
+                def writer = new FileWriter(modifiedFile)
+                writer.withWriter { outWriter ->
+                    XmlUtil.serialize(new StreamingMarkupBuilder().bind { mkp.yield parsedXML }, outWriter)
+                }
+                writer.close()
+
+            }
         }
 
-        return createdTasks
+        Jar deployTask = task.project.tasks.create("p2" + task.name.capitalize(), Jar)
+        deployTask.dependsOn(task)
+        deployTask.dependsOn(p2FeatureCreation)
+
+        deployTask.doFirst {
+            from "${task.project.buildDir}/p2-tmp/feature.xml"
+
+            def featureDir = new File(config.targetRepository, "features")
+            if (!featureDir.exists())
+                featureDir.mkdirs()
+
+            destinationDir = featureDir
+            archiveName = "${task.project.name}_${finalVersion}.jar"
+        }
+        return deployTask
     }
 
     private void doBuildP2Repository(EclipseConfiguration eclipseHome, String sourceDir, URI targetURI, boolean publishArtifacts) {

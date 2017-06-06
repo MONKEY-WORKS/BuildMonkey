@@ -43,6 +43,8 @@ subprojects {
     dependencies {
         compile gradleApi()
         compile localGroovy()
+
+        testCompile 'junit:junit:4.12'
     }
     build.dependsOn install
 

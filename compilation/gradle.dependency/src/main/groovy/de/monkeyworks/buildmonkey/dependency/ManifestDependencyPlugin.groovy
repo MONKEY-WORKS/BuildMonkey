@@ -7,6 +7,8 @@
  */
 package de.monkeyworks.buildmonkey.dependency
 
+import de.monkeyworks.buildmonkey.osgi.ManifestParser
+import de.monkeyworks.buildmonkey.osgi.RequiredBundle
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPlugin
@@ -91,7 +93,7 @@ class ManifestDependencyPlugin implements Plugin<Project> {
         project.afterEvaluate {
             // Resolves the dependencies for the compile configuration
             project.configurations.getByName('compile') { Configuration config ->
-                requireBundles().each { String dependency ->    
+                requireBundles().each { RequiredBundle dependency ->
                     setProjectDependencies(config, dependency)
                 }
                 fragmentHost().each { String dependency ->    
@@ -104,8 +106,9 @@ class ManifestDependencyPlugin implements Plugin<Project> {
             }
             // Resolves the dependencies for the test compile configuration.
             project.configurations.getByName('testCompile') { Configuration config ->
-                testBundles().each { String dependency ->    
-                    setProjectDependencies(config, dependency)
+                testBundles().each { String dependency ->
+                    if(dependency != null)
+                        setProjectDependencies(config, dependency)
                 }
 
 
@@ -135,8 +138,9 @@ class ManifestDependencyPlugin implements Plugin<Project> {
      */
     private List requireBundles() {
         def evaluationStrategy = {
-            def bundles = new Manifest(it).getMainAttributes().getValue('Require-Bundle')
-            return bundles ? bundles.split(',') : []
+            def manifest = new Manifest(it)
+
+            return new ManifestParser(manifest).parseRequireBundles().toArray()
         }
         return evaluateDependencyFile("META-INF/MANIFEST.MF", evaluationStrategy)
     }
@@ -191,8 +195,21 @@ class ManifestDependencyPlugin implements Plugin<Project> {
         String name = dependency.contains(';') ? dependency.split(';')[0] : dependency
         name = name.trim()
         def version = parseVersion(dependency)
+
+        setProjectDependency(config, name, version)
+    }
+
+    void setProjectDependencies(Configuration config, RequiredBundle bundle) {
+        setProjectDependency(config, bundle.bundleName, bundle.attributes.get("bundle-version"))
+    }
+
+    private void setProjectDependency(Configuration config, String name, version) {
         if(!version)
             version = '+'
+
+        if(!name) {
+            return
+        }
 
         final Project rootProject = project.rootProject
 
@@ -220,21 +237,21 @@ class ManifestDependencyPlugin implements Plugin<Project> {
 
         boolean match = false
 
-        if(ids != null && ids.size() > 0) {
+        if (ids != null && ids.size() > 0) {
             groupID = ids['groupId']
             match = (groupID != null && groupID != '')
-            if(match) {
-                if(ids.containsKey('artifactId')) {
+            if (match) {
+                if (ids.containsKey('artifactId')) {
                     artifactId = ids['artifactId']
                 }
-                if(ids.containsKey('version')) {
+                if (ids.containsKey('version')) {
                     version = ids['version']
                 }
             }
         }
 
         // if group ID still unknown, make a resolution with mavenGroup or eclipseGroup
-        if(!match) {
+        if (!match) {
             def mavenGroup = manifestDependencies.mavenGroup
             // second check for third-party dependencies.
             // TODO Add dependency and a list of additional dependencies
@@ -331,6 +348,7 @@ class ManifestDependencyPlugin implements Plugin<Project> {
             return version
         }
 
+        println("---" + version)
         return "[${version}, )"
     }
 }
