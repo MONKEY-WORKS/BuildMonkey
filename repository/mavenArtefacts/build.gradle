@@ -5,12 +5,12 @@ repositories {
 dependencies {
     compile 'org.apache.maven:maven-ant-tasks:2.1.3'
     compile 'org.osgi:org.eclipse.osgi:3.10.100.v20150529-1857'
-    compile 'de.monkeyworks.buildmonkey:base:1.0'
+    compile 'de.monkeyworks.buildmonkey:base:1.0.1'
 }
 
 apply plugin: "com.gradle.plugin-publish"
 
-version = '0.4.5'
+version = '0.4.7'
 
 pluginBundle {
     website = 'https://github.com/MONKEY-WORKS/BuildMonkey/wiki'

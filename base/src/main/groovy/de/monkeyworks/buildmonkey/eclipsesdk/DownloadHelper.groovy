@@ -27,7 +27,7 @@ class DownloadHelper {
     static void addTaskDownloadEclipseSdk(Project project) {
         if (project.tasks.findByPath(TASK_NAME_DOWNLOAD_ECLIPSE_SDK) != null)
             return
-            
+
         project.task(TASK_NAME_DOWNLOAD_ECLIPSE_SDK, type: DownloadEclipseSdkTask) {
             description = "Downloads an Eclipse SDK to perform P2 operations with."
 
