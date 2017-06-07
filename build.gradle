@@ -60,6 +60,24 @@ subprojects {
             }
         }
     }
+
+    Properties properties = new Properties()
+    File propFile = "${System.properties['user.home']}${File.separator}.gradle${File.separator}artifactory.properties" as File
+    if(propFile.exists()) {
+        properties.load(propFile.newDataInputStream())
+        publishing {
+            repositories {
+                maven {
+                    name "artifactory"
+                    url "https://artifactory.monkey-works.de/artifactory/gradle-plugins"
+                    credentials {
+                        username properties.getProperty("artifactory.user")
+                        password properties.getProperty("artifactory.password")
+                    }
+                }
+            }
+        }
+    }
 }
 
 
