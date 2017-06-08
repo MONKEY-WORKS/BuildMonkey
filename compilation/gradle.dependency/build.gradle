@@ -1,7 +1,11 @@
 
 apply plugin: "com.gradle.plugin-publish"
 
-version = '0.4.9'
+version = '0.4.10'
+
+dependencies {
+    compile 'de.monkeyworks.buildmonkey:base:1.0.1'
+}
 
 pluginBundle {
     website = 'https://github.com/MONKEY-WORKS/BuildMonkey/wiki'

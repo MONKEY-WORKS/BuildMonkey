@@ -42,4 +42,6 @@ include ':gradle.p2'
 project( ':gradle.p2' ).projectDir = new File( sharedRootDir, 'gradle.p2' )
 include ':gradle.p2publish'
 project( ':gradle.p2publish' ).projectDir = new File( sharedRootDir, 'gradle.p2publish' )
+include 'osgi:manifestUpdater'
+findProject(':osgi:manifestUpdater')?.name = 'manifestUpdater'
 

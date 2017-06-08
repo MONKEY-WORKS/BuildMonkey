@@ -54,7 +54,7 @@ if(propFile.exists()) {
         pkg {
             repo = 'BuildMonkey'
             name = 'base'
-            userOrg = 'michael-barth-monkey-works'
+            userOrg = 'monkey-works'
             licenses = ['EPL-1.0']
             vcsUrl = 'https://github.com/MONKEY-WORKS/BuildMonkey.git'
             version {

@@ -43,6 +43,8 @@ subprojects {
     dependencies {
         compile gradleApi()
         compile localGroovy()
+
+        testCompile 'junit:junit:4.12'
     }
     build.dependsOn install
 
@@ -54,6 +56,24 @@ subprojects {
                     groupId "${group}"
                     version project.version
                     from components.java
+                }
+            }
+        }
+    }
+
+    Properties properties = new Properties()
+    File propFile = "${System.properties['user.home']}${File.separator}.gradle${File.separator}artifactory.properties" as File
+    if(propFile.exists()) {
+        properties.load(propFile.newDataInputStream())
+        publishing {
+            repositories {
+                maven {
+                    name "artifactory"
+                    url "https://artifactory.monkey-works.de/artifactory/gradle-plugins"
+                    credentials {
+                        username properties.getProperty("artifactory.user")
+                        password properties.getProperty("artifactory.password")
+                    }
                 }
             }
         }
