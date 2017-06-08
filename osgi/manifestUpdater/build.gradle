@@ -3,5 +3,5 @@ version '0.0.1'
 sourceCompatibility = 1.8
 
 dependencies {
-    compile 'de.monkeyworks.buildmonkey:base:1.0'
+    compile 'de.monkeyworks.buildmonkey:base:1.0.3'
 }

@@ -1,7 +1,7 @@
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'java'
 
-version = '1.0.1'
+version = '1.0.3'
 group = 'de.monkeyworks.buildmonkey'
 
 publishing {
@@ -58,7 +58,7 @@ if(propFile.exists()) {
             licenses = ['EPL-1.0']
             vcsUrl = 'https://github.com/MONKEY-WORKS/BuildMonkey.git'
             version {
-                name = '1.0.1'
+                name = project.version
                 desc = 'Common tasks and classes for the BuildMonkey project'
                 released  = new Date()
             }

@@ -4,7 +4,7 @@ apply plugin: "com.gradle.plugin-publish"
 version = '0.4.10'
 
 dependencies {
-    compile 'de.monkeyworks.buildmonkey:base:1.0.1'
+    compile 'de.monkeyworks.buildmonkey:base:1.0.3'
 }
 
 pluginBundle {
