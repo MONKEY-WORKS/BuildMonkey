@@ -175,29 +175,19 @@ public final class UiTestExecuter implements TestExecuter {
             programArgs.add(optionsFile.getAbsolutePath());
         }
 
-        //programArgs.add("-version");
-        //programArgs.add("4");
         programArgs.add("-port");
         programArgs.add(Integer.toString(pluginTestPort));
-        //programArgs.add("-testLoaderClass");
-        //programArgs.add("org.eclipse.jdt.internal.junit4.runner.JUnit4TestLoader");
-        //programArgs.add("-loaderpluginname");
-        //programArgs.add("org.eclipse.jdt.junit4.runtime");
-
-
-        //programArgs.add("-product");
-        //programArgs.add(getExtension(testTask).getProduct());
         programArgs.add("-testApplication");
         programArgs.add(getExtension(testTask).getApplication());
 
 
-        File reportFolder = new File(project.getBuildDir(), "reports/uiTest");
+        File reportFolder = new File(project.getBuildDir(), "test-results/uiTest");
 
         String testClass = getExtension(testTask).getTestClass();
         if(testClass != null) {
             programArgs.add("-className");
             programArgs.add(testClass);
-            programArgs.add("formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,"+reportFolder.getAbsolutePath().toString() + "/" + testClass +".xml");
+            programArgs.add("formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,"+reportFolder.getAbsolutePath().toString() + "/TEST-" + testClass +".xml");
         } else {
             programArgs.add("-classNames");
             for (String clzName : collectTestNames(testTask)) {
@@ -205,7 +195,7 @@ public final class UiTestExecuter implements TestExecuter {
                 break;
             }
             for (String clzName : collectTestNames(testTask)) {
-                programArgs.add("formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,"+reportFolder.getAbsolutePath().toString() + "/" + clzName +".xml");
+                programArgs.add("formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,"+reportFolder.getAbsolutePath().toString() + "/TEST-" + clzName +".xml");
                 break;
             }
         }

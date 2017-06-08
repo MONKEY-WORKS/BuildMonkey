@@ -245,11 +245,6 @@ public final class PluginTestExecuter implements TestExecuter {
 
         new TestMainAction(detector, processor, new NoOpTestResultProcessor(), new TrueTimeProvider(), testTask.toString(), testTask.getPath(), String.format("Gradle Eclipse Test Run %s", testTask.getPath())).run();
         LOGGER.info("collected test class names: {}", processor.classNames);
-        System.out.println("collected test class names: ");
-        for(String name : processor.classNames) {
-            System.out.print("   ");
-            System.out.println(name);
-        }
         return processor.classNames;
     }
 
