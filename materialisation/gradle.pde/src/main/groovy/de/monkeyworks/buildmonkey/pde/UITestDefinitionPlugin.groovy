@@ -33,24 +33,14 @@ class UITestBuild {
 
     def project
     def targetDefinition
-    def mavenGroup
-    def p2Group
-
-    Closure dependencyClosure
 
     UITestBuild(Project project) {
         this.project = project
-        this.mavenGroup = 'buildMonkey'
-        this.p2Group = 'eclipse'
 
         eclipseSdkUrl = 'http://ftp-stud.hs-esslingen.de/Mirrors/eclipse/eclipse/downloads/drops4/R-4.6.1-201609071200'
         eclipseVersion = '4.6.1'
 
 
-    }
-
-    void dependencyHandling(Closure closure) {
-        dependencyClosure = closure
     }
 
 }

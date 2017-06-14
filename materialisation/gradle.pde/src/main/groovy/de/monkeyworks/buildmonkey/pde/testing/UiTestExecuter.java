@@ -205,8 +205,11 @@ public final class UiTestExecuter implements TestExecuter {
         programArgs.add("-data");
         File workspace = new File (project.getBuildDir() + "/uiTest/workspace");
         programArgs.add(workspace.getAbsolutePath());
+
+        UiTestExtension uiTestExt = (UiTestExtension) project.getExtensions().findByName("uiTest");
+
         programArgs.add("-testPluginName");
-        programArgs.add(this.project.getName());
+        programArgs.add(uiTestExt.getTestBundle());
 
         javaExecHandleBuilder.setArgs(programArgs);
         javaExecHandleBuilder.setSystemProperties(testTask.getSystemProperties());
@@ -232,6 +235,7 @@ public final class UiTestExecuter implements TestExecuter {
 
         javaExecHandleBuilder.setJvmArgs(jvmArgs);
         javaExecHandleBuilder.setWorkingDir(this.project.getBuildDir());
+
         return javaExecHandleBuilder;
     }
 

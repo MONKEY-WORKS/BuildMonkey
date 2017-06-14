@@ -12,16 +12,10 @@
 package de.monkeyworks.buildmonkey.pde.testing;
 
 import groovy.lang.Closure;
-import org.gradle.api.internal.file.FileResolver;
-import org.gradle.internal.impldep.com.amazonaws.services.kms.model.UnsupportedOperationException;
 
-import javax.inject.Inject;
 import java.io.File;
-import java.util.List;
 
 public class UiTestExtension {
-
-    private String fragmentHost;
 
     /**
      * Application launched in Eclipse.
@@ -30,6 +24,8 @@ public class UiTestExtension {
     private String applicationName = "org.eclipse.swtbot.eclipse.core.swtbottestapplication";
 
     private String testClass;
+
+    private String testBundle;
 
     private File optionsFile;
 
@@ -42,13 +38,11 @@ public class UiTestExtension {
 
     private long testTimeoutSeconds = 60 * 60L;
 
-    private List<String> projectPattern;
-
-    private Closure testClassClosure;
-
     private String application;
 
     private String product;
+
+    private Closure testClassClosure;
 
     public String getApplicationName() {
         return this.applicationName;
@@ -82,14 +76,6 @@ public class UiTestExtension {
         this.testTimeoutSeconds = testTimeoutSeconds;
     }
 
-    public String getFragmentHost() {
-        return this.fragmentHost;
-    }
-
-    public void setFragmentHost(String fragmentHost) {
-        this.fragmentHost = fragmentHost;
-    }
-
     public boolean isDebug() {
         return this.debug;
     }
@@ -104,22 +90,6 @@ public class UiTestExtension {
 
     public void setDebugPort(int debugPort) {
         this.debugPort = debugPort;
-    }
-
-    public List<String> getProjectPattern() {
-        return this.projectPattern;
-    }
-
-    public void setProjectPattern(List<String> pattern) {
-        this.projectPattern = pattern;
-    }
-
-    public Closure getTestClassClosure() {
-        return testClassClosure;
-    }
-
-    public void isTestClass(Closure testClassClosure) {
-        this.testClassClosure = testClassClosure;
     }
 
     public String getApplication() {
@@ -145,4 +115,21 @@ public class UiTestExtension {
     public void setTestClass(String testClass) {
         this.testClass = testClass;
     }
+
+    public String getTestBundle() {
+        return testBundle;
+    }
+
+    public void setTestBundle(String testBundle) {
+        this.testBundle = testBundle;
+    }
+
+    public Closure getTestClassClosure() {
+        return testClassClosure;
+    }
+
+    public void isTestClass(Closure testClassClosure) {
+        this.testClassClosure = testClassClosure;
+    }
+
 }
