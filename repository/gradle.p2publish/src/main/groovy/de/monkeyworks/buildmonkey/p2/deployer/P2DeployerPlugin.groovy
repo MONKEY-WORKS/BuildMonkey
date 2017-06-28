@@ -192,6 +192,10 @@ public class P2DeployerPlugin implements Plugin<Project> {
             manifest {
                 attributes(task.manifest.effectiveManifest.getAttributes())
                 getAttributes().put('Bundle-Version', finalVersion)
+
+                if(classifier.endsWith("source")) {
+                    getAttributes().put('Eclipse-SourceBundle', "${task.project.name};version=\"${finalVersion}\";roots:=\".\"")
+                }
             }
             destinationDir = pluginsDir
             archiveName = "${task.project.name}${classifier}_${finalVersion}.jar"
