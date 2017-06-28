@@ -13,6 +13,7 @@ package de.monkeyworks.buildmonkey.pde
 
 import de.monkeyworks.buildmonkey.pde.testing.UiTestExecuter
 import de.monkeyworks.buildmonkey.pde.testing.UiTestExtension
+import de.monkeyworks.buildmonkey.pde.tools.FileHelper
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.internal.file.FileResolver
@@ -95,7 +96,10 @@ class UiTestPlugin implements Plugin<Project> {
 
             doFirst {
                 def bundleName = project.uiTest.testBundle
-                bundles = new FileNameFinder().getFileNames("$project.rootProject.buildDir/application/application/plugins", "${bundleName}_*.jar")
+                def helper = new FileHelper()
+                def pluginFolder = helper.findSubFolder(new File(project.rootProject.buildDir, 'application/application'), "plugins")
+                assert pluginFolder != null
+                bundles = new FileNameFinder().getFileNames(pluginFolder.absolutePath, "${bundleName}_*.jar")
                 assert bundles != null
                 assert bundles.size() > 0
                 project.copy {

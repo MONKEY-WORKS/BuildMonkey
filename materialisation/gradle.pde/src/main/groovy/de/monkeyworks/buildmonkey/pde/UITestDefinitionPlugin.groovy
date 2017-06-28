@@ -29,7 +29,6 @@ class UITestBuild {
 
     def applicationUrl
     def applicationName
-    def swtbotRepository
 
     def project
     def targetDefinition
@@ -164,7 +163,6 @@ class UITestDefinitionPlugin implements Plugin<Project> {
 
     static void installTargetPlatform(Project project, Config config) {
 
-        def repo = project.uiTestBuild.getSwtbotRepository()
         def plugins = FileHelper.findSubFolder(project.rootProject.buildDir.toPath().resolve("eclipse").toAbsolutePath().toFile(), 'plugins')
 
         def equinoxLaunchers = new FileNameFinder().getFileNames(plugins.toString(), 'org.eclipse.equinox.launcher_*.jar')
