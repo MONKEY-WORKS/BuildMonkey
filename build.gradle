@@ -38,6 +38,9 @@ subprojects {
         mavenLocal()
         mavenCentral()
         jcenter()
+        maven {
+            url  "http://dl.bintray.com/monkey-works/BuildMonkey" 
+        }
     }
 
     dependencies {
