@@ -39,8 +39,8 @@ class EclipseConfiguration {
     String launcherVersion
 
     EclipseConfiguration(Project project) {
-        eclipseSdkURL = 'http://ftp-stud.hs-esslingen.de/Mirrors/eclipse/eclipse/downloads/drops4/R-4.6.1-201609071200'
-        eclipseVersion = '4.6.1'
+        eclipseSdkURL = 'http://ftp-stud.hs-esslingen.de/Mirrors/eclipse/eclipse/downloads/drops4/R-4.7-201706120950'
+        eclipseVersion = '4.7'
         localEclipseDir = project.buildDir.toPath().resolve("eclipsesdk")
 
         // if eclipse home variable is there use it
