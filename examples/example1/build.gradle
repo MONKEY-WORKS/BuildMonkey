@@ -15,13 +15,13 @@ buildscript {
 
     // Get BuildMonkey plugins
     dependencies {
-        classpath "de.monkeyworks.buildmonkey:gradle.p2:0.4"
-        classpath "de.monkeyworks.buildmonkey:gradle.p2publish:0.4.1"
-        classpath "de.monkeyworks.buildmonkey:gradle.mavenize:0.4"
-        classpath "de.monkeyworks.buildmonkey:gradle.dependency:0.4"
-        classpath "de.monkeyworks.buildmonkey:gradle.projectsetup:0.4"
-        classpath "de.monkeyworks.buildmonkey:mavenArtefacts:0.4.1"
-        classpath 'de.monkeyworks.buildmonkey:artifactoryupload:0.4'
+        classpath "de.monkeyworks.buildmonkey:gradle.p2:0.4.1"
+        classpath "de.monkeyworks.buildmonkey:gradle.p2publish:0.4.11"
+        classpath "de.monkeyworks.buildmonkey:gradle.mavenize:0.4.1"
+        classpath "de.monkeyworks.buildmonkey:gradle.dependency:0.4.10"
+        classpath "de.monkeyworks.buildmonkey:gradle.projectsetup:0.4.1"
+        classpath "de.monkeyworks.buildmonkey:mavenArtefacts:0.4.7"
+        classpath 'de.monkeyworks.buildmonkey:artifactoryupload:0.4.1'
         classpath 'org.standardout:bnd-platform:1.4.0'
     }
 }
@@ -100,10 +100,14 @@ subprojects {
         // Name prefix for all maven plugins
         mavenGroup = "buildmonkey"
 
-        // Patter to identify local projects
-        addProjectPattern {
-          projectPattern = "Monkey(\\..*)"
-          projectGroup = "de.monkeyworks"
+        dependencyHandling {
+            def ids = [:]
+            // if artifactId needs special handling, fill the map with groupID, artifactID, version like:
+            if(it.matches("Monkey(\\..*)")) {
+                ids['groupId'] = 'de.monkeyworks'
+                ids['version'] = project.version
+            }
+            return ids
         }
     }
 
@@ -182,6 +186,8 @@ subprojects {
     assemble.dependsOn mirrorP2Repository
     createTargetPlatform.dependsOn mirrorP2Repository
     mavenizeP2Repository.dependsOn mirrorP2Repository
+
+    apply plugin: "de.monkeyworks.buildmonkey.p2.P2DeployerPlugin"
 }
  
 
@@ -190,8 +196,10 @@ apply plugin: 'de.monkeyworks.buildmonkey.p2.P2DeployerPlugin'
 
 // Configure publishing to a P2 repository
 p2Deployment {
-    // Repository, where the plugin is publsihed to
+    // Repository, where the plugin is published to
     targetRepository = file("$buildDir/monkey-repository")
+    generateQualifier = true
+    generateFeature = true
     // Name of the feature
     featureId = "MonkeyPlugin"
     // Display name of the feature

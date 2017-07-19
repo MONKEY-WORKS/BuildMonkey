@@ -1,6 +1,6 @@
 buildscript {
     repositories {
-        //mavenLocal()
+        mavenLocal()
         maven {url "https://plugins.gradle.org/m2/"}
         mavenCentral()
         jcenter()
@@ -8,10 +8,10 @@ buildscript {
 
     dependencies {
         classpath "de.monkeyworks.buildmonkey:gradle.p2:0.4.1"
-        classpath "de.monkeyworks.buildmonkey:gradle.p2publish:0.4.7"
-        classpath "de.monkeyworks.buildmonkey:gradle.mavenize:0.4"
-        classpath "de.monkeyworks.buildmonkey:gradle.dependency:0.4.9"
-        classpath "de.monkeyworks.buildmonkey:gradle.projectsetup:0.4.2"
+        classpath "de.monkeyworks.buildmonkey:gradle.p2publish:0.4.11"
+        classpath "de.monkeyworks.buildmonkey:gradle.mavenize:0.4.1"
+        classpath "de.monkeyworks.buildmonkey:gradle.dependency:0.4.10"
+        classpath "de.monkeyworks.buildmonkey:gradle.projectsetup:0.4.1"
     }
 }
 
@@ -148,14 +148,25 @@ subprojects {
     assemble.dependsOn mirrorP2Repository
     createTargetPlatform.dependsOn mirrorP2Repository
     mavenizeP2Repository.dependsOn mirrorP2Repository
+
+    apply plugin: "de.monkeyworks.buildmonkey.p2.P2DeployerPlugin"
 }
- 
+
+
+// Last step publishes the crate Eclipse plugin to an own P2 repository
 apply plugin: 'de.monkeyworks.buildmonkey.p2.P2DeployerPlugin'
 
+// Configure publishing to a P2 repository
 p2Deployment {
+    // Repository, where the plugin is published to
     targetRepository = file("$buildDir/p2-repository")
+    generateQualifier = true
+    generateFeature = true
+    // Name of the feature
     featureId = "ExampleE4App"
+    // Display name of the feature
     featureLabel = "Example Feature"
     version = "1.0.0"
 }
+
 

@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="buildmonkey" sequenceNumber="2">
+<?pde version="3.8"?>
+<target includeMode="feature" name="buildmonkey" sequenceNumber="2">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.platform.feature.group" version="4.6.0.v20160606-1342" />
+<unit id="org.eclipse.platform.feature.group" version="0.0.0" />
+<!--unit id="org.eclipse.swt.tools.feature.feature.group" version="3.106.0.v20170608-0516"/-->
 <unit id="org.eclipse.equinox.executable.feature.group" version="0.0.0" />
-<repository location="http://ftp-stud.fht-esslingen.de/pub/Mirrors/eclipse/releases/neon/"/>
+<unit id="org.eclipse.core.runtime.feature.feature.group" version="0.0.0"/>
+<repository location="http://download.eclipse.org/releases/oxygen/"/>
 </location>
 </locations>
 </target>
