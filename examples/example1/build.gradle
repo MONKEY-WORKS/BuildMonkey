@@ -1,7 +1,7 @@
 buildscript {
     repositories {
         // Uncomment for local deployment of built plugins
-         mavenLocal()
+        //mavenLocal()
 
         // The BuildMonkey plugins are published here
         maven {

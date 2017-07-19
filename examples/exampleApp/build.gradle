@@ -1,6 +1,6 @@
 buildscript {
     repositories {
-        mavenLocal()
+        //mavenLocal()
         maven {url "https://plugins.gradle.org/m2/"}
         mavenCentral()
         jcenter()
