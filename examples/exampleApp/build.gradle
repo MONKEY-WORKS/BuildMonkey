@@ -4,6 +4,10 @@ buildscript {
         maven {url "https://plugins.gradle.org/m2/"}
         mavenCentral()
         jcenter()
+        maven {
+            url  "http://dl.bintray.com/monkey-works/BuildMonkey"
+        }
+
     }
 
     dependencies {
@@ -37,12 +41,14 @@ mavenize {
         targetDir = "$buildDir/m2-repository"
         sourceP2Repository = "$buildDir/p2-repository"
     }
-}  
+}
 
 subprojects {
 
     repositories {
         maven {url uri("${buildUri}/m2-repository")}
+        jcenter()
+        mavenCentral()
     }
 
     apply plugin: 'java'

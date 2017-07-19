@@ -9,6 +9,9 @@ buildscript {
         // Default repositories for all the maven dependencies of this world
         mavenCentral()
         jcenter()
+        maven {
+            url  "http://dl.bintray.com/monkey-works/BuildMonkey"
+        }
     }
 
     // Get BuildMonkey plugins
@@ -20,11 +23,6 @@ buildscript {
     }
 }
 
-repositories {
-        mavenLocal()
-        mavenCentral()
-        jcenter()
-}
 
 apply plugin: 'de.monkeyworks.buildmonkey.maven.MavenArtefactsPlugin'
 

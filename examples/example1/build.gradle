@@ -11,6 +11,10 @@ buildscript {
         // Default repositories for all the maven dependencies of this world
         mavenCentral()
         jcenter()
+        maven {
+            url  "http://dl.bintray.com/monkey-works/BuildMonkey"
+        }
+
     }
 
     // Get BuildMonkey plugins
@@ -62,20 +66,12 @@ mavenize {
     }
 } 
 
-repositories {
-        mavenLocal()
-        mavenCentral()
-        jcenter()
-}
-
-
 // Process each sub project, build the eclipse plugins
 subprojects {
 
     // Receive plugins from the built maven repository
     repositories {
         maven {url uri("${buildUri}/m2-repository")}
-
     }
 
     // Normal java project stuff
