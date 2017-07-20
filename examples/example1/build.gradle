@@ -37,6 +37,10 @@ apply plugin: 'de.monkeyworks.buildmonkey.p2.P2MirrorPlugin'
 def buildUri = buildDir.toURI()
 def buildUrl = buildUri.toURL()
 
+eclipseConfiguration {
+    eclipseSdkURL = 'https://ftp.heanet.ie/mirrors/eclipse/eclipse/downloads/drops4/R-4.7-201706120950/'
+}
+
 // Configure mirroring plugin
 eclipseMirror {
     // Both parameters on false means a lazy dependency resolving but matching the exact versions of the defined features
@@ -112,7 +116,7 @@ subprojects {
 
     publishing {
         publications {
-            def isJavaPlugin = project.getPlugins().hasPlugin('java');
+            def isJavaPlugin = project.getPlugins().hasPlugin('java')
 
             if (isJavaPlugin) {
                 mavenJava(MavenPublication) {
@@ -125,13 +129,13 @@ subprojects {
                     apply plugin: 'de.monkeyworks.buildmonkey.FixDependencyVersion'
 
                     configurations.archives.allArtifacts.forEach {
-                        def cls = it.classifier;
+                        def cls = it.classifier
                         if (cls != null && !cls.empty) {
                             artifact(it.file) {
                                 classifier cls
                             }
                         }
-                    };
+                    }
                 }
             }
         }
