@@ -19,10 +19,10 @@ buildscript {
 
     // Get BuildMonkey plugins
     dependencies {
-        classpath "de.monkeyworks.buildmonkey:gradle.p2:0.4.1"
-        classpath "de.monkeyworks.buildmonkey:gradle.p2publish:0.4.11"
+        classpath "de.monkeyworks.buildmonkey:gradle.p2:0.4.2"
+        classpath "de.monkeyworks.buildmonkey:gradle.p2publish:0.4.12"
         classpath "de.monkeyworks.buildmonkey:gradle.mavenize:0.4.1"
-        classpath "de.monkeyworks.buildmonkey:gradle.dependency:0.4.10"
+        classpath "de.monkeyworks.buildmonkey:gradle.dependency:0.4.11"
         classpath "de.monkeyworks.buildmonkey:gradle.projectsetup:0.4.1"
         classpath "de.monkeyworks.buildmonkey:mavenArtefacts:0.4.7"
         classpath 'de.monkeyworks.buildmonkey:artifactoryupload:0.4.1'
@@ -36,10 +36,6 @@ apply plugin: 'de.monkeyworks.buildmonkey.p2.P2MirrorPlugin'
 // Create the URL of the build folder
 def buildUri = buildDir.toURI()
 def buildUrl = buildUri.toURL()
-
-eclipseConfiguration {
-    eclipseSdkURL = 'https://ftp.heanet.ie/mirrors/eclipse/eclipse/downloads/drops4/R-4.7-201706120950/'
-}
 
 // Configure mirroring plugin
 eclipseMirror {
