@@ -29,28 +29,31 @@ class DownloadHelper {
             return
 
         project.task(TASK_NAME_DOWNLOAD_ECLIPSE_SDK, type: DownloadEclipseSdkTask) {
-            description = "Downloads an Eclipse SDK to perform P2 operations with."
+            project.afterEvaluate {
+                description = "Downloads an Eclipse SDK to perform P2 operations with."
 
-            EclipseConfiguration config = project.eclipseConfiguration
+                EclipseConfiguration config = project.eclipseConfiguration
 
-            onlyIf {
-                return !config.isDownloded()
+                onlyIf {
+                    return !config.isDownloded()
+                }
+
+                def os = org.gradle.internal.os.OperatingSystem.current()
+                def arch = System.getProperty("os.arch").contains("64") ? "-x86_64" : ""
+                def eclipseUrl = config.eclipseSdkURL
+                println eclipseUrl
+                def eclipseVersion = config.eclipseVersion
+
+                if (os.windows) {
+                    downloadUrl = "${eclipseUrl}/eclipse-SDK-${eclipseVersion}-win32${arch}.zip"
+                } else if (os.macOsX) {
+                    downloadUrl = "${eclipseUrl}/eclipse-SDK-${eclipseVersion}-macosx-cocoa${arch}.tar.gz"
+                } else if (os.linux) {
+                    downloadUrl = "${eclipseUrl}/eclipse-SDK-${eclipseVersion}-linux-gtk${arch}.tar.gz"
+                }
+
+                targetDir = project.buildDir.toPath().resolve("downloads").toFile()
             }
-
-            def os = org.gradle.internal.os.OperatingSystem.current()
-            def arch = System.getProperty("os.arch").contains("64") ? "-x86_64" : ""
-            def eclipseUrl = config.eclipseSdkURL
-            def eclipseVersion = config.eclipseVersion
-
-            if (os.windows) {
-                downloadUrl = "${eclipseUrl}/eclipse-SDK-${eclipseVersion}-win32${arch}.zip"
-            } else if (os.macOsX) {
-                downloadUrl = "${eclipseUrl}/eclipse-SDK-${eclipseVersion}-macosx-cocoa${arch}.tar.gz"
-            } else if (os.linux) {
-                downloadUrl = "${eclipseUrl}/eclipse-SDK-${eclipseVersion}-linux-gtk${arch}.tar.gz"
-            }
-
-            targetDir = project.buildDir.toPath().resolve("downloads").toFile()
         }
     }
 }

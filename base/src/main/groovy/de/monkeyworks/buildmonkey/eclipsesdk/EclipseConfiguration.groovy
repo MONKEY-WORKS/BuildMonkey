@@ -39,7 +39,7 @@ class EclipseConfiguration {
     String launcherVersion
 
     EclipseConfiguration(Project project) {
-        eclipseSdkURL = 'http://ftp-stud.hs-esslingen.de/Mirrors/eclipse/eclipse/downloads/drops4/R-4.7-201706120950'
+        eclipseSdkURL = 'https://ftp.heanet.ie/mirrors/eclipse/eclipse/downloads/drops4/R-4.7-201706120950/'
         eclipseVersion = '4.7'
         localEclipseDir = project.buildDir.toPath().resolve("eclipsesdk")
 
