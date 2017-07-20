@@ -35,49 +35,90 @@ public class P2DeployerPlugin implements Plugin<Project> {
 
     private final String taskName = "publishP2"
 
-    private Project project
+    private Project rootProject
 
     @Override
-    void apply(Project project) {
-        this.project = project
+    void apply(Project childProject) {
+        this.rootProject = childProject.rootProject
 
-        DownloadHelper.addEclipseConfigurationExtension(project)
-        DownloadHelper.addTaskDownloadEclipseSdk(project)
+        initRootProjectIfRequired()
 
-        // create project extension if it doesn't exist yet
-        if (project.extensions.findByName(extensionName) == null) {
-            project.extensions.create(extensionName, P2DeploymentExtension, project)
+        Task bundleTask = rootProject.tasks.findByPath(taskName)
+        Task cleanTask = rootProject.tasks.findByPath("cleanP2")
 
-            project.p2Deployment.qualifier = ".v" + new Date().format('yyyyMMddHHmm')
+        if (bundleTask == null) {
+            // create bundle task
+            bundleTask = rootProject.task(taskName)
+            cleanTask = rootProject.tasks.create("cleanP2", Delete)
+            cleanTask.doLast {
+                delete rootProject.p2Deployment.targetRepository
+            }
+
+            rootProject.ext.sourceTasks = new HashSet<Jar>();
+            rootProject.ext.bundleTasks = new HashSet<Jar>();
+
+            bundleTask.doLast {
+
+                P2DeploymentExtension config = rootProject.p2Deployment
+
+                def eclipseHome = config.project.eclipseConfiguration
+                def repoDirUri = config.targetRepository.toURI()
+                def sourceDir = config.sourceRepository
+
+                // deploy source repository
+                if (sourceDir == null) {
+
+                    if (config.generateFeature) {
+                        def version = config.version
+
+                        if (!version || version == "unspecified")
+                            version = "0.0.0"
+
+                        if (config.qualifier) {
+                            version += config.qualifier
+                        }
+
+                        // create feature
+                        def featureJar = config.targetRepository.toPath().resolve("features/${config.featureId}_${version}.jar")
+                        FeatureHelper.createJar(config.featureId,
+                                config.featureLabel,
+                                version, "provider",
+                                false,
+                                rootProject.ext.bundleTasks,
+                                featureJar.toFile())
+
+                        if (rootProject.ext.sourceTasks.size() > 0) {
+                            featureJar = config.targetRepository.toPath().resolve("features/${config.featureId}.source_${version}.jar")
+                            FeatureHelper.createJar(config.featureId,
+                                    config.featureLabel + " - Sources",
+                                    version, "provider",
+                                    true,
+                                    rootProject.ext.sourceTasks,
+                                    featureJar.toFile())
+                        }
+                    }
+
+                    doBuildP2Repository(rootProject, eclipseHome, config.targetRepository.getAbsolutePath(), repoDirUri, false)
+                } else {
+                    doBuildP2Repository(rootProject, eclipseHome, sourceDir, repoDirUri, true)
+                }
+            }
         }
-
-        // create bundle task
-        def bundleTask = project.task(taskName)
-
 
         List<Task> copyArtefactsTasks = new ArrayList<Task>()
 
-        Set<Jar> sourceTasks = new HashSet<>()
-        Set<Jar> bundleTasks = new HashSet<>()
+        Set<Jar> sourceTasks = rootProject.ext.bundleTasks
+        Set<Jar> bundleTasks = rootProject.ext.sourceTasks
 
-        def cleanTask = project.tasks.create("cleanP2", Delete)
-        cleanTask.doFirst {
-            delete project.p2Deployment.targetRepository
-        }
+        List<Jar> jarTasks = childProject.tasks.withType(Jar).toList()
 
+        if (jarTasks.size() > 0) {
+            println childProject.path + " - " + childProject.name
+            sourceTasks.addAll(jarTasks.collect { if (it && it.classifier == "sources") it })
+            bundleTasks.addAll(jarTasks.collect { if (it && it.classifier != "sources") it })
 
-        project.subprojects.forEach { childProject ->
-            if (!childProject.name)
-                return
-
-            List<Jar> jarTasks = childProject.tasks.withType(Jar).toList()
-            if (jarTasks.size() > 0) {
-                sourceTasks.addAll(jarTasks.collect { if (it && it.classifier == "sources") it })
-                bundleTasks.addAll(jarTasks.collect { if (it && it.classifier != "sources") it })
-
-                Collection<Task> t = createCopyArtefactTask(jarTasks)
-                copyArtefactsTasks.addAll(t)
-            }
+            Collection<Task> t = createCopyArtefactTask(childProject, jarTasks)
+            copyArtefactsTasks.addAll(t)
         }
 
         sourceTasks.removeIf { it -> it == null }
@@ -90,57 +131,21 @@ public class P2DeployerPlugin implements Plugin<Project> {
         if (copyArtefactsTasks.size() > 0) {
             bundleTask.dependsOn(copyArtefactsTasks.toArray())
         }
-
-        bundleTask.doLast {
-
-            P2DeploymentExtension config = project.p2Deployment
-
-            def eclipseHome = config.project.eclipseConfiguration
-            def repoDirUri = config.targetRepository.toURI()
-            def sourceDir = config.sourceRepository
-
-            // deploy source repository
-            if (sourceDir == null) {
-
-                if (config.generateFeature) {
-                    def version = config.version
-                    println(version)
-                    if (!version || version == "unspecified")
-                        version = "0.0.0"
-
-                    if (config.qualifier) {
-                        version += config.qualifier
-                    }
-
-                    // create feature
-                    def featureJar = config.targetRepository.toPath().resolve("features/${config.featureId}_${version}.jar")
-                    FeatureHelper.createJar(config.featureId,
-                            config.featureLabel,
-                            version, "provider",
-                            false,
-                            bundleTasks,
-                            featureJar.toFile())
-
-                    if (sourceTasks.size() > 0) {
-                        featureJar = config.targetRepository.toPath().resolve("features/${config.featureId}.source_${version}.jar")
-                        FeatureHelper.createJar(config.featureId,
-                                config.featureLabel + " - Sources",
-                                version, "provider",
-                                true,
-                                sourceTasks,
-                                featureJar.toFile())
-                    }
-                }
-
-                doBuildP2Repository(eclipseHome, config.targetRepository.getAbsolutePath(), repoDirUri, false)
-            } else {
-                doBuildP2Repository(eclipseHome, sourceDir, repoDirUri, true)
-            }
-        }
-
     }
 
-    private Set<Task> createCopyArtefactTask(List<Jar> jarTasks) {
+    def initRootProjectIfRequired() {
+        DownloadHelper.addEclipseConfigurationExtension(rootProject)
+        DownloadHelper.addTaskDownloadEclipseSdk(rootProject)
+
+        // create project extension if it doesn't exist yet
+        if (rootProject.extensions.findByName(extensionName) == null) {
+            rootProject.extensions.create(extensionName, P2DeploymentExtension, rootProject)
+
+            rootProject.p2Deployment.qualifier = ".v" + new Date().format('yyyyMMddHHmm')
+        }
+    }
+
+    private Set<Task> createCopyArtefactTask(Project project, List<Jar> jarTasks) {
 
         P2DeploymentExtension config = project.p2Deployment
 
@@ -276,7 +281,7 @@ public class P2DeployerPlugin implements Plugin<Project> {
         return deployTask
     }
 
-    private void doBuildP2Repository(EclipseConfiguration eclipseHome, String sourceDir, URI targetURI, boolean publishArtifacts) {
+    private void doBuildP2Repository(Project project, EclipseConfiguration eclipseHome, String sourceDir, URI targetURI, boolean publishArtifacts) {
         project.exec {
             commandLine 'java', '-jar', eclipseHome.getLauncherPath().toFile(),
                     '-application', 'org.eclipse.equinox.p2.publisher.FeaturesAndBundlesPublisher',

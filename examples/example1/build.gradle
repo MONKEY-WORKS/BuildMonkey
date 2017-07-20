@@ -1,7 +1,7 @@
 buildscript {
     repositories {
         // Uncomment for local deployment of built plugins
-         mavenLocal()
+        //mavenLocal()
 
         // The BuildMonkey plugins are published here
         maven {
@@ -11,17 +11,21 @@ buildscript {
         // Default repositories for all the maven dependencies of this world
         mavenCentral()
         jcenter()
+        maven {
+            url  "http://dl.bintray.com/monkey-works/BuildMonkey"
+        }
+
     }
 
     // Get BuildMonkey plugins
     dependencies {
-        classpath "de.monkeyworks.buildmonkey:gradle.p2:0.4"
-        classpath "de.monkeyworks.buildmonkey:gradle.p2publish:0.4.1"
-        classpath "de.monkeyworks.buildmonkey:gradle.mavenize:0.4"
-        classpath "de.monkeyworks.buildmonkey:gradle.dependency:0.4"
-        classpath "de.monkeyworks.buildmonkey:gradle.projectsetup:0.4"
-        classpath "de.monkeyworks.buildmonkey:mavenArtefacts:0.4.1"
-        classpath 'de.monkeyworks.buildmonkey:artifactoryupload:0.4'
+        classpath "de.monkeyworks.buildmonkey:gradle.p2:0.4.2"
+        classpath "de.monkeyworks.buildmonkey:gradle.p2publish:0.4.12"
+        classpath "de.monkeyworks.buildmonkey:gradle.mavenize:0.4.1"
+        classpath "de.monkeyworks.buildmonkey:gradle.dependency:0.4.11"
+        classpath "de.monkeyworks.buildmonkey:gradle.projectsetup:0.4.1"
+        classpath "de.monkeyworks.buildmonkey:mavenArtefacts:0.4.7"
+        classpath 'de.monkeyworks.buildmonkey:artifactoryupload:0.4.1'
         classpath 'org.standardout:bnd-platform:1.4.0'
     }
 }
@@ -62,20 +66,12 @@ mavenize {
     }
 } 
 
-repositories {
-        mavenLocal()
-        mavenCentral()
-        jcenter()
-}
-
-
 // Process each sub project, build the eclipse plugins
 subprojects {
 
     // Receive plugins from the built maven repository
     repositories {
         maven {url uri("${buildUri}/m2-repository")}
-
     }
 
     // Normal java project stuff
@@ -100,10 +96,14 @@ subprojects {
         // Name prefix for all maven plugins
         mavenGroup = "buildmonkey"
 
-        // Patter to identify local projects
-        addProjectPattern {
-          projectPattern = "Monkey(\\..*)"
-          projectGroup = "de.monkeyworks"
+        dependencyHandling {
+            def ids = [:]
+            // if artifactId needs special handling, fill the map with groupID, artifactID, version like:
+            if(it.matches("Monkey(\\..*)")) {
+                ids['groupId'] = 'de.monkeyworks'
+                ids['version'] = project.version
+            }
+            return ids
         }
     }
 
@@ -112,7 +112,7 @@ subprojects {
 
     publishing {
         publications {
-            def isJavaPlugin = project.getPlugins().hasPlugin('java');
+            def isJavaPlugin = project.getPlugins().hasPlugin('java')
 
             if (isJavaPlugin) {
                 mavenJava(MavenPublication) {
@@ -125,13 +125,13 @@ subprojects {
                     apply plugin: 'de.monkeyworks.buildmonkey.FixDependencyVersion'
 
                     configurations.archives.allArtifacts.forEach {
-                        def cls = it.classifier;
+                        def cls = it.classifier
                         if (cls != null && !cls.empty) {
                             artifact(it.file) {
                                 classifier cls
                             }
                         }
-                    };
+                    }
                 }
             }
         }
@@ -182,6 +182,8 @@ subprojects {
     assemble.dependsOn mirrorP2Repository
     createTargetPlatform.dependsOn mirrorP2Repository
     mavenizeP2Repository.dependsOn mirrorP2Repository
+
+    apply plugin: "de.monkeyworks.buildmonkey.p2.P2DeployerPlugin"
 }
  
 
@@ -190,8 +192,10 @@ apply plugin: 'de.monkeyworks.buildmonkey.p2.P2DeployerPlugin'
 
 // Configure publishing to a P2 repository
 p2Deployment {
-    // Repository, where the plugin is publsihed to
+    // Repository, where the plugin is published to
     targetRepository = file("$buildDir/monkey-repository")
+    generateQualifier = true
+    generateFeature = true
     // Name of the feature
     featureId = "MonkeyPlugin"
     // Display name of the feature

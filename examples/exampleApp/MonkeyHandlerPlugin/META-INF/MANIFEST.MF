@@ -4,10 +4,10 @@ Bundle-Name: MonkeyPlugin
 Bundle-SymbolicName: MonkeyHandlerPlugin;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Monkey-Works
-Require-Bundle: org.eclipse.ui,
- org.eclipse.e4.ui.model.workbench;bundle-version="1.2.0.v20160229-1459",
- MonkeyExampleE4Application;bundle-version="1.0.0",
+Require-Bundle: javax.inject,
+ org.eclipse.ui,
+ org.eclipse.e4.ui.model.workbench,
+ MonkeyExampleE4Application,
  org.eclipse.e4.core.di.annotations,
  org.eclipse.e4.core.di
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Import-Package: javax.inject;version="1.0.0"
