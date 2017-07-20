@@ -41,7 +41,6 @@ class DownloadHelper {
                 def os = org.gradle.internal.os.OperatingSystem.current()
                 def arch = System.getProperty("os.arch").contains("64") ? "-x86_64" : ""
                 def eclipseUrl = config.eclipseSdkURL
-                println eclipseUrl
                 def eclipseVersion = config.eclipseVersion
 
                 if (os.windows) {
