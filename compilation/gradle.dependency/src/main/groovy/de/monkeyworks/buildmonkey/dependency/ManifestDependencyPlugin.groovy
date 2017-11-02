@@ -107,8 +107,9 @@ class ManifestDependencyPlugin implements Plugin<Project> {
             // Resolves the dependencies for the test compile configuration.
             project.configurations.getByName('testCompile') { Configuration config ->
                 testBundles().each { String dependency ->
-                    if(dependency != null)
+                    if(dependency != null) {
                         setProjectDependencies(config, dependency)
+                    }
                 }
 
 
@@ -192,15 +193,22 @@ class ManifestDependencyPlugin implements Plugin<Project> {
      * @param dependency Dependency to check.
      */
     void setProjectDependencies(Configuration config, String dependency) {
-        String name = dependency.contains(';') ? dependency.split(';')[0] : dependency
+        String name = dependency
+        def version = "+"
+
+        if(dependency.contains(";")) {
+            name = dependency.substring(0, dependency.indexOf(";"))
+            version = parseVersion(dependency)
+        }
+
         name = name.trim()
-        def version = parseVersion(dependency)
 
         setProjectDependency(config, name, version)
     }
 
     void setProjectDependencies(Configuration config, RequiredBundle bundle) {
-        setProjectDependency(config, bundle.bundleName, bundle.attributes.get("bundle-version"))
+        def version = parseVersion(bundle.attributes.get("bundle-version"))
+        setProjectDependency(config, bundle.bundleName, version)
     }
 
     private void setProjectDependency(Configuration config, String name, version) {
@@ -298,7 +306,6 @@ class ManifestDependencyPlugin implements Plugin<Project> {
      * @param version Version of the artefact. Default is '+', will be resolved at publishing step.
      */
     private void addDependency(Configuration config, String group, String artifact, String version='+') {
-//        config.dependencies.add project.dependencies.create("${group}:${artifact}:${version}")
         config.dependencies.add project.dependencies.create("${group}:${artifact}:${version}")
 
     }
@@ -326,29 +333,71 @@ class ManifestDependencyPlugin implements Plugin<Project> {
         return "org.eclipse.swt.${osString}.x86_64" 
     }
 
-    private String parseVersion(String depBundlesString) {
-        if(!depBundlesString.contains(';'))
-            return null
 
-        List elements = depBundlesString.split(';')
-
-        String version = null
-        for(String element in elements) {
-            if (element.startsWith("bundle-version")) {
-                version = element.substring(element.indexOf('=') + 1)
-                if(version.startsWith('"'))
-                    version = version.substring(1)
-                if(version.endsWith('"'))
-                    version = version.substring(0, version.length() - 1)
-                break
-            }
-        }
-
-        if(!version || version.contains(",")) {
+    private String fillVersion(String version) {
+        String[] versionParts = version.split("\\.")
+        String[] tmp = ["0", "0", "0"]
+        if(tmp.length < versionParts.length) {
             return version
         }
 
-        println("---" + version)
-        return "[${version}, )"
+        for(int i=0;i<versionParts.length;i++) {
+            tmp[i] = versionParts[i]
+        }
+        return tmp.join(".")
+    }
+
+    private String parseVersion(String depBundlesString) {
+        if(!depBundlesString)
+            return "+"
+
+        String version = depBundlesString
+        if(depBundlesString.contains(';')) {
+            List elements = depBundlesString.split(';')
+
+            for (String element in elements) {
+                if (element.startsWith("bundle-version")) {
+                    version = element.substring(element.indexOf('=') + 1)
+                    if (version.startsWith('"'))
+                        version = version.substring(1)
+                    if (version.endsWith('"'))
+                        version = version.substring(0, version.length() - 1)
+                    break
+                }
+            }
+        }
+
+        // Possible version tuples
+        //
+        // 2.0 -> [2.0.0,)
+        // 2.0.0 -> [2.0.0,)
+        // [2.0.0,3.0.0)
+        // [2.0,3.0) -> [2.0.0,3.0.0)
+        // [2.0,) -> [2.0.0,)
+        // [2.0.0,) -> [2.0.0,)
+        // [2.1, 3.0) -> [2.1.0, 3.0.0)
+
+        if(!version) {
+            return version
+        }
+
+        if(!version.contains(",")) {
+            version = fillVersion(version)
+            return "[${version},)"
+        }
+
+        String minBoarder = version.substring(0, 1)
+        String maxBoarder = version.substring(version.length() - 1)
+
+        String[] versionParts = version.substring(1, version.length() - 1).split(",")
+
+        String minVersion = fillVersion(versionParts[0])
+        String maxVersion = versionParts[1]
+
+        if(maxVersion.length()>0) {
+            maxVersion = fillVersion(maxVersion)
+        }
+
+        return minBoarder + minVersion + "," + maxVersion + maxBoarder
     }
 }
