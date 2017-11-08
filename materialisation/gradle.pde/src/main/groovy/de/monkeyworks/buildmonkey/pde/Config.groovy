@@ -47,7 +47,7 @@ class Config {
     }
 
     File getRootNonMavenizedTargetPlatformDir() {
-        new File(project.rootProject.buildDir, 'targetPlatforms/pluginTests/target-platform')
+        new File(project.parent.buildDir, 'targetPlatforms/pluginTests/target-platform')
     }
 
     File getP2TargetPlatformDir() {

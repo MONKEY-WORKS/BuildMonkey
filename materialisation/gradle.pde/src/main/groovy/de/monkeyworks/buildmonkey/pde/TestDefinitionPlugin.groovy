@@ -39,9 +39,9 @@ class PluginTestBuild {
 
     PluginTestBuild(Project project) {
         this.project = project
-        eclipseSdkUrl = 'http://ftp-stud.hs-esslingen.de/Mirrors/eclipse/eclipse/downloads/drops4/R-4.6.1-201609071200'
-        eclipseVersion = '4.6.1'
-        launcherVersion = '1.3.200.v20160318-1642'
+        eclipseSdkUrl = 'https://ftp.heanet.ie/mirrors/eclipse/eclipse/downloads/drops4/R-4.7-201706120950/'
+        eclipseVersion = '4.7'
+        launcherVersion = '1.4.0.v20161219-1356'
         this.mavenGroup = 'buildMonkey'
         this.p2Group = 'eclipse'
     }
@@ -222,7 +222,7 @@ class TestDefinitionPlugin implements Plugin<Project> {
         // definition file to the target platform: http://help.eclipse.org/luna/index.jsp?topic=%2Forg.eclipse.platform.doc.isv%2Fguide%2Fp2_director.html
         def launcherVersion = project.pluginTestBuild.launcherVersion
         project.logger.info("Assemble target platfrom in '${config.nonMavenizedTargetPlatformDir.absolutePath}'.\n    Update sites: '${updateSites.join(' ')}'\n    Features: '${features.join(' ')}'")
-        println("Assemble target platfrom in '${config.nonMavenizedTargetPlatformDir.absolutePath}'.\n    Update sites: '${updateSites.join(' ')}'\n    Features: '${features.join(' ')}'")
+        //println("Assemble target platfrom in '${config.nonMavenizedTargetPlatformDir.absolutePath}'.\n    Update sites: '${updateSites.join(' ')}'\n    Features: '${features.join(' ')}'")
         project.exec {
 
             commandLine("java",

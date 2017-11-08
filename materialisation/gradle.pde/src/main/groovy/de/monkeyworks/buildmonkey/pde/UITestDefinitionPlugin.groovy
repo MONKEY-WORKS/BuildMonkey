@@ -36,8 +36,8 @@ class UITestBuild {
     UITestBuild(Project project) {
         this.project = project
 
-        eclipseSdkUrl = 'http://ftp-stud.hs-esslingen.de/Mirrors/eclipse/eclipse/downloads/drops4/R-4.6.1-201609071200'
-        eclipseVersion = '4.6.1'
+        eclipseSdkUrl = 'https://ftp.heanet.ie/mirrors/eclipse/eclipse/downloads/drops4/R-4.7-201706120950/'
+        eclipseVersion = '4.7'
 
 
     }

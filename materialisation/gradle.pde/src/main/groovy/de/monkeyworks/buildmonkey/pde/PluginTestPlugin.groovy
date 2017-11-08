@@ -141,14 +141,17 @@ class PluginTestPlugin implements Plugin<Project> {
             }
 
             doFirst { beforePluginTest(project, config, testDistributionDir, additionalPluginsDir) }
-            
-            dependsOn  ":${TestDefinitionPlugin.TASK_NAME_PREPARE_TARGET_PLATFORM}"
 
         }
 
         // Make sure that every time the testing is running the 'pluginTest' task is also gets executed.
         pluginTest.dependsOn 'test'
         pluginTest.dependsOn 'jar'
+        if(project.parent != project.rootProject) {
+            pluginTest.dependsOn  ":${project.parent.name}:${TestDefinitionPlugin.TASK_NAME_PREPARE_TARGET_PLATFORM}"
+        } else {
+            pluginTest.dependsOn  ":${TestDefinitionPlugin.TASK_NAME_PREPARE_TARGET_PLATFORM}"
+        }
     }
 
 
@@ -182,7 +185,7 @@ class PluginTestPlugin implements Plugin<Project> {
         project.logger.info("Create additional repository in ${additionalPluginsDir.path}")
         project.exec {
             commandLine("java", 
-                    '-cp', project.rootProject.buildDir.toPath().resolve("eclipse/eclipse/plugins/org.eclipse.equinox.launcher_${launcherVersion}.jar").toFile(),
+                    '-cp', project.parent.buildDir.toPath().resolve("eclipse/eclipse/plugins/org.eclipse.equinox.launcher_${launcherVersion}.jar").toFile(),
                     'org.eclipse.core.launcher.Main',
                     "-application", "org.eclipse.equinox.p2.publisher.FeaturesAndBundlesPublisher",
                     "-metadataRepository", "file:${additionalPluginsDir.path}",
@@ -195,11 +198,11 @@ class PluginTestPlugin implements Plugin<Project> {
         project.logger.info("Install additional repository ${additionalPluginsDir.path} with ${bundles} into ${testDistributionDir}")
         project.exec {
             commandLine("java",
-                    '-cp', project.rootProject.buildDir.toPath().resolve("eclipse/eclipse/plugins/org.eclipse.equinox.launcher_${launcherVersion}.jar").toFile(),
+                    '-cp', project.parent.buildDir.toPath().resolve("eclipse/eclipse/plugins/org.eclipse.equinox.launcher_${launcherVersion}.jar").toFile(),
                     'org.eclipse.core.launcher.Main',
                     '-application', 'org.eclipse.equinox.p2.director',
-                    '-metadataRepository', "file:${project.rootProject.buildDir}/eclipse/eclipse/p2/org.eclipse.equinox.p2.engine/profileRegistry/SDKProfile.profile",
-                    '-artifactRepository', "file:${project.rootProject.buildDir}/eclipse/eclipse,file:${testDistributionDir.path}",
+                    '-metadataRepository', "file:${project.parent.buildDir}/eclipse/eclipse/p2/org.eclipse.equinox.p2.engine/profileRegistry/SDKProfile.profile",
+                    '-artifactRepository', "file:${project.parent.buildDir}/eclipse/eclipse,file:${testDistributionDir.path}",
                     '-repository', "file:${additionalPluginsDir.path}",
                     '-installIU', bundles,
                     '-destination', testDistributionDir,

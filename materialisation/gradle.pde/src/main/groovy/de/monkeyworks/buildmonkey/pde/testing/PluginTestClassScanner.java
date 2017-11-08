@@ -43,6 +43,7 @@ public final class PluginTestClassScanner implements Runnable {
             public void visitClassFile(FileVisitDetails fileDetails) {
                 String className = fileDetails.getRelativePath().getPathString().replaceAll("\\.class", "").replace('/', '.');
                 TestClassRunInfo testClass = new DefaultTestClassRunInfo(className);
+                System.out.println(testClass.getTestClassName());
                 PluginTestClassScanner.this.testClassProcessor.processTestClass(testClass);
             }
         });
@@ -61,8 +62,10 @@ public final class PluginTestClassScanner implements Runnable {
         private boolean isValidTestClassFile(final File file) {
             try {
                 boolean closureMatching = (testClassClosure != null && (Boolean)testClassClosure.call(file));
+                System.out.println("Check class file: " + file.getName() + ":" + closureMatching + ":" + isTopLevelClass(file) + ":" + isConcreteClass(file));
                 return (closureMatching || isTopLevelClass(file)) && isConcreteClass(file);
             } catch (Exception e) {
+                System.out.println("Exception for class " + file.getName() + ": " + e.getLocalizedMessage());
                 e.printStackTrace();
                 return false;
             }

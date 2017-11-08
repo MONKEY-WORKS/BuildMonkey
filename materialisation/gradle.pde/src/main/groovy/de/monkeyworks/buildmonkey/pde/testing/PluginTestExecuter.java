@@ -187,6 +187,9 @@ public final class PluginTestExecuter implements TestExecuter {
         programArgs.add("-testpluginname");
         String fragmentHost = getExtension(testTask).getFragmentHost();
         if (fragmentHost != null) {
+            if(fragmentHost.contains(":")) {
+                fragmentHost = fragmentHost.substring(fragmentHost.lastIndexOf(":")+1);
+            }
             programArgs.add(fragmentHost);
         } else {
             programArgs.add(this.project.getName());

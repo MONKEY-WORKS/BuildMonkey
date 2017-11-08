@@ -40,7 +40,7 @@ public class PluginTestExtension {
 
     private long testTimeoutSeconds = 60 * 60L;
 
-    private String launcherVersion = "1.3.200.v20160318-1642";
+    private String launcherVersion = "1.4.0.v20161219-1356";
 
     private List<String> projectPattern;
 
