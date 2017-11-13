@@ -55,7 +55,7 @@ final class BundleMavenDeployer {
         assert featuresFolder.exists()
 
         collectArtifacts(pluginFolder)
-        collectFeatures(featuresFolder)
+        //collectFeatures(featuresFolder)
 
         fixDependencies()
 
@@ -67,7 +67,7 @@ final class BundleMavenDeployer {
         def processFeature = { File file ->
             Feature2Pom reader = new Feature2Pom(group: groupIdForBundles, dependencyGroup: groupIdForBundles)
             Pom pom = reader.convert(file)
-
+            println "Try to add feature: ${pom.artifact}"
             if (!artifacts.containsKey(pom.artifact))
                 artifacts[pom.artifact] = []
             artifacts[pom.artifact].add pom
@@ -105,6 +105,7 @@ final class BundleMavenDeployer {
                     } else {
                         if (!artifacts.containsKey(pom.artifact))
                             artifacts[pom.artifact] = []
+                        println "Add plugin: ${pom.artifact}"
                         artifacts[pom.artifact].add pom
                     }
                     artifactFiles["${pom.artifact}:${pom.version}"] = file

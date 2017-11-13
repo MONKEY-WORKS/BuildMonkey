@@ -5,7 +5,7 @@ dependencies {
 //    compile project(':gradle.p2')
 
 }
-
+version = '0.4.2'
 apply plugin: "com.gradle.plugin-publish"
 
 pluginBundle {
