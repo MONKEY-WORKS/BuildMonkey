@@ -98,13 +98,13 @@ class ManifestDependencyPlugin implements Plugin<Project> {
             // Resolves the dependencies for the compile configuration
             project.configurations.getByName('compile') { Configuration config ->
                 requireBundles().each { RequiredBundle dependency ->
-                    setProjectDependencies(config, dependency)
+                    setProjectDependency(config, dependency)
                 }
                 fragmentHost().each { String dependency ->    
-                    setProjectDependencies(config, dependency)
+                    setProjectDependency(config, dependency)
                 }
                 featureDependencies().each { String dependency ->
-                    setProjectDependencies(config, dependency)
+                    setProjectDependency(config, dependency)
                 }
 
             }
@@ -114,9 +114,10 @@ class ManifestDependencyPlugin implements Plugin<Project> {
                 testBundles().each { String dependency ->
                     if(dependency != null) {
                         if(testBundleVersions.containsKey(dependency)) {
-                            setProjectDependencies(config, dependency, parseVersion(testBundleVersions[dependency])
+                            String version = parseVersion(testBundleVersions[dependency])
+                            setProjectDependency(config, dependency, version)
                         } else {
-                            setProjectDependencies(config, dependency)
+                            setProjectDependency(config, dependency)
                         }
                     }
                 }
@@ -201,7 +202,7 @@ class ManifestDependencyPlugin implements Plugin<Project> {
      * @param config Configuration of the dependency. can be compile or testCompile.
      * @param dependency Dependency to check.
      */
-    void setProjectDependencies(Configuration config, String dependency) {
+    private void setProjectDependency(Configuration config, String dependency) {
         String name = dependency
         def version = "+"
 
@@ -215,12 +216,12 @@ class ManifestDependencyPlugin implements Plugin<Project> {
         setProjectDependency(config, name, version)
     }
 
-    void setProjectDependencies(Configuration config, RequiredBundle bundle) {
+    private void setProjectDependency(Configuration config, RequiredBundle bundle) {
         def version = parseVersion(bundle.attributes.get("bundle-version"))
         setProjectDependency(config, bundle.bundleName, version)
     }
 
-    private void setProjectDependency(Configuration config, String name, version) {
+    private void setProjectDependency(Configuration config, String name, String version) {
         if(!version)
             version = '+'
 
