@@ -22,10 +22,12 @@ class ManifestDependencyPluginExtension {
     String mavenGroup
     String eclipseGroup
     Closure dependencyClosure
+    def testBundleVersions
 
     ManifestDependencyPluginExtension(Project project) {
         this.project = project
         this.eclipseGroup = 'eclipse'
+        this.testBundleVersions = [:]
     }
 
     void dependencyHandling(Closure closure) {
@@ -91,6 +93,8 @@ class ManifestDependencyPlugin implements Plugin<Project> {
         project.tasks."${name}".dependsOn project.configurations.compile, project.configurations.testCompile
 
         project.afterEvaluate {
+            def manifestDependencies = project.manifestDependencies
+
             // Resolves the dependencies for the compile configuration
             project.configurations.getByName('compile') { Configuration config ->
                 requireBundles().each { RequiredBundle dependency ->
@@ -104,11 +108,16 @@ class ManifestDependencyPlugin implements Plugin<Project> {
                 }
 
             }
+            def testBundleVersions = manifestDependencies.testBundleVersions
             // Resolves the dependencies for the test compile configuration.
             project.configurations.getByName('testCompile') { Configuration config ->
                 testBundles().each { String dependency ->
                     if(dependency != null) {
-                        setProjectDependencies(config, dependency)
+                        if(testBundleVersions.containsKey(dependency)) {
+                            setProjectDependencies(config, dependency, parseVersion(testBundleVersions[dependency])
+                        } else {
+                            setProjectDependencies(config, dependency)
+                        }
                     }
                 }
 
