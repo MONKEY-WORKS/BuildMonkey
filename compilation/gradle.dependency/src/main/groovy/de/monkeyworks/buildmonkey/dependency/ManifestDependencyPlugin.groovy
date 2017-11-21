@@ -114,7 +114,7 @@ class ManifestDependencyPlugin implements Plugin<Project> {
                 testBundles().each { String dependency ->
                     if(dependency != null) {
                         if(testBundleVersions.containsKey(dependency)) {
-                            setProjectDependencies(config, dependency, parseVersion(testBundleVersions[dependency])
+                            setProjectDependencies(config, dependency, parseVersion(testBundleVersions[dependency]))
                         } else {
                             setProjectDependencies(config, dependency)
                         }
