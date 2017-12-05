@@ -293,7 +293,7 @@ class P2MirrorPlugin implements Plugin<Project> {
 
 				xmlMarkup.'project'(name :"Create Mirror", 'default' :"create-mirror", basedir:".") {
 					xmlMarkup.'target'(name:"create-mirror") {
-                        xmlMarkup.'p2.mirror'(destination: project.eclipseMirror.target, references: 'false', ignoreErrors: 'true', verbose:'true') {
+                        xmlMarkup.'p2.mirror'(destination: "${project.eclipseMirror.target}", references: 'false', ignoreErrors: 'true', verbose:'true') {
                             project.eclipseMirror.targetPlatform.locations.each { location ->    
                                 xmlMarkup.'source'('location': location.url)
                             }
@@ -307,7 +307,7 @@ class P2MirrorPlugin implements Plugin<Project> {
                             }
                         }
 
-                        xmlMarkup."p2.publish.featuresAndBundles"(metadataRepository:"file:${project.eclipseMirror.target}", artifactRepository:"file:${project.eclipseMirror.target}", source:"${project.eclipseMirror.target}", compress:"false")
+                        xmlMarkup."p2.publish.featuresAndBundles"(metadataRepository:"file:${project.eclipseMirror.target}", artifactRepository:"file:${project.eclipseMirror.target}", source:"${project.eclipseMirror.target}", compress:"false", reusePackedFiles:"true")
                         xmlMarkup."p2.publish.featuresAndBundles"(metadataRepository:"file:${project.eclipseMirror.target}", artifactRepository:"file:${project.eclipseMirror.target}", source:"${project.buildDir}/targetFeature", publishArtifacts:"true", compress:"true", append:"true")
 					}
 				}
