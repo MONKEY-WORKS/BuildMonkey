@@ -307,6 +307,8 @@ class P2MirrorPlugin implements Plugin<Project> {
                             }
                         }
 
+                        xmlMarkup."p2.repo2runnable"(source: "file:${project.eclipseMirror.target}", destination:"${project.eclipseMirror.target}-mvn")
+
                         xmlMarkup."p2.publish.featuresAndBundles"(metadataRepository:"file:${project.eclipseMirror.target}", artifactRepository:"file:${project.eclipseMirror.target}", source:"${project.eclipseMirror.target}", compress:"false", reusePackedFiles:"true")
                         xmlMarkup."p2.publish.featuresAndBundles"(metadataRepository:"file:${project.eclipseMirror.target}", artifactRepository:"file:${project.eclipseMirror.target}", source:"${project.buildDir}/targetFeature", publishArtifacts:"true", compress:"true", append:"true")
 					}
