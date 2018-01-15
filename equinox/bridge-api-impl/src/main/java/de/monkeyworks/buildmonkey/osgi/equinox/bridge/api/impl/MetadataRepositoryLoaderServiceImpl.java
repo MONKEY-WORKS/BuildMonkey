@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2015 the original author or authors.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ */
 package de.monkeyworks.buildmonkey.osgi.equinox.bridge.api.impl;
 
 import de.monkeyworks.buildmonkey.equinox.api.MetadataRepositoryLoaderService;
@@ -76,7 +83,7 @@ public class MetadataRepositoryLoaderServiceImpl implements MetadataRepositoryLo
 
         // PUBLISH product meta data
         Publisher publisher = new Publisher(publisherInfo);
-        String exeFeaturePath =  "/Users/jake/code/hackathon/BuildMonkey/examples/exampleApp/build/p2-repository/features/org.eclipse.equinox.executable_3.6.300.v20161122-1740";
+        //String exeFeaturePath =  "/Users/jake/code/hackathon/BuildMonkey/examples/exampleApp/build/p2-repository/features/org.eclipse.equinox.executable_3.6.300.v20161122-1740";
 
         ProductAction action = new ProductAction(null, productFile, "tooling", null);
         IPublisherAction[] actions = new IPublisherAction[] { action };
