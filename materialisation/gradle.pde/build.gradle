@@ -12,11 +12,12 @@ dependencies {
     //DUPLICATED BundleMavenDeployer, must be into replaced by a common bundle
     compile 'org.apache.maven:maven-ant-tasks:2.1.3'
     compile 'de.monkeyworks.buildmonkey:base:1.0'
-
+    compile 'de.monkeyworks.buildmonkey:bridge.api:1.0'
+    compile 'de.monkeyworks.buildmonkey:embedded.equinox:1.0'
 }
 
 apply plugin: "com.gradle.plugin-publish"
-version = '0.4.5'
+version = '0.5.0'
 
 pluginBundle {
     website = 'https://github.com/MONKEY-WORKS/BuildMonkey/wiki'

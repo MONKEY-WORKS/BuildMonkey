@@ -5,6 +5,10 @@ repositories {
     mavenCentral()
 }
 
+dependencies {
+    compile "org.eclipse.platform:org.eclipse.equinox.p2.metadata:2.3.100"
+}
+
 jar {
     manifest {
         from 'META-INF/MANIFEST.MF'

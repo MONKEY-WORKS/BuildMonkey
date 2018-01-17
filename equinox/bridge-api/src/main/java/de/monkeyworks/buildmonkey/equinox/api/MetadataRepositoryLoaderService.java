@@ -7,7 +7,10 @@
  */
 package de.monkeyworks.buildmonkey.equinox.api;
 
+import org.eclipse.equinox.p2.metadata.IVersionedId;
+
 import java.net.URI;
+import java.util.List;
 
 /**
  *
@@ -28,4 +31,7 @@ public interface MetadataRepositoryLoaderService {
     void materialiseProduct(String buildPath, String productId);
     // No need for a public method like that
     String getProductID(String productFilePath);
+
+    // No need for a public method like that
+    List<IVersionedId> getFeatures(String productFilePath);
 }

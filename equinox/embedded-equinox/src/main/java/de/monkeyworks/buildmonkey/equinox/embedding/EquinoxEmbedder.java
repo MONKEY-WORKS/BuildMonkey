@@ -35,17 +35,36 @@ import java.util.Map;
  */
 public class EquinoxEmbedder {
 
+    private static EquinoxEmbedder instance;
+
     private BundleContext eclipseContext;
 
     private Project project;
 
-    public void configure(Project project) {
-        this.project = project;
 
-        // add external tycho dependency
-        project.getConfigurations().create("build");
-        project.getDependencies().add("build", "org.eclipse.tycho:tycho-bundles-external:1.0.0@zip");
-        project.getDependencies().add("build", "de.monkeyworks.buildmonkey:bridge.api.impl:+");
+
+
+    public static EquinoxEmbedder INSTANCE() {
+        if(instance == null) {
+            instance = new EquinoxEmbedder();
+        }
+
+        return instance;
+    }
+
+    private EquinoxEmbedder() {
+
+    }
+
+    public void configure(Project project) {
+        if(project != this.project) {
+            this.project = project;
+
+            // add external tycho dependency
+            project.getConfigurations().create("build");
+            project.getDependencies().add("build", "org.eclipse.tycho:tycho-bundles-external:1.0.0@zip");
+            project.getDependencies().add("build", "de.monkeyworks.buildmonkey:bridge.api.impl:+");
+        }
     }
 
     /**

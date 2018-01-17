@@ -13,7 +13,8 @@ Require-Bundle: org.eclipse.equinox.p2.metadata,
  org.eclipse.equinox.p2.publisher.eclipse,
  org.eclipse.equinox.p2.director.app,
  org.eclipse.equinox.app
-Service-Component: OSGI-INF/MetadataRepositoryLoaderServiceImpl.xml
+Service-Component: OSGI-INF/MetadataRepositoryLoaderServiceImpl.xml,
+ OSGI-INF/P2DirectorServiceImpl.xml
 Bundle-Activator: de.monkeyworks.buildmonkey.osgi.equinox.bridge.api.impl.Activator
 Bundle-Vendor: %providerName
 Bundle-ActivationPolicy: lazy

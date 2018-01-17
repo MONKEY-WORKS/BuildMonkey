@@ -14,6 +14,7 @@ import org.eclipse.equinox.internal.p2.publisher.eclipse.ProductFile;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.IProvisioningAgentProvider;
 import org.eclipse.equinox.p2.core.ProvisionException;
+import org.eclipse.equinox.p2.metadata.IVersionedId;
 import org.eclipse.equinox.p2.publisher.IPublisherAction;
 import org.eclipse.equinox.p2.publisher.IPublisherInfo;
 import org.eclipse.equinox.p2.publisher.Publisher;
@@ -26,9 +27,7 @@ import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
-import java.io.File;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -110,6 +109,16 @@ public class MetadataRepositoryLoaderServiceImpl implements MetadataRepositoryLo
         return productFile.getId();
     }
 
+    public List<IVersionedId> getFeatures(String productFilePath) {
+        ProductFile productFile = null;
+        try {
+            productFile = new ProductFile(Paths.get(productFilePath).toAbsolutePath().toFile().toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return productFile.getFeatures();
+    }
 
     @Override
     public void materialiseProduct(String buildPath, String productId) {

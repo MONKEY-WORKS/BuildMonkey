@@ -112,7 +112,7 @@ class Config {
      * @return the name of the group where all tasks defined in this project should show upon the execution of <code>gradle tasks</code>
      */
     static String getGradleTaskGroupName() {
-        return "PDE Test Plugin Build"
+        return "Build Monkey PDE plugins"
     }
 
 }
