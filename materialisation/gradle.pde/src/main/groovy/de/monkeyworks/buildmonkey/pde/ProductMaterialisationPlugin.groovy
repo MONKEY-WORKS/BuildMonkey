@@ -70,6 +70,7 @@ class ProductMaterialisationPlugin implements Plugin<Project> {
             EquinoxEmbedder embedder = EquinoxEmbedder.INSTANCE()
 
             def outputDir = new File("${project.buildDir}/products/${PlatformArchitecture.LINUX_GTK_64.operatingSystem}")
+            def platformDir = new File("${project.buildDir}/products/targetplatform/${PlatformArchitecture.LINUX_GTK_64.operatingSystem}")
 
             group = 'Build Monkey PDE plugins'
             description = "Produces a P2 repository containing only the features from the product file and their dependencies."
@@ -84,6 +85,7 @@ class ProductMaterialisationPlugin implements Plugin<Project> {
                     updateSites.add(location.repository.@location.text().replace('\${project_loc}', 'file://' +  project.buildDir.absolutePath))
                 }
                 updateSites.add(project.product.eclipseUpdateSite)
+                //updateSites.add("file://${platformDir.absolutePath}")
 
                 def productFileService = embedder.getService(MetadataRepositoryLoaderService.class)
 
@@ -101,7 +103,7 @@ class ProductMaterialisationPlugin implements Plugin<Project> {
                 parameter.setArchitecture(PlatformArchitecture.LINUX_GTK_64)
                 parameter.setProfile("SDKProfile")
                 parameter.setDestination(outputDir.absolutePath)
-                parameter.setBundlepool(outputDir.absolutePath)
+                parameter.setBundlepool(platformDir.absolutePath)
                 parameter.setInstallIU(installIUs.join(","))
                 parameter.setRepository(updateSites.join(","))
 
