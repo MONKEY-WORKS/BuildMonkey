@@ -41,6 +41,11 @@ dependencies {
 
     compileOnly project(":embedded.equinox")
     compileOnly project(":bridge.api")
+    compile "org.eclipse.platform:org.eclipse.equinox.p2.publisher:1.4.200"
+    compile "org.eclipse.platform:org.eclipse.equinox.p2.publisher.eclipse:1.2.200"
+    compile "org.eclipse.platform:org.eclipse.equinox.frameworkadmin:2.0.300"
+    compile "org.eclipse.platform:org.eclipse.equinox.p2.repository:2.3.301"
+    compile "org.eclipse.platform:org.eclipse.equinox.p2.metadata:2.3.200"
 }
 
 apply plugin: "com.gradle.plugin-publish"
@@ -55,6 +60,10 @@ pluginBundle {
         productPublishPlugin {
             id = 'de.monkeyworks.buildmonkey.ProductPublishPlugin'
             displayName = 'Product Publish plugin'
+        }
+        productConfigPlugin {
+            id = 'de.monkeyworks.buildmonkey.ProductConfigPlugin'
+            displayName = 'Product Config plugin'
         }
     }
 

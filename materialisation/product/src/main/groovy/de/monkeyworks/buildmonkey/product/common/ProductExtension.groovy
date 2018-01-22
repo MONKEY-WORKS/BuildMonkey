@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package de.monkeyworks.buildmonkey.product.publish
+package de.monkeyworks.buildmonkey.product.common
 
 import org.gradle.api.Project
 

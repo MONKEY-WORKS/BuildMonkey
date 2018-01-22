@@ -55,3 +55,6 @@ project( ':bridge.api.impl' ).projectDir = new File( sharedRootDir, 'bridge-api-
 
 include ':embedded.equinox'
 project( ':embedded.equinox' ).projectDir = new File( sharedRootDir, 'embedded-equinox' )
+include 'materialisation:productConfig'
+findProject(':materialisation:productConfig')?.name = 'productConfig'
+

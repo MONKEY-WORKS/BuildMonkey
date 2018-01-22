@@ -9,6 +9,7 @@ package de.monkeyworks.buildmonkey.product.publish
 
 import de.monkeyworks.buildmonkey.equinox.api.MetadataRepositoryLoaderService
 import de.monkeyworks.buildmonkey.equinox.embedding.EquinoxEmbedder
+import de.monkeyworks.buildmonkey.product.common.ProductExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
