@@ -69,7 +69,7 @@ class TargetPlatformPlugin implements Plugin<Project> {
             EquinoxEmbedder embedder = EquinoxEmbedder.INSTANCE()
             embedder.configure(project)
 
-            def outputDir = new File("${project.buildDir}/products/linux")
+            def outputDir = new File("${project.buildDir}/products/targetplatform/${PlatformArchitecture.LINUX_GTK_64.operatingSystem}")
 
             group = 'Build Monkey PDE plugins'
             description = "Assembles an P2 repository distribution based on the target platform definition."
