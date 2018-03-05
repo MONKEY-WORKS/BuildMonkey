@@ -7,7 +7,6 @@ Bundle-Vendor: Monkey-Works
 Require-Bundle: javax.inject,
  org.eclipse.ui,
  org.eclipse.e4.ui.model.workbench,
- MonkeyExampleE4Application,
  org.eclipse.e4.core.di.annotations,
  org.eclipse.e4.core.di
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
