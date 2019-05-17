@@ -1,3 +1,6 @@
+# OUT OF MAINTENTENCE
+Because we as MONKEY WORKS (or now Elco Industrie Automation) moved completly away from the eclipse universe, we are not able to maintain the repo anymore.
+
 # BuildMonkey
 [![Build Status](https://travis-ci.org/MONKEY-WORKS/BuildMonkey.svg?branch=master)](https://travis-ci.org/MONKEY-WORKS/BuildMonkey)
 
