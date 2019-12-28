@@ -37,6 +37,12 @@ apply plugin: 'de.monkeyworks.buildmonkey.p2.P2MirrorPlugin'
 def buildUri = buildDir.toURI()
 def buildUrl = buildUri.toURL()
 
+// Configure Eclipse SDK Download
+eclipseConfiguration {
+    eclipseSdkURL = 'http://ftp.halifax.rwth-aachen.de/eclipse//eclipse/downloads/drops4/R-4.7.3-201803010715/'
+    eclipseVersion = '4.7.3'
+}
+
 // Configure mirroring plugin
 eclipseMirror {
     // Both parameters on false means a lazy dependency resolving but matching the exact versions of the defined features

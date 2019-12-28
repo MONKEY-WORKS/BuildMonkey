@@ -25,6 +25,12 @@ apply plugin: 'de.monkeyworks.buildmonkey.mavenizer.MavenizerPlugin'
 def buildUri = buildDir.toURI()
 def buildUrl = buildUri.toURL()
 
+// Configure Eclipse SDK Download
+eclipseConfiguration {
+    eclipseSdkURL = 'http://ftp.halifax.rwth-aachen.de/eclipse//eclipse/downloads/drops4/R-4.7.3-201803010715/'
+    eclipseVersion = '4.7.3'
+}
+
 eclipseMirror {
     sliceStrict false
     latestVersionOnly false
